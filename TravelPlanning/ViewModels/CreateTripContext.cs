@@ -7,7 +7,7 @@ using static System.Net.WebRequestMethods;
 
 namespace TravelPlanning.ViewModels
 {
-    internal class CreateTripPageContext
+    public class CreateTripContext
     {
         public string name { get; set; }
         public string destination { get; set; }

@@ -20,10 +20,7 @@
             <TextBox></TextBox>
         </StackPanel>
 
-        <StackPanel>
-            <Label>目的地</Label>
-            <TextBox></TextBox>
-        </StackPanel>
+   
 
         <StackPanel>
             <Label>開始日期</Label>

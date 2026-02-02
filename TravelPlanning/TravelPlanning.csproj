@@ -173,7 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\CreateTripPageContext.cs" />
+    <Compile Include="Contracts\CreateTripContract.cs" />
+    <Compile Include="Models\DTO\TripDTO.cs" />
+    <Compile Include="Presenters\CreateTripPresenter.cs" />
+    <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
       <DependentUpon>CreateTripPage.xaml</DependentUpon>
@@ -238,8 +241,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />
-    <Folder Include="Contracts\" />
-    <Folder Include="Presenters\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
