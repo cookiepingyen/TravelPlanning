@@ -1,0 +1,53 @@
+﻿<ui:FluentWindow x:Class="TravelPlanning.Views.MainTravelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TravelPlanning.Views"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        ExtendsContentIntoTitleBar="True"
+        mc:Ignorable="d"
+        Title="MainTravelWindow" Height="450" Width="800">
+
+    <Grid>
+        <ui:NavigationView
+            x:Name="NavigationView"
+            Padding="42,0,42,0"
+            EnableDebugMessages="True"
+            FrameMargin="0"
+            IsBackButtonVisible="Visible"
+            IsPaneToggleVisible="True"
+            OpenPaneLength="310"
+            PaneDisplayMode="Left"
+            MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
+            Transition="FadeInWithSlide">
+            <ui:NavigationView.Header>
+                <StackPanel Margin="42,32,42,20">
+                    <Label>Header</Label>
+                    <ui:BreadcrumbBar x:Name="BreadcrumbBar" />
+                </StackPanel>
+            </ui:NavigationView.Header>
+            <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Search">
+                    <ui:AutoSuggestBox.Icon>
+                        <ui:IconSourceElement>
+                            <ui:SymbolIconSource Symbol="Search24" />
+                        </ui:IconSourceElement>
+                    </ui:AutoSuggestBox.Icon>
+                </ui:AutoSuggestBox>
+            </ui:NavigationView.AutoSuggestBox>
+            <ui:NavigationView.ContentOverlay>
+                <Grid>
+                    <ui:SnackbarPresenter x:Name="SnackbarPresenter" />
+                </Grid>
+            </ui:NavigationView.ContentOverlay>
+        </ui:NavigationView>
+
+        <ui:TitleBar
+            x:Name="TitleBar"
+            Title="Title"
+            Grid.Row="0"
+            CloseWindowByDoubleClickOnIcon="True">
+        </ui:TitleBar>
+    </Grid>
+</ui:FluentWindow>
