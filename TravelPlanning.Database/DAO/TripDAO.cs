@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TravelPlanning.Models.DTO
+namespace TravelPlanning.Database.DAO
 {
-    public class TripDTO
+    public class TripDAO
     {
         public string Name { get; set; }
 

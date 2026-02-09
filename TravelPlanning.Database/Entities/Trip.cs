@@ -29,7 +29,7 @@ namespace TravelPlanning.Database.Entities
 
         public int? Days { get; set; }
 
-        [StringLength(100)]
+        [StringLength(500)]
         public string Cover { get; set; }
 
         public virtual User User { get; set; }

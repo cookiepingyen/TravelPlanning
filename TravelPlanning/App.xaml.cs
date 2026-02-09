@@ -12,7 +12,7 @@ using TravelPlanning.Views.Pages;
 using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
 using ServiceCollection = IOCServiceCollection.ServiceCollection;
-
+using TravelPlanning.Database;
 
 namespace TravelPlanning
 {
@@ -27,6 +27,8 @@ namespace TravelPlanning
         {
             var collection = new ServiceCollection();
             collection.AddNavigationViewPageProvider();
+            collection.AddTravelPlanningRegistration();
+            collection.AddTravelPlanningDatabaseRegistration();
             collection.AddSingleton<INavigationService, NavigationService>();
 
             collection.AddSingleton<Window, MainTravelWindow>();

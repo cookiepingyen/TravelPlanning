@@ -1,9 +1,9 @@
-﻿using SQLConsole.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Repositories;
 
 namespace SQLConsole
@@ -41,6 +41,7 @@ namespace SQLConsole
 
 
             #region Select Users
+            //var users = Db.User.ToList();
             //foreach (User user in users)
             //{
             //    Console.WriteLine(user.Name);

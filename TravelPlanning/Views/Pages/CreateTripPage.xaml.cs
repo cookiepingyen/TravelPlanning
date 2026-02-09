@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IOCServiceCollection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TravelPlanning.ViewModels;
+using static TravelPlanning.Contracts.CreateTripContract;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -21,11 +23,11 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class CreateTripPage : Page
     {
-        CreateTripContext createTripPageContext;
-        public CreateTripPage(CreateTripContext createTripPageContext)
+        public CreateTripPage(ICreateTripView createTripPageContext)
         {
             InitializeComponent();
-            this.createTripPageContext = createTripPageContext;
+            DataContext = createTripPageContext;
         }
+
     }
 }

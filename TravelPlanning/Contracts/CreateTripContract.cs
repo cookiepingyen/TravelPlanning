@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelPlanning.Models.DTO;
 
 namespace TravelPlanning.Contracts
 {
     public class CreateTripContract
     {
-
-
-        public interface ICreateTripContext
+        public interface ICreateTripView
         {
 
 
@@ -18,7 +17,7 @@ namespace TravelPlanning.Contracts
 
         public interface ICreateTripPresenter
         {
-            void CreateTrip();
+            void CreateTrip(TripDTO tripDTO);
 
         }
     }
