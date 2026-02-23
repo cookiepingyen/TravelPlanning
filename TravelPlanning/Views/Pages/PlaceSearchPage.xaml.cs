@@ -37,6 +37,9 @@ namespace TravelPlanning.Views.Pages
         public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
             InitializeComponent();
+            this.serviceProvider = provider;
+            this.googleAPIContext = googleAPIContext;
+
             mapControl = serviceProvider.GetService<IMapControl>();
 
             Control control = (Control)mapControl;
