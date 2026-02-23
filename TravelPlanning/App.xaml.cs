@@ -13,6 +13,8 @@ using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
 using ServiceCollection = IOCServiceCollection.ServiceCollection;
 using TravelPlanning.Database;
+using GoogleMap.SDK.Core;
+using GoogleMap.SDK.UI.WPF;
 
 namespace TravelPlanning
 {
@@ -26,9 +28,12 @@ namespace TravelPlanning
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             var collection = new ServiceCollection();
+            collection.AddGoogleMapCoreRegistration();
+            collection.AddGoogleMapWPFRegistration();
             collection.AddNavigationViewPageProvider();
             collection.AddTravelPlanningRegistration();
             collection.AddTravelPlanningDatabaseRegistration();
+
             collection.AddSingleton<INavigationService, NavigationService>();
 
             collection.AddSingleton<Window, MainTravelWindow>();

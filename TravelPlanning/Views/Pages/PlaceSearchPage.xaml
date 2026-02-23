@@ -8,7 +8,9 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PlaceSearchPage">
 
-    <Grid Margin="42" VerticalAlignment="Top">
+    <Grid x:Name="container"
+          Margin="42" 
+          VerticalAlignment="Top">
         <Label>PlaceSearchPage</Label>
     </Grid>
 </Page>

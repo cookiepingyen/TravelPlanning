@@ -1,5 +1,11 @@
-﻿using System;
+﻿using GoogleMap.SDK.Contract.GoogleMap;
+using GoogleMap.SDK.Contract.GoogleMapAPI;
+using GoogleMap.SDK.UI.WPF.Components.AutoComplete;
+using IOCServiceCollection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +26,24 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class PlaceSearchPage : Page
     {
-        public PlaceSearchPage()
+        PlaceAutoCompleteView originAutoCompleteView;
+        IMapControl mapControl;
+        ServiceProvider serviceProvider;
+        IGoogleAPIContext googleAPIContext;
+        GoogleMapMarker selectedMarker;
+
+
+
+        public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
             InitializeComponent();
+            mapControl = serviceProvider.GetService<IMapControl>();
+
+            Control control = (Control)mapControl;
+
+            container.Children.Add(control);
+
+
         }
     }
 }
