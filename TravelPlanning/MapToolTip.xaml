@@ -1,0 +1,98 @@
+﻿<ToolTip
+    x:Class="TravelPlanning.MapToolTip"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:TravelPlanning.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TravelPlanning"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <ToolTip.Resources>
+        <converters:RatingToStarsConverter x:Key="RantingConverter" />
+        <converters:RatingToStarsConverter x:Key="RatingToStarsConverter" />
+    </ToolTip.Resources>
+    <Border
+        Padding="10"
+        Background="White"
+        BorderBrush="#DDD"
+        BorderThickness="1"
+        CornerRadius="8">
+        <Border.Effect>
+            <DropShadowEffect
+                BlurRadius="6"
+                Opacity="0.15"
+                ShadowDepth="1"
+                Color="#000000" />
+        </Border.Effect>
+
+        <StackPanel MaxWidth="300">
+            <!--  店名  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="#222"
+                Text="{Binding PlaceName}"
+                TextWrapping="Wrap" />
+
+            <!--  評分與評論數  -->
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock
+                    FontSize="14"
+                    Foreground="Black"
+                    Text="{Binding Rating}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="14"
+                    Foreground="Orange"
+                    Text="{Binding Rating, Converter={StaticResource RantingConverter}}" />
+
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="14"
+                    Foreground="Gray"
+                    Text="{Binding UserRatingsTotal}" />
+            </StackPanel>
+
+            <!--  類別  -->
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="13"
+                    FontWeight="Bold"
+                    Text="{Binding BusinessStatus}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Red" />
+                            <!--  預設為紅色，如果是「營業中」則改為綠色  -->
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BusinessStatus}" Value="營業中">
+                                    <Setter Property="Foreground" Value="#188038" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+
+            <!--  地址  -->
+            <TextBlock
+                Margin="0,2,0,0"
+                FontSize="13"
+                Foreground="Black"
+                Text="{Binding Address}"
+                TextWrapping="Wrap" />
+
+            <!--  電話  -->
+            <TextBlock
+                Margin="0,2,0,0"
+                Cursor="Hand"
+                FontSize="13"
+                Foreground="#1A73E8"
+                Text="{Binding Phone}"
+                TextDecorations="Underline" />
+        </StackPanel>
+    </Border>
+</ToolTip>

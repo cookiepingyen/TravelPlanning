@@ -1,11 +1,16 @@
-﻿using GoogleMap.SDK.Contract.GoogleMap;
+﻿using GMap.NET;
+using GoogleMap.SDK.Contract.GoogleMap;
 using GoogleMap.SDK.Contract.GoogleMapAPI;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlacePhoto;
 using GoogleMap.SDK.UI.WPF.Components.AutoComplete;
 using IOCServiceCollection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +23,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelPlanning.Models;
+using static GoogleMap.SDK.Contract.Components.AutoComplete.AutoCompleteContract;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -26,13 +33,13 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class PlaceSearchPage : Page
     {
-        PlaceAutoCompleteView originAutoCompleteView;
+        PlaceAutoCompleteView AutoCompleteView;
         IMapControl mapControl;
         ServiceProvider serviceProvider;
         IGoogleAPIContext googleAPIContext;
         GoogleMapMarker selectedMarker;
 
-
+        PlaceCard placeCard { get; set; }
 
         public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
@@ -40,13 +47,89 @@ namespace TravelPlanning.Views.Pages
             this.serviceProvider = provider;
             this.googleAPIContext = googleAPIContext;
 
-            mapControl = serviceProvider.GetService<IMapControl>();
+            AutoCompleteView = (PlaceAutoCompleteView)provider.GetService<IAutoCompleteView>();
+            AutoCompleteView.selectChange += PlaceAutoCompleteView_selectChange;
 
+            AutoCompleteView.Padding = new Thickness(5);
+            AutoCompleteView.VerticalContentAlignment = VerticalAlignment.Center;
+            AutoCompleteView.Background = new SolidColorBrush(Colors.Transparent);
+            AutoCompleteView.Foreground = new SolidColorBrush(Colors.White);
+            AutoCompleteView.BorderThickness = new Thickness(0);
+
+            DataContext = placeCard;
+
+            autoCompletePanel.Children.Add(AutoCompleteView);
+
+            mapControl = serviceProvider.GetService<IMapControl>();
+            mapControl.MarkerClick += MapControl_MarkerClick;
             Control control = (Control)mapControl;
 
             container.Children.Add(control);
 
 
+        }
+
+        private void MapControl_MarkerClick(GoogleMapMarker marker)
+        {
+
+            DataContext = marker.Tag;
+
+            // throw new NotImplementedException();
+        }
+
+        private async void PlaceAutoCompleteView_selectChange(object sender, PlaceDetailResModel e)
+        {
+            Console.WriteLine($"name: {e.result.name}, place_id: {e.result.place_id}");
+
+            MapToolTip toolTip = new MapToolTip();
+
+            string BusinessStatusText = "未提供";
+            if (e.result.current_opening_hours != null)
+            {
+                BusinessStatusText = e.result.current_opening_hours.open_now ? "營業中" : "已打烊";
+            }
+            //e.result.photos[0].photo_reference
+            byte[] photobytes = await googleAPIContext.Place.PlacePhoto(new PlacePhotoRequest()
+            {
+                photo_reference = e.result.photos[0].photo_reference,
+                photoSpec = new PhotoSpec()
+                {
+                    maxwidth = 600,
+                    maxheight = 300
+                }
+            });
+            toolTip.DataContext = new PlaceCard()
+            {
+                PlaceName = e.result.name,
+                Phone = e.result.formatted_phone_number,
+                Address = e.result.formatted_address,
+                Rating = e.result.rating,
+                UserRatingsTotal = $"({e.result.user_ratings_total.ToString()})",
+                BusinessStatus = BusinessStatusText,
+                Photo = CreateImage(photobytes)
+            };
+
+            DataContext = toolTip.DataContext;
+
+            var location = e.result.geometry.location;
+            mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);
+        }
+
+
+
+        private BitmapImage CreateImage(byte[] bytes)
+        {
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            memoryStream.Position = 0;
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.StreamSource = memoryStream;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            return bitmap;
         }
     }
 }
