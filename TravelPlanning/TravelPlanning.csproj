@@ -221,17 +221,27 @@
     <Compile Include="Models\DTO\TripDTO.cs" />
     <Compile Include="Models\PlaceCard.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
-    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Utilities\Interfaces\INavigationAware.cs" />
+    <Compile Include="Utilities\Interfaces\INavigationService.cs" />
+    <Compile Include="Utilities\NavigationService.cs" />
+    <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="TravelPlanningRegistration.cs" />
     <Compile Include="Utilities\ImageCompress.cs" />
     <Compile Include="Utilities\Mapper.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
+    <Compile Include="ViewModels\PlaceSearchContext.cs" />
+    <Compile Include="Views\Pages\CommentPage.xaml.cs">
+      <DependentUpon>CommentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
       <DependentUpon>CreateTripPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MyTripPage.xaml.cs">
       <DependentUpon>MyTripPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\OverviewPage.xaml.cs">
+      <DependentUpon>OverviewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\PlaceSearchPage.xaml.cs">
       <DependentUpon>PlaceSearchPage.xaml</DependentUpon>
@@ -252,11 +262,19 @@
       <DependentUpon>MainTravelWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Pages\CommentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Pages\CreateTripPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\MyTripPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\OverviewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

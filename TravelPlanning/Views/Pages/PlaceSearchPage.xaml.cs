@@ -7,6 +7,7 @@ using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlacePhoto;
 using GoogleMap.SDK.UI.WPF.Components.AutoComplete;
 using IOCServiceCollection;
 using Microsoft.Extensions.DependencyInjection;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +25,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TravelPlanning.Models;
+using TravelPlanning.Utilities;
+using TravelPlanning.Utilities.Interfaces;
+using TravelPlanning.ViewModels;
 using static GoogleMap.SDK.Contract.Components.AutoComplete.AutoCompleteContract;
 
 namespace TravelPlanning.Views.Pages
@@ -31,15 +35,38 @@ namespace TravelPlanning.Views.Pages
     /// <summary>
     /// PlaceSearchPage.xaml 的互動邏輯
     /// </summary>
-    public partial class PlaceSearchPage : Page
+
+    public partial class PlaceSearchPage : Page, INotifyPropertyChanged
     {
         PlaceAutoCompleteView AutoCompleteView;
         IMapControl mapControl;
         ServiceProvider serviceProvider;
         IGoogleAPIContext googleAPIContext;
         GoogleMapMarker selectedMarker;
+        PlaceSearchContext placeSearchContext;
 
-        PlaceCard placeCard { get; set; }
+        private Page _currentPage = new OverviewPage();
+
+        public Page CurrentPage
+        {
+            get
+            {
+                return _currentPage;
+            }
+            set
+            {
+                _currentPage = value;
+                OnPropertyChanged(nameof(CurrentPage));
+            }
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
@@ -56,8 +83,6 @@ namespace TravelPlanning.Views.Pages
             AutoCompleteView.Foreground = new SolidColorBrush(Colors.White);
             AutoCompleteView.BorderThickness = new Thickness(0);
 
-            DataContext = placeCard;
-
             autoCompletePanel.Children.Add(AutoCompleteView);
 
             mapControl = serviceProvider.GetService<IMapControl>();
@@ -66,15 +91,13 @@ namespace TravelPlanning.Views.Pages
 
             container.Children.Add(control);
 
-
+            this.placeSearchContext = new PlaceSearchContext(new NavService(frame));
+            DataContext = this.placeSearchContext;
         }
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
         {
-
-            DataContext = marker.Tag;
-
-            // throw new NotImplementedException();
+            //DataContext = marker.Tag;
         }
 
         private async void PlaceAutoCompleteView_selectChange(object sender, PlaceDetailResModel e)
@@ -88,7 +111,7 @@ namespace TravelPlanning.Views.Pages
             {
                 BusinessStatusText = e.result.current_opening_hours.open_now ? "營業中" : "已打烊";
             }
-            //e.result.photos[0].photo_reference
+
             byte[] photobytes = await googleAPIContext.Place.PlacePhoto(new PlacePhotoRequest()
             {
                 photo_reference = e.result.photos[0].photo_reference,
@@ -109,13 +132,18 @@ namespace TravelPlanning.Views.Pages
                 Photo = CreateImage(photobytes)
             };
 
-            DataContext = toolTip.DataContext;
+            placeSearchContext.IsVisible = true;
+            placeSearchContext.PlaceName = e.result.name;
+            placeSearchContext.Phone = e.result.formatted_phone_number;
+            placeSearchContext.Address = e.result.formatted_address;
+            placeSearchContext.Rating = e.result.rating;
+            placeSearchContext.UserRatingsTotal = $"({e.result.user_ratings_total.ToString()})";
+            placeSearchContext.BusinessStatus = BusinessStatusText;
+            placeSearchContext.Photo = CreateImage(photobytes);
 
             var location = e.result.geometry.location;
             mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);
         }
-
-
 
         private BitmapImage CreateImage(byte[] bytes)
         {

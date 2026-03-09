@@ -218,13 +218,14 @@
 
                         <Separator Margin="0,0,0,8" Background="{StaticResource DarkBorder}" />
 
-                        <!--  Tab 列：菜單 / 評論  -->
+                        <!--  Tab 列：總覽 / 評論  -->
                         <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
                             <Button
                                 Padding="16,6"
                                 Background="Transparent"
                                 BorderBrush="{StaticResource ActiveBlue}"
                                 BorderThickness="0,0,0,2"
+                                Command="{Binding OverviewClickCommand}"
                                 Content="總覽"
                                 Cursor="Hand"
                                 FontSize="13"
@@ -234,6 +235,7 @@
                                 Padding="16,6"
                                 Background="Transparent"
                                 BorderThickness="0"
+                                Command="{Binding CommentClickCommand}"
                                 Content="評論"
                                 Cursor="Hand"
                                 FontSize="13"
@@ -242,112 +244,13 @@
 
                         <Separator Margin="0,0,0,12" Background="{StaticResource DarkBorder}" />
 
-                        <!--  動作按鈕列：規劃路線 / 儲存地點  -->
-                        <StackPanel
-                            Margin="0,0,0,12"
-                            HorizontalAlignment="Left"
-                            Orientation="Horizontal">
-
-                            <!--  規劃路線  -->
-                            <StackPanel
-                                Width="60"
-                                Margin="0,0,16,0"
-                                HorizontalAlignment="Center"
-                                Cursor="Hand">
-                                <Border
-                                    Width="44"
-                                    Height="44"
-                                    HorizontalAlignment="Center"
-                                    Background="{StaticResource ActiveBlueBg}"
-                                    CornerRadius="22">
-                                    <ui:SymbolIcon
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Foreground="{StaticResource ActiveBlue}"
-                                        Symbol="Navigation24" />
-                                </Border>
-                                <TextBlock
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Center"
-                                    FontSize="11"
-                                    Foreground="{StaticResource TextSecondary}"
-                                    Text="規劃路線"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <!--  儲存地點  -->
-                            <StackPanel
-                                Width="60"
-                                HorizontalAlignment="Center"
-                                Cursor="Hand">
-                                <Border
-                                    Width="44"
-                                    Height="44"
-                                    HorizontalAlignment="Center"
-                                    Background="{StaticResource InputBg}"
-                                    CornerRadius="22">
-                                    <ui:SymbolIcon
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Foreground="{StaticResource TextPrimary}"
-                                        Symbol="Bookmark24" />
-                                </Border>
-                                <TextBlock
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Center"
-                                    FontSize="11"
-                                    Foreground="{StaticResource TextSecondary}"
-                                    Text="儲存地點"
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                        </StackPanel>
-
-                        <Separator Margin="0,0,0,8" Background="{StaticResource DarkBorder}" />
-
-                        <!--  營業狀態  -->
-                        <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                            <ui:SymbolIcon
-                                Margin="0,0,8,0"
-                                Foreground="#34A853"
-                                Symbol="Clock24" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="13"
-                                Foreground="#34A853"
-                                Text="{Binding BusinessStatus}" />
-                        </StackPanel>
-
-                        <!--  地址  -->
-                        <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                            <ui:SymbolIcon
-                                Margin="0,0,8,0"
-                                Foreground="{StaticResource TextSecondary}"
-                                Symbol="Location24" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Foreground="{StaticResource TextSecondary}"
-                                Text="{Binding Address}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-
-                        <!--  電話  -->
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon
-                                Margin="0,0,8,0"
-                                Foreground="{StaticResource TextSecondary}"
-                                Symbol="Call24" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Foreground="{StaticResource TextSecondary}"
-                                Text="{Binding Phone}" />
-                        </StackPanel>
+                        <Frame
+                            x:Name="frame"
+                            Grid.Row="1"
+                            NavigationUIVisibility="Hidden" />
 
                     </StackPanel>
+
                 </Border>
                 <!--  ===== PlaceCard 結束 =====  -->
 

@@ -40,6 +40,8 @@ namespace TravelPlanning
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
+            collection.AddTransient<OverviewPage, OverviewPage>();
+            collection.AddTransient<CommentPage, CommentPage>();
             provider = collection.BuildServiceProvider();
 
             Window window = provider.GetService<Window>();
