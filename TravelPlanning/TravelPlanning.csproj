@@ -220,6 +220,7 @@
     </Compile>
     <Compile Include="Models\DTO\TripDTO.cs" />
     <Compile Include="Models\PlaceCard.cs" />
+    <Compile Include="Models\PlaceOverview.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />
     <Compile Include="Utilities\Interfaces\INavigationService.cs" />
@@ -228,8 +229,10 @@
     <Compile Include="TravelPlanningRegistration.cs" />
     <Compile Include="Utilities\ImageCompress.cs" />
     <Compile Include="Utilities\Mapper.cs" />
+    <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
+    <Compile Include="ViewModels\OverviewContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="Views\Pages\CommentPage.xaml.cs">
       <DependentUpon>CommentPage.xaml</DependentUpon>

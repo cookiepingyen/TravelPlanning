@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
+using TravelPlanning.Models;
 using TravelPlanning.Utilities.Interfaces;
 using TravelPlanning.Views.Pages;
 
@@ -29,23 +30,21 @@ namespace TravelPlanning.ViewModels
         public string UserRatingsTotal { get; set; }
         public string BusinessStatus { get; set; }
         public BitmapImage Photo { get; set; }
-
-        public String QueryData { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand CommentClickCommand { get; set; }
         public ICommand OverviewClickCommand { get; set; }
 
         public PlaceSearchContext(INavigationService navigationService)
         {
-            navigationService.Navigate("OverviewPage", QueryData);
+            navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus));
 
             this.SearchCommand = new RelayCommand(() =>
             {
-                navigationService.Navigate("OverviewPage", QueryData);
+                navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus));
             });
 
-            this.OverviewClickCommand = new RelayCommand(() => navigationService.Navigate("OverviewPage", QueryData));
-            this.CommentClickCommand = new RelayCommand(() => navigationService.Navigate("CommentPage", QueryData));
+            this.OverviewClickCommand = new RelayCommand(() => navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus)));
+            this.CommentClickCommand = new RelayCommand(() => navigationService.Navigate("CommentPage", PlaceID));
         }
 
 

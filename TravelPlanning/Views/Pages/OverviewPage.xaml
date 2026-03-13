@@ -28,7 +28,7 @@
         <converters:RatingToStarsConverter x:Key="RatingToStarsConverter" />
     </Page.Resources>
 
-    <Grid>
+    <Grid Cursor="">
         <StackPanel Orientation="Vertical">
             <!--  動作按鈕列：規劃路線 / 儲存地點  -->
             <StackPanel
@@ -106,7 +106,7 @@
                     VerticalAlignment="Center"
                     FontSize="13"
                     Foreground="#34A853"
-                    Text="{Binding BusinessStatus}" />
+                    Text="{Binding placeOverview.BusinessStatus}" />
             </StackPanel>
 
             <!--  地址  -->
@@ -119,7 +119,7 @@
                     VerticalAlignment="Center"
                     FontSize="12"
                     Foreground="{StaticResource TextSecondary}"
-                    Text="{Binding Address}"
+                    Text="{Binding placeOverview.Address}"
                     TextWrapping="Wrap" />
             </StackPanel>
 
@@ -133,10 +133,9 @@
                     VerticalAlignment="Center"
                     FontSize="12"
                     Foreground="{StaticResource TextSecondary}"
-                    Text="{Binding Phone}" />
+                    Text="{Binding placeOverview.Phone}" />
             </StackPanel>
 
         </StackPanel>
-        <TextBox>Overview</TextBox>
     </Grid>
 </Page>

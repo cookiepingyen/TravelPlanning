@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelPlanning.ViewModels;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -20,6 +21,9 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class CommentPage : Page
     {
+        CommentContext commentContext { get; set; }
+
+
         public CommentPage()
         {
             InitializeComponent();

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelPlanning.Utilities;
+using TravelPlanning.ViewModels;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -20,9 +22,13 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class OverviewPage : Page
     {
+
         public OverviewPage()
         {
             InitializeComponent();
+
+
+            DataContext = new OverviewContext();
         }
     }
 }

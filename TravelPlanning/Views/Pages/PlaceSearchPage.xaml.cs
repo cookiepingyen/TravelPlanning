@@ -36,7 +36,7 @@ namespace TravelPlanning.Views.Pages
     /// PlaceSearchPage.xaml 的互動邏輯
     /// </summary>
 
-    public partial class PlaceSearchPage : Page, INotifyPropertyChanged
+    public partial class PlaceSearchPage : Page
     {
         PlaceAutoCompleteView AutoCompleteView;
         IMapControl mapControl;
@@ -44,29 +44,6 @@ namespace TravelPlanning.Views.Pages
         IGoogleAPIContext googleAPIContext;
         GoogleMapMarker selectedMarker;
         PlaceSearchContext placeSearchContext;
-
-        private Page _currentPage = new OverviewPage();
-
-        public Page CurrentPage
-        {
-            get
-            {
-                return _currentPage;
-            }
-            set
-            {
-                _currentPage = value;
-                OnPropertyChanged(nameof(CurrentPage));
-            }
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
