@@ -213,6 +213,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Components\CommentComponent\Comment.xaml.cs">
+      <DependentUpon>Comment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Contracts\CreateTripContract.cs" />
     <Compile Include="Converters\RatingToStarsConverter.cs" />
     <Compile Include="MapToolTip.xaml.cs">
@@ -249,6 +252,10 @@
     <Compile Include="Views\Pages\PlaceSearchPage.xaml.cs">
       <DependentUpon>PlaceSearchPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="Components\CommentComponent\Comment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MapToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -316,9 +323,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\TravelPlanning.Database\TravelPlanning.Database.csproj">
       <Project>{5351f73b-cc02-498d-bec1-5bafa8342e28}</Project>

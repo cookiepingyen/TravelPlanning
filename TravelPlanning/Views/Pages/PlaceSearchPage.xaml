@@ -26,6 +26,38 @@
         <SolidColorBrush x:Key="ToggleBg" Color="#2A2A2A" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:RatingToStarsConverter x:Key="RatingToStarsConverter" />
+        <Style x:Key="TabRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0,0,0,2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}">
+                            <ContentPresenter
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource ActiveBlue}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource ActiveBlue}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid Background="{StaticResource DarkBg}">
@@ -220,26 +252,26 @@
 
                         <!--  Tab 列：總覽 / 評論  -->
                         <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
-                            <Button
+                            <RadioButton
                                 Padding="16,6"
                                 Background="Transparent"
-                                BorderBrush="{StaticResource ActiveBlue}"
-                                BorderThickness="0,0,0,2"
                                 Command="{Binding OverviewClickCommand}"
                                 Content="總覽"
                                 Cursor="Hand"
                                 FontSize="13"
                                 FontWeight="SemiBold"
-                                Foreground="{StaticResource ActiveBlue}" />
-                            <Button
+                                GroupName="TabGroup"
+                                IsChecked="True"
+                                Style="{StaticResource TabRadioButtonStyle}" />
+                            <RadioButton
                                 Padding="16,6"
                                 Background="Transparent"
-                                BorderThickness="0"
                                 Command="{Binding CommentClickCommand}"
                                 Content="評論"
                                 Cursor="Hand"
                                 FontSize="13"
-                                Foreground="{StaticResource TextSecondary}" />
+                                GroupName="TabGroup"
+                                Style="{StaticResource TabRadioButtonStyle}" />
                         </StackPanel>
 
                         <Separator Margin="0,0,0,12" Background="{StaticResource DarkBorder}" />

@@ -14,20 +14,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
-using TravelPlanning.ViewModels;
 
-namespace TravelPlanning.Views.Pages
+namespace TravelPlanning.Components.CommentComponent
 {
     /// <summary>
-    /// Comment.xaml 的互動邏輯
+    /// CommentComponent.xaml 的互動邏輯
     /// </summary>
-    public partial class CommentPage : Page
+    public partial class Comment : UserControl
     {
 
-        public CommentPage()
+
+        public Comment()
         {
             InitializeComponent();
-            DataContext = new CommentContext();
         }
     }
 }
