@@ -104,19 +104,13 @@ namespace TravelPlanning.Views.Pages
                 Phone = e.result.formatted_phone_number,
                 Address = e.result.formatted_address,
                 Rating = e.result.rating,
-                UserRatingsTotal = $"({e.result.user_ratings_total.ToString()})",
+                UserRatingsTotal = $"({e.result.user_ratings_total})",
                 BusinessStatus = BusinessStatusText,
                 Photo = CreateImage(photobytes)
             };
 
-            placeSearchContext.IsVisible = true;
-            placeSearchContext.PlaceName = e.result.name;
-            placeSearchContext.Phone = e.result.formatted_phone_number;
-            placeSearchContext.Address = e.result.formatted_address;
-            placeSearchContext.Rating = e.result.rating;
-            placeSearchContext.UserRatingsTotal = $"({e.result.user_ratings_total.ToString()})";
-            placeSearchContext.BusinessStatus = BusinessStatusText;
-            placeSearchContext.Photo = CreateImage(photobytes);
+            placeSearchContext.RenderData(e.result.place_id, true, e.result.name, e.result.formatted_phone_number, e.result.formatted_address,
+                                           e.result.rating, $"({e.result.user_ratings_total})", BusinessStatusText, e.result.reviews, CreateImage(photobytes));
 
             var location = e.result.geometry.location;
             mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);

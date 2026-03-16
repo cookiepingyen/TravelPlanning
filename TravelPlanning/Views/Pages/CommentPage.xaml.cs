@@ -21,12 +21,10 @@ namespace TravelPlanning.Views.Pages
     /// </summary>
     public partial class CommentPage : Page
     {
-        CommentContext commentContext { get; set; }
-
-
         public CommentPage()
         {
             InitializeComponent();
+            DataContext = new CommentContext();
         }
     }
 }
