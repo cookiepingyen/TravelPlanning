@@ -1,0 +1,44 @@
+﻿<UserControl
+    x:Class="TravelPlanning.Components.AutoCompleteComponent.AutoComplete"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TravelPlanning"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Loaded="AutoComplete_Loaded"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TextSecondary" Color="#9AA0A6" />
+        <SolidColorBrush x:Key="DarkBorder" Color="#3A3A3A" />
+        <SolidColorBrush x:Key="InputBg" Color="#303030" />
+    </UserControl.Resources>
+    <Border
+        Margin="0,0,0,12"
+        Background="{StaticResource InputBg}"
+        BorderBrush="{StaticResource DarkBorder}"
+        BorderThickness="1"
+        CornerRadius="8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ui:SymbolIcon
+                Grid.Column="0"
+                Margin="10,0,6,0"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource TextSecondary}"
+                Symbol="Search24" />
+
+            <StackPanel
+                x:Name="autoCompletePanel"
+                Grid.Column="1"
+                Orientation="Vertical" />
+
+        </Grid>
+    </Border>
+</UserControl>

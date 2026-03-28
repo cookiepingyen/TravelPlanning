@@ -1,34 +1,20 @@
-﻿using GMap.NET;
-using GoogleMap.SDK.Contract.GoogleMap;
+﻿using GoogleMap.SDK.Contract.GoogleMap;
 using GoogleMap.SDK.Contract.GoogleMapAPI;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlacePhoto;
-using GoogleMap.SDK.UI.WPF.Components.AutoComplete;
 using IOCServiceCollection;
 using Microsoft.Extensions.DependencyInjection;
-using PropertyChanged;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TravelPlanning.Models;
 using TravelPlanning.Utilities;
-using TravelPlanning.Utilities.Interfaces;
 using TravelPlanning.ViewModels;
-using static GoogleMap.SDK.Contract.Components.AutoComplete.AutoCompleteContract;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -36,14 +22,37 @@ namespace TravelPlanning.Views.Pages
     /// PlaceSearchPage.xaml 的互動邏輯
     /// </summary>
 
-    public partial class PlaceSearchPage : Page
+    public partial class PlaceSearchPage : Page, INotifyPropertyChanged
     {
-        PlaceAutoCompleteView AutoCompleteView;
         IMapControl mapControl;
         ServiceProvider serviceProvider;
         IGoogleAPIContext googleAPIContext;
         GoogleMapMarker selectedMarker;
         PlaceSearchContext placeSearchContext;
+
+
+        private ICommand _autoCompleteCommand;
+
+        public ICommand AutoCompleteCommand
+        {
+            get
+            {
+                return _autoCompleteCommand;
+            }
+            set
+            {
+                _autoCompleteCommand = value;
+                OnPropertyChanged("AutoCompleteCommand");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
@@ -51,25 +60,18 @@ namespace TravelPlanning.Views.Pages
             this.serviceProvider = provider;
             this.googleAPIContext = googleAPIContext;
 
-            AutoCompleteView = (PlaceAutoCompleteView)provider.GetService<IAutoCompleteView>();
-            AutoCompleteView.selectChange += PlaceAutoCompleteView_selectChange;
-
-            AutoCompleteView.Padding = new Thickness(5);
-            AutoCompleteView.VerticalContentAlignment = VerticalAlignment.Center;
-            AutoCompleteView.Background = new SolidColorBrush(Colors.Transparent);
-            AutoCompleteView.Foreground = new SolidColorBrush(Colors.White);
-            AutoCompleteView.BorderThickness = new Thickness(0);
-
-            autoCompletePanel.Children.Add(AutoCompleteView);
-
             mapControl = serviceProvider.GetService<IMapControl>();
             mapControl.MarkerClick += MapControl_MarkerClick;
             Control control = (Control)mapControl;
 
             container.Children.Add(control);
 
-            this.placeSearchContext = new PlaceSearchContext(new NavService(frame));
+            this.placeSearchContext = new PlaceSearchContext(new NavService(frame), googleAPIContext);
             DataContext = this.placeSearchContext;
+
+            WeakReferenceMessenger.Default.Register<PlaceDetailResModel>(this, AddMarkerandToolTip);
+
+
         }
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
@@ -77,9 +79,26 @@ namespace TravelPlanning.Views.Pages
             //DataContext = marker.Tag;
         }
 
-        private async void PlaceAutoCompleteView_selectChange(object sender, PlaceDetailResModel e)
+        private BitmapImage CreateImage(byte[] bytes)
         {
-            Console.WriteLine($"name: {e.result.name}, place_id: {e.result.place_id}");
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            memoryStream.Position = 0;
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.StreamSource = memoryStream;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            return bitmap;
+        }
+
+
+        public async void AddMarkerandToolTip(object sender, PlaceDetailResModel e)
+        {
+
+            Action<object, PlaceDetailResModel> func = AddMarkerandToolTip;
 
             MapToolTip toolTip = new MapToolTip();
 
@@ -98,6 +117,8 @@ namespace TravelPlanning.Views.Pages
                     maxheight = 300
                 }
             });
+
+
             toolTip.DataContext = new PlaceCard()
             {
                 PlaceName = e.result.name,
@@ -109,26 +130,8 @@ namespace TravelPlanning.Views.Pages
                 Photo = CreateImage(photobytes)
             };
 
-            placeSearchContext.RenderData(e.result.place_id, true, e.result.name, e.result.formatted_phone_number, e.result.formatted_address,
-                                           e.result.rating, $"({e.result.user_ratings_total})", BusinessStatusText, e.result.reviews, CreateImage(photobytes));
-
             var location = e.result.geometry.location;
             mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);
-        }
-
-        private BitmapImage CreateImage(byte[] bytes)
-        {
-            MemoryStream memoryStream = new MemoryStream(bytes);
-            memoryStream.Position = 0;
-
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.StreamSource = memoryStream;
-            bitmap.EndInit();
-            bitmap.Freeze();
-
-            return bitmap;
         }
     }
 }
