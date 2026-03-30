@@ -64,7 +64,52 @@
                 Foreground="#E8EAED"
                 LineHeight="20"
                 Text="{Binding text}"
-                TextWrapping="Wrap" />
+                TextTrimming="CharacterEllipsis"
+                TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="MaxHeight" Value="40" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=ExpandToggle}" Value="True">
+                                <Setter Property="MaxHeight" Value="9999" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!--  展開/收合按鈕  -->
+            <ToggleButton
+                x:Name="ExpandToggle"
+                Margin="0,4,0,0"
+                Padding="0"
+                HorizontalAlignment="Left"
+                Background="Transparent"
+                BorderThickness="0"
+                Cursor="Hand"
+                FontSize="12">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Foreground" Value="#9AA0A6" />
+                        <Setter Property="Content" Value="更多" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <TextBlock
+                                        Foreground="{TemplateBinding Foreground}"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        Text="{TemplateBinding Content}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content" Value="收合" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
 
         </StackPanel>
     </Border>
