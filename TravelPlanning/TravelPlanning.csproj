@@ -231,7 +231,7 @@
       <DependentUpon>MapToolTip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\DTO\TripDTO.cs" />
-    <Compile Include="Models\PlaceCard.cs" />
+    <Compile Include="Models\PlaceModel.cs" />
     <Compile Include="Models\PlaceOverview.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />

@@ -76,7 +76,7 @@ namespace TravelPlanning.Views.Pages
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
         {
-            //DataContext = marker.Tag;
+            this.placeSearchContext.RenderData((PlaceModel)marker.Tag);
         }
 
         private BitmapImage CreateImage(byte[] bytes)
@@ -119,15 +119,18 @@ namespace TravelPlanning.Views.Pages
             });
 
 
-            toolTip.DataContext = new PlaceCard()
+            toolTip.DataContext = new PlaceModel()
             {
+                PlaceID = e.result.place_id,
                 PlaceName = e.result.name,
                 Phone = e.result.formatted_phone_number,
                 Address = e.result.formatted_address,
                 Rating = e.result.rating,
                 UserRatingsTotal = $"({e.result.user_ratings_total})",
                 BusinessStatus = BusinessStatusText,
-                Photo = CreateImage(photobytes)
+                Photo = CreateImage(photobytes),
+                Reviews = e.result.reviews,
+                IsOpening = e.result.current_opening_hours?.open_now
             };
 
             var location = e.result.geometry.location;

@@ -73,26 +73,39 @@ namespace TravelPlanning.ViewModels
                     }
                 });
 
-                RenderData(e.result.place_id, true, e.result.name, e.result.formatted_phone_number, e.result.formatted_address,
-                                           e.result.rating, $"({e.result.user_ratings_total})", GetBusinessText(e.result.current_opening_hours), e.result.reviews, CreateImage(photobytes));
+                PlaceModel placeModel = new PlaceModel()
+                {
+                    PlaceID = e.result.place_id,
+                    PlaceName = e.result.name,
+                    Phone = e.result.formatted_phone_number,
+                    Address = e.result.formatted_address,
+                    Rating = e.result.rating,
+                    UserRatingsTotal = $"({e.result.user_ratings_total})",
+                    Photo = CreateImage(photobytes),
+                    Reviews = e.result.reviews,
+                    IsOpening = e.result.current_opening_hours?.open_now
+                };
+
+                RenderData(placeModel);
 
                 WeakReferenceMessenger.Default.Send(e);
             });
             this.googleAPIContext = googleAPIContext;
         }
 
-        public void RenderData(string placeID, bool isvisible, string placeName, string phone, string address, double rating, string userRatingsTotal, string businessStatusText, Review[] reviews, BitmapImage photo)
+
+        public void RenderData(PlaceModel placeModel)
         {
-            PlaceID = placeID;
-            IsVisible = isvisible;
-            PlaceName = placeName;
-            Phone = phone;
-            Address = address;
-            Rating = rating;
-            UserRatingsTotal = userRatingsTotal;
-            BusinessStatus = businessStatusText;
-            Reviews = reviews;
-            Photo = photo;
+            PlaceID = placeModel.PlaceID;
+            IsVisible = true;
+            PlaceName = placeModel.PlaceName;
+            Phone = placeModel.Phone;
+            Address = placeModel.Address;
+            Rating = placeModel.Rating;
+            UserRatingsTotal = placeModel.UserRatingsTotal;
+            BusinessStatus = placeModel.BusinessText;
+            Reviews = placeModel.Reviews;
+            Photo = placeModel.Photo;
 
             navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus));
         }
