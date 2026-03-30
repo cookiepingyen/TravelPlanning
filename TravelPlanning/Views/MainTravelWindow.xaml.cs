@@ -29,11 +29,8 @@ namespace TravelPlanning.Views
         public MainTravelWindow(INavigationService navigationService)
         {
             InitializeComponent();
-
             DataContext = viewModel;
             navigationService.SetNavigationControl(NavigationView);
-
-
         }
 
         private void CardAction_Click(object sender, RoutedEventArgs e)

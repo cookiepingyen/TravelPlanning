@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using TravelPlanning.ViewModels;
 
-namespace TravelPlanning.Views.Pages
+namespace TravelPlanning.Views.Pages.MapPanel.PlaceSearch
 {
     /// <summary>
     /// Comment.xaml 的互動邏輯

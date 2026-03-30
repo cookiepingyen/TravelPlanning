@@ -246,7 +246,7 @@
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
-    <Compile Include="Views\Pages\CommentPage.xaml.cs">
+    <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml.cs">
       <DependentUpon>CommentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
@@ -255,11 +255,11 @@
     <Compile Include="Views\Pages\MyTripPage.xaml.cs">
       <DependentUpon>MyTripPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\OverviewPage.xaml.cs">
+    <Compile Include="Views\Pages\MapPanel\PlaceSearch\OverviewPage.xaml.cs">
       <DependentUpon>OverviewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\PlaceSearchPage.xaml.cs">
-      <DependentUpon>PlaceSearchPage.xaml</DependentUpon>
+    <Compile Include="Views\Pages\MapPanelPage.xaml.cs">
+      <DependentUpon>MapPanelPage.xaml</DependentUpon>
     </Compile>
     <Page Include="Components\AutoCompleteComponent\AutoComplete.xaml">
       <SubType>Designer</SubType>
@@ -285,7 +285,7 @@
       <DependentUpon>MainTravelWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Pages\CommentPage.xaml">
+    <Page Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -297,11 +297,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\OverviewPage.xaml">
+    <Page Include="Views\Pages\MapPanel\PlaceSearch\OverviewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\PlaceSearchPage.xaml">
+    <Page Include="Views\Pages\MapPanelPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

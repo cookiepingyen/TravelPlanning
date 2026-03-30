@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TravelPlanning.Views;
 using TravelPlanning.Views.Pages;
+using TravelPlanning.Views.Pages.MapPanel.PlaceSearch;
 using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
 using ServiceCollection = IOCServiceCollection.ServiceCollection;
@@ -39,7 +40,7 @@ namespace TravelPlanning
             collection.AddSingleton<Window, MainTravelWindow>();
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<MyTripPage, MyTripPage>();
-            collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
+            collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewPage, OverviewPage>();
             collection.AddTransient<CommentPage, CommentPage>();
             provider = collection.BuildServiceProvider();

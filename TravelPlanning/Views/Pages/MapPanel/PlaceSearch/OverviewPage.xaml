@@ -1,10 +1,10 @@
 ﻿<Page
-    x:Class="TravelPlanning.Views.Pages.OverviewPage"
+    x:Class="TravelPlanning.Views.Pages.MapPanel.PlaceSearch.OverviewPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:TravelPlanning.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TravelPlanning.Views.Pages"
+    xmlns:local="clr-namespace:TravelPlanning.Views.Pages.MapPanel.PlaceSearch"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Overview"

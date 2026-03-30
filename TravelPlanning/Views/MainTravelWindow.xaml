@@ -1,13 +1,17 @@
-﻿<ui:FluentWindow x:Class="TravelPlanning.Views.MainTravelWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TravelPlanning.Views"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        ExtendsContentIntoTitleBar="True"
-        mc:Ignorable="d"
-        Title="MainTravelWindow" Height="450" Width="800" WindowState="Maximized">
+﻿<ui:FluentWindow
+    x:Class="TravelPlanning.Views.MainTravelWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TravelPlanning.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="MainTravelWindow"
+    Width="800"
+    Height="450"
+    ExtendsContentIntoTitleBar="True"
+    WindowState="Maximized"
+    mc:Ignorable="d">
 
     <Grid>
         <ui:NavigationView
@@ -17,9 +21,9 @@
             FrameMargin="0"
             IsBackButtonVisible="Visible"
             IsPaneToggleVisible="True"
+            MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
             OpenPaneLength="310"
             PaneDisplayMode="Left"
-            MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
             Transition="FadeInWithSlide">
             <ui:NavigationView.Header>
                 <StackPanel Margin="42,32,42,20">
@@ -47,7 +51,6 @@
             x:Name="TitleBar"
             Title="Title"
             Grid.Row="0"
-            CloseWindowByDoubleClickOnIcon="True">
-        </ui:TitleBar>
+            CloseWindowByDoubleClickOnIcon="True" />
     </Grid>
 </ui:FluentWindow>

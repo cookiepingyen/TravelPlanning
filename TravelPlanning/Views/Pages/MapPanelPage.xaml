@@ -1,5 +1,5 @@
 <Page
-    x:Class="TravelPlanning.Views.Pages.PlaceSearchPage"
+    x:Class="TravelPlanning.Views.Pages.MapPanelPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:autoComplete="clr-namespace:TravelPlanning.Components.AutoCompleteComponent"
@@ -135,13 +135,13 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel HorizontalAlignment="Center">
-                        <ui:SymbolIcon Foreground="{StaticResource TextSecondary}" Symbol="History24" />
+                        <ui:SymbolIcon Foreground="{StaticResource TextSecondary}" Symbol="Directions16" />
                         <TextBlock
                             Margin="0,3,0,0"
                             HorizontalAlignment="Center"
                             FontSize="11"
                             Foreground="{StaticResource TextSecondary}"
-                            Text="最近" />
+                            Text="路線" />
                     </StackPanel>
                 </Button>
 

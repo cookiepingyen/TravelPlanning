@@ -19,10 +19,10 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace TravelPlanning.Views.Pages
 {
     /// <summary>
-    /// PlaceSearchPage.xaml 的互動邏輯
+    /// MapPanelPage.xaml 的互動邏輯
     /// </summary>
 
-    public partial class PlaceSearchPage : Page, INotifyPropertyChanged
+    public partial class MapPanelPage : Page, INotifyPropertyChanged
     {
         IMapControl mapControl;
         ServiceProvider serviceProvider;
@@ -54,7 +54,7 @@ namespace TravelPlanning.Views.Pages
         }
 
 
-        public PlaceSearchPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
+        public MapPanelPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
             InitializeComponent();
             this.serviceProvider = provider;

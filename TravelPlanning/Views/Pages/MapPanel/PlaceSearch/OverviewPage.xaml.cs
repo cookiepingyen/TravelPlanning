@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 
-namespace TravelPlanning.Views.Pages
+namespace TravelPlanning.Views.Pages.MapPanel.PlaceSearch
 {
     /// <summary>
     /// Overview.xaml 的互動邏輯
