@@ -42,6 +42,7 @@ namespace TravelPlanning
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewPage, OverviewPage>();
+            collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
             collection.AddTransient<CommentPage, CommentPage>();
             provider = collection.BuildServiceProvider();
 

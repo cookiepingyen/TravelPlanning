@@ -244,6 +244,7 @@
     <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
+    <Compile Include="ViewModels\MapPanelContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml.cs">
@@ -251,6 +252,9 @@
     </Compile>
     <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
       <DependentUpon>CreateTripPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\MapPanel\PlaceSearch\PlaceSearchPage.xaml.cs">
+      <DependentUpon>PlaceSearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MyTripPage.xaml.cs">
       <DependentUpon>MyTripPage.xaml</DependentUpon>
@@ -290,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\CreateTripPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\MapPanel\PlaceSearch\PlaceSearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

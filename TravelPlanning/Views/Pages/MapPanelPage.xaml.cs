@@ -22,36 +22,11 @@ namespace TravelPlanning.Views.Pages
     /// MapPanelPage.xaml 的互動邏輯
     /// </summary>
 
-    public partial class MapPanelPage : Page, INotifyPropertyChanged
+    public partial class MapPanelPage : Page
     {
         IMapControl mapControl;
         ServiceProvider serviceProvider;
         IGoogleAPIContext googleAPIContext;
-        GoogleMapMarker selectedMarker;
-        PlaceSearchContext placeSearchContext;
-
-
-        private ICommand _autoCompleteCommand;
-
-        public ICommand AutoCompleteCommand
-        {
-            get
-            {
-                return _autoCompleteCommand;
-            }
-            set
-            {
-                _autoCompleteCommand = value;
-                OnPropertyChanged("AutoCompleteCommand");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
 
         public MapPanelPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
@@ -66,8 +41,7 @@ namespace TravelPlanning.Views.Pages
 
             container.Children.Add(control);
 
-            this.placeSearchContext = new PlaceSearchContext(new NavService(frame), googleAPIContext);
-            DataContext = this.placeSearchContext;
+            DataContext = new MapPanelContext(new NavService(frame));
 
             WeakReferenceMessenger.Default.Register<PlaceDetailResModel>(this, AddMarkerandToolTip);
 
@@ -76,7 +50,7 @@ namespace TravelPlanning.Views.Pages
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
         {
-            this.placeSearchContext.RenderData((PlaceModel)marker.Tag);
+            //this.MapPanelContext.RenderData((PlaceModel)marker.Tag);
         }
 
         private BitmapImage CreateImage(byte[] bytes)

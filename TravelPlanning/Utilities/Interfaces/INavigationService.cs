@@ -8,6 +8,6 @@ namespace TravelPlanning.Utilities.Interfaces
 {
     public interface INavigationService
     {
-        void Navigate(string page, object parm);
+        void Navigate(string page, object parm = null);
     }
 }

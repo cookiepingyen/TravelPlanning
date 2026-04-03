@@ -83,6 +83,7 @@
                     HorizontalAlignment="Center"
                     Background="{StaticResource ActiveBlueBg}"
                     BorderThickness="0"
+                    Command="{Binding PlaceSearchCommand}"
                     Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -117,6 +118,7 @@
                     HorizontalAlignment="Center"
                     Background="Transparent"
                     BorderThickness="0"
+                    Command="{Binding MyTripCommand}"
                     Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -157,136 +159,9 @@
             BorderBrush="{StaticResource DarkBorder}"
             BorderThickness="0,0,1,0"
             ClipToBounds="True">
-            <StackPanel Margin="16">
-                <TextBlock
-                    Margin="0,0,0,12"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource TextPrimary}"
-                    Text="地點搜尋" />
+            <Frame x:Name="frame" />
 
-                <!--  搜尋框  -->
-                <autoComplete:AutoComplete SelectedCommand="{Binding AutoCompleteCommaned}" />
-                <!--<Border
-                    Margin="0,0,0,12"
-                    Background="{StaticResource InputBg}"
-                    BorderBrush="{StaticResource DarkBorder}"
-                    BorderThickness="1"
-                    CornerRadius="8">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <ui:SymbolIcon
-                            Grid.Column="0"
-                            Margin="10,0,6,0"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource TextSecondary}"
-                            Symbol="Search24" />
 
-                        <StackPanel
-                            x:Name="autoCompletePanel"
-                            Grid.Column="1"
-                            Orientation="Vertical" />
-
-                    </Grid>
-                </Border>-->
-
-                <!--  ===== PlaceCard 詳細資訊面板 =====  -->
-                <Border
-                    x:Name="PlaceCardPanel"
-                    Margin="0,8,0,0"
-                    Padding="16"
-                    Background="#2C2C2C"
-                    BorderBrush="{StaticResource DarkBorder}"
-                    BorderThickness="1"
-                    CornerRadius="12"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel>
-
-                        <!--  地點圖片  -->
-                        <Border
-                            Margin="-16,-16,-16,12"
-                            ClipToBounds="True"
-                            CornerRadius="12,12,0,0">
-                            <Image
-                                Height="200"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{Binding Photo}"
-                                Stretch="UniformToFill" />
-                        </Border>
-
-                        <!--  地點名稱  -->
-                        <TextBlock
-                            Margin="0,0,0,6"
-                            FontSize="16"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource TextPrimary}"
-                            Text="{Binding PlaceName}"
-                            TextWrapping="Wrap" />
-
-                        <!--  評分 + 評論數  -->
-                        <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Foreground="#FBBC04"
-                                Text="{Binding Rating}" />
-                            <TextBlock
-                                Margin="2,0,4,0"
-                                VerticalAlignment="Center"
-                                FontSize="13"
-                                Foreground="#FBBC04"
-                                Text="{Binding Rating, Converter={StaticResource RatingToStarsConverter}}" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Foreground="{StaticResource TextSecondary}"
-                                Text="{Binding UserRatingsTotal}" />
-                        </StackPanel>
-
-                        <Separator Margin="0,0,0,8" Background="{StaticResource DarkBorder}" />
-
-                        <!--  Tab 列：總覽 / 評論  -->
-                        <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
-                            <RadioButton
-                                Padding="16,6"
-                                Background="Transparent"
-                                Command="{Binding OverviewClickCommand}"
-                                Content="總覽"
-                                Cursor="Hand"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                GroupName="TabGroup"
-                                IsChecked="True"
-                                Style="{StaticResource TabRadioButtonStyle}" />
-                            <RadioButton
-                                Padding="16,6"
-                                Background="Transparent"
-                                Command="{Binding CommentClickCommand}"
-                                Content="評論"
-                                Cursor="Hand"
-                                FontSize="13"
-                                GroupName="TabGroup"
-                                Style="{StaticResource TabRadioButtonStyle}" />
-                        </StackPanel>
-
-                        <Separator Margin="0,0,0,12" Background="{StaticResource DarkBorder}" />
-
-                        <Frame
-                            x:Name="frame"
-                            Grid.Row="1"
-                            NavigationUIVisibility="Hidden" />
-
-                    </StackPanel>
-
-                </Border>
-                <!--  ===== PlaceCard 結束 =====  -->
-
-            </StackPanel>
         </Border>
 
         <!--  展開/收合 按鈕  -->
