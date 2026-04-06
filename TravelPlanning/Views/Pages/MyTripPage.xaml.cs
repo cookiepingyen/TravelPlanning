@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelPlanning.Attributes;
 
 namespace TravelPlanning.Views.Pages
 {
     /// <summary>
     /// MyTripPage.xaml 的互動邏輯
     /// </summary>
+    [LeftSidebarAttribute("我的旅程", Wpf.Ui.Controls.SymbolRegular.Directions16)]
     public partial class MyTripPage : Page
     {
         public MyTripPage()

@@ -1,5 +1,4 @@
-﻿using IOCServiceCollection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,22 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TravelPlanning.Attributes;
-using TravelPlanning.ViewModels;
-using static TravelPlanning.Contracts.CreateTripContract;
 
-namespace TravelPlanning.Views.Pages
+namespace TravelPlanning.Views.Pages.RoutePlanning
 {
     /// <summary>
-    /// CreateTripPage.xaml 的互動邏輯
+    /// RoutePlanningPage.xaml 的互動邏輯
     /// </summary>
-    [LeftSidebarAttribute("新增旅程", Wpf.Ui.Controls.SymbolRegular.Add16)]
-    public partial class CreateTripPage : Page
+    /// 
+    public partial class RoutePlanningPage : Page
     {
-        public CreateTripPage(ICreateTripView createTripPageContext)
+        public RoutePlanningPage()
         {
             InitializeComponent();
-            DataContext = createTripPageContext;
         }
-
     }
 }

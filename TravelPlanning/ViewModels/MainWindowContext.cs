@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using TravelPlanning.Attributes;
 using Wpf.Ui.Controls;
 
 namespace TravelPlanning.ViewModels
@@ -26,8 +27,12 @@ namespace TravelPlanning.ViewModels
         {
             Assembly.GetExecutingAssembly()
                 .DefinedTypes
-                .Where(x => x.BaseType == typeof(Page))
-                .Select(x => new NavigationViewItem(x.Name, SymbolRegular.Building24, x))
+                .Where(x => x.BaseType == typeof(Page) && x.GetCustomAttribute<LeftSidebarAttribute>() != null)
+                .Select(x =>
+                {
+                    LeftSidebarAttribute attr = x.GetCustomAttribute<LeftSidebarAttribute>();
+                    return new NavigationViewItem(attr.PageName, attr.Icon, x);
+                })
                 .ToList()
                 .ForEach(x => MenuItems.Add(x));
 

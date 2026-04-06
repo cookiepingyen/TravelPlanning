@@ -18,7 +18,7 @@ namespace TravelPlanning.ViewModels
 
         private INavigationService navigationService;
         public ICommand PlaceSearchCommand { get; set; }
-        public ICommand MyTripCommand { get; set; }
+        public ICommand RoutePlanningPageCommand { get; set; }
 
 
         public MapPanelContext(INavigationService navigationService)
@@ -32,9 +32,9 @@ namespace TravelPlanning.ViewModels
 
             });
 
-            this.MyTripCommand = new RelayCommand(() =>
+            this.RoutePlanningPageCommand = new RelayCommand(() =>
             {
-                navigationService.Navigate("MyTripPage");
+                navigationService.Navigate("RoutePlanningPage");
             });
 
         }

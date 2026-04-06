@@ -118,7 +118,7 @@
                     HorizontalAlignment="Center"
                     Background="Transparent"
                     BorderThickness="0"
-                    Command="{Binding MyTripCommand}"
+                    Command="{Binding RoutePlanningPageCommand}"
                     Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">

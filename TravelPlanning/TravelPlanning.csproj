@@ -219,6 +219,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Attributes\LeftSidebarAttribute.cs" />
     <Compile Include="Components\AutoCompleteComponent\AutoComplete.xaml.cs">
       <DependentUpon>AutoComplete.xaml</DependentUpon>
     </Compile>
@@ -265,6 +266,9 @@
     <Compile Include="Views\Pages\MapPanelPage.xaml.cs">
       <DependentUpon>MapPanelPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Pages\RoutePlanning\RoutePlanningPage.xaml.cs">
+      <DependentUpon>RoutePlanningPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="Components\AutoCompleteComponent\AutoComplete.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -310,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\MapPanelPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\RoutePlanning\RoutePlanningPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,6 +16,7 @@ using ServiceCollection = IOCServiceCollection.ServiceCollection;
 using TravelPlanning.Database;
 using GoogleMap.SDK.Core;
 using GoogleMap.SDK.UI.WPF;
+using TravelPlanning.Views.Pages.RoutePlanning;
 
 namespace TravelPlanning
 {
@@ -40,6 +41,7 @@ namespace TravelPlanning
             collection.AddSingleton<Window, MainTravelWindow>();
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<MyTripPage, MyTripPage>();
+            collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewPage, OverviewPage>();
             collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();

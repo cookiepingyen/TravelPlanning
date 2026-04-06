@@ -15,6 +15,7 @@ using TravelPlanning.Models;
 using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
+using TravelPlanning.Attributes;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -22,6 +23,7 @@ namespace TravelPlanning.Views.Pages
     /// MapPanelPage.xaml 的互動邏輯
     /// </summary>
 
+    [LeftSidebarAttribute("地點搜尋", Wpf.Ui.Controls.SymbolRegular.Search16)]
     public partial class MapPanelPage : Page
     {
         IMapControl mapControl;
@@ -44,8 +46,6 @@ namespace TravelPlanning.Views.Pages
             DataContext = new MapPanelContext(new NavService(frame));
 
             WeakReferenceMessenger.Default.Register<PlaceDetailResModel>(this, AddMarkerandToolTip);
-
-
         }
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
