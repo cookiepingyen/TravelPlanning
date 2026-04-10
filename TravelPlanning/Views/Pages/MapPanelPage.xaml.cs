@@ -16,6 +16,7 @@ using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using TravelPlanning.Attributes;
+using System.Collections.Generic;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -46,11 +47,20 @@ namespace TravelPlanning.Views.Pages
             DataContext = new MapPanelContext(new NavService(frame));
 
             WeakReferenceMessenger.Default.Register<PlaceDetailResModel>(this, AddMarkerandToolTip);
+
+            WeakReferenceMessenger.Default.Register<List<Location>>(this, CreateRoute);
+        }
+
+        private void CreateRoute(object recipient, List<Location> locations)
+        {
+            this.mapControl.AddRoute("Route", locations);
         }
 
         private void MapControl_MarkerClick(GoogleMapMarker marker)
         {
             //this.MapPanelContext.RenderData((PlaceModel)marker.Tag);
+
+            //this.mapControl.AddRoute();
         }
 
         private BitmapImage CreateImage(byte[] bytes)
@@ -110,5 +120,6 @@ namespace TravelPlanning.Views.Pages
             var location = e.result.geometry.location;
             mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);
         }
+
     }
 }

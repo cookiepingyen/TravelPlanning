@@ -248,6 +248,7 @@
     <Compile Include="ViewModels\MapPanelContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
+    <Compile Include="ViewModels\RoutePlanningContext.cs" />
     <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml.cs">
       <DependentUpon>CommentPage.xaml</DependentUpon>
     </Compile>

@@ -34,7 +34,6 @@ namespace TravelPlanning.Views.Pages.MapPanel.PlaceSearch
     public partial class PlaceSearchPage : Page
     {
 
-
         public PlaceSearchPage(IGoogleAPIContext googleAPIContext)
         {
             InitializeComponent();

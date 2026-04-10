@@ -1,4 +1,5 @@
-﻿using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
+﻿using GoogleMap.SDK.Contract.GoogleMapAPI.Models;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
 using GoogleMap.SDK.UI.WPF.Components.AutoComplete;
 using IOCServiceCollection;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,20 @@ namespace TravelPlanning.Components.AutoCompleteComponent
             get => (ICommand)GetValue(SelectedProperty);
             set => SetValue(SelectedProperty, value);
         }
+
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
+            nameof(SelectedItem),
+            typeof(PlaceDetailResModel),
+            typeof(AutoComplete),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        public PlaceDetailResModel SelectedItem
+        {
+            get => (PlaceDetailResModel)GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
+        }
+
         public AutoComplete()
         {
 
@@ -62,6 +77,7 @@ namespace TravelPlanning.Components.AutoCompleteComponent
 
         private void PlaceAutoCompleteView_selectChange(object sender, PlaceDetailResModel e)
         {
+            SelectedItem = e;
             SelectedCommand.Execute(e);
         }
     }
