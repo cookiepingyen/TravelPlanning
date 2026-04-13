@@ -10,26 +10,26 @@ namespace TravelPlanning.ViewModels
 {
     public class RouteStep
     {
-        public SymbolRegular icon { get; set; }
-        public string instructions { get; set; }
-        public string distance { get; set; }
+        public SymbolRegular Icon { get; set; }
+        public string Instructions { get; set; }
+        public string Distance { get; set; }
 
 
         public RouteStep(string instructions, string distance, string maneuver)
         {
-            this.instructions = Regex.Replace(instructions, "<[^>]*>", string.Empty);
-            this.distance = distance;
+            this.Instructions = Regex.Replace(instructions, "<[^>]*>", string.Empty);
+            this.Distance = distance;
 
             switch (maneuver)
             {
                 case "turn-left":
-                    this.icon = SymbolRegular.ArrowLeft24;
+                    this.Icon = SymbolRegular.ArrowLeft24;
                     break;
                 case "turn-right":
-                    this.icon = SymbolRegular.ArrowRight24;
+                    this.Icon = SymbolRegular.ArrowRight24;
                     break;
                 default:
-                    this.icon = SymbolRegular.ArrowUp24;
+                    this.Icon = SymbolRegular.ArrowUp24;
                     break;
             }
 

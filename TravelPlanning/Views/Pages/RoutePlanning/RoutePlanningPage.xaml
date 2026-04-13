@@ -10,100 +10,223 @@
     Title="RoutePlanningPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Background="#202124"
     mc:Ignorable="d">
+
     <Page.Resources>
+        <!--  顏色  -->
+        <SolidColorBrush x:Key="SurfaceColor" Color="#303134" />
+        <SolidColorBrush x:Key="InputBgColor" Color="#3C4043" />
         <SolidColorBrush x:Key="TextPrimary" Color="#E8EAED" />
+        <SolidColorBrush x:Key="TextSecondary" Color="#9AA0A6" />
+        <SolidColorBrush x:Key="AccentBlue" Color="#1A73E8" />
+        <SolidColorBrush x:Key="AccentRed" Color="#EA4335" />
+        <SolidColorBrush x:Key="DividerColor" Color="#3C4043" />
+        <SolidColorBrush x:Key="IconBg" Color="#3C4043" />
+
+        <!--  路線步驟容器樣式  -->
+        <Style x:Key="StepRowStyle" TargetType="Grid">
+            <Setter Property="Margin" Value="0,0,0,0" />
+        </Style>
+
+        <!--  圖示圓圈樣式  -->
+        <Style x:Key="IconCircleStyle" TargetType="Border">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="16" />
+            <Setter Property="Background" Value="{StaticResource IconBg}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+
+        <!--  步驟說明文字樣式  -->
+        <Style x:Key="InstructionTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="LineHeight" Value="20" />
+        </Style>
+
+        <!--  距離文字樣式  -->
+        <Style x:Key="DistanceTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,3,0,0" />
+        </Style>
+
+        <!--  輸入框樣式  -->
+        <Style x:Key="SearchBoxStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource InputBgColor}" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
     </Page.Resources>
 
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  ── 搜尋區塊（深色卡片） ──  -->
+            <Border
+                Grid.Row="0"
+                Margin="12,12,12,0"
+                Padding="12"
+                Background="{StaticResource SurfaceColor}"
+                CornerRadius="12">
+                <StackPanel>
 
-    <Grid x:Name="container">
+                    <!--  起點  -->
+                    <Border Margin="0,0,0,8" Style="{StaticResource SearchBoxStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  藍色圓點圖示  -->
+                            <Ellipse
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                Margin="0,0,10,0"
+                                VerticalAlignment="Center"
+                                Fill="#4FC3F7" />
+                            <autoComplete:AutoComplete
+                                Grid.Column="1"
+                                VerticalContentAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource TextPrimary}"
+                                SelectedCommand="{Binding AutoCompleteCommaned}"
+                                SelectedItem="{Binding Start}" />
+                        </Grid>
+                    </Border>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+                    <!--  分隔虛線（模擬路線連接線）  -->
+                    <Rectangle
+                        Height="1"
+                        Margin="20,0"
+                        Fill="{StaticResource DividerColor}" />
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="4*" />
-        </Grid.ColumnDefinitions>
+                    <!--  終點  -->
+                    <Border Margin="0,8,0,0" Style="{StaticResource SearchBoxStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  紅色圖釘圖示  -->
+                            <ui:SymbolIcon
+                                Grid.Column="0"
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Foreground="{StaticResource AccentRed}"
+                                Symbol="Location24" />
+                            <autoComplete:AutoComplete
+                                Grid.Column="1"
+                                VerticalContentAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource TextPrimary}"
+                                SelectedCommand="{Binding AutoCompleteCommaned}"
+                                SelectedItem="{Binding End}" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
 
-        <Label
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="0,20,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center">
-            起點
-        </Label>
-        <autoComplete:AutoComplete
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="0,20,0,0"
-            VerticalContentAlignment="Center"
-            SelectedCommand="{Binding AutoCompleteCommaned}"
-            SelectedItem="{Binding Start}" />
+            <!--  ── 建立路線按鈕 ──  -->
+            <Button
+                Grid.Row="1"
+                Width="200"
+                Height="40"
+                Margin="12,10,12,0"
+                HorizontalAlignment="Center"
+                Background="{StaticResource AccentBlue}"
+                BorderThickness="0"
+                Command="{Binding RoutePlanningCommaned}"
+                Cursor="Hand"
+                FontSize="14"
+                FontWeight="Medium"
+                Foreground="White">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="0"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1557B0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                建立路線
+            </Button>
 
+            <!--  ── 路線步驟清單 ──  -->
+            <ItemsControl
+                Grid.Row="2"
+                Margin="12,12,12,12"
+                ItemsSource="{Binding RouteSteps}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-        <Label
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="0,20,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center">
-            終點
-        </Label>
-        <autoComplete:AutoComplete
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="0,20,0,0"
-            VerticalContentAlignment="Center"
-            SelectedCommand="{Binding AutoCompleteCommaned}"
-            SelectedItem="{Binding End}" />
+                            <!--  圖示圓圈  -->
+                            <Border
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Style="{StaticResource IconCircleStyle}">
+                                <ui:SymbolIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Symbol="{Binding Icon}" />
+                            </Border>
 
+                            <!--  說明文字  -->
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="0,8,0,0"
+                                Style="{StaticResource InstructionTextStyle}"
+                                Text="{Binding Instructions}" />
 
-        <Button
-            Grid.Row="2"
-            Grid.Column="1"
-            Width="100"
-            Height="50"
-            Margin="20"
-            Command="{Binding RoutePlanningCommaned}">
-            建立路線
-        </Button>
+                            <!--  距離 + 底線  -->
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,0,0,0">
+                                <TextBlock Style="{StaticResource DistanceTextStyle}" Text="{Binding Distance}" />
+                                <Rectangle
+                                    Height="0.5"
+                                    Margin="0,10,0,0"
+                                    Fill="{StaticResource DividerColor}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-        <ItemsControl
-            Grid.Row="4"
-            Grid.Column="1"
-            ItemsSource="{Binding RouteSteps}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="4*" />
-                        </Grid.ColumnDefinitions>
-                        <ui:SymbolIcon
-                            Grid.Column="0"
-                            FontSize="24"
-                            Foreground="White"
-                            Symbol="{Binding icon}" />
-                        <StackPanel Grid.Column="1" Orientation="Vertical">
-                            <Label Content="{Binding instructions}" />
-                            <Label Content="{Binding distance}" />
-                        </StackPanel>
-
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>
