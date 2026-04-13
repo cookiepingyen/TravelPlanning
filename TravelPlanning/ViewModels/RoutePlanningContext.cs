@@ -12,6 +12,7 @@ using System.Windows.Input;
 using TravelPlanning.Models;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Direction;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace TravelPlanning.ViewModels
 {
@@ -55,6 +56,20 @@ namespace TravelPlanning.ViewModels
             }
         }
 
+        private List<RouteStep> _routeSteps { get; set; }
+        public List<RouteStep> RouteSteps
+        {
+            get
+            {
+                return _routeSteps;
+            }
+            set
+            {
+                _routeSteps = value;
+                OnPropertyChanged(nameof(RouteSteps));
+            }
+        }
+
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -74,6 +89,9 @@ namespace TravelPlanning.ViewModels
             {
                 DirectionRequest directionRequest = new DirectionRequest(End.result.place_id, Start.result.place_id, true);
                 DirectionResModel directionResModel = await googleAPIContext.Direction.GetDirections(directionRequest);
+
+                RouteSteps = directionResModel.routes[0].legs[0].steps.Select(step => new RouteStep(step.html_instructions, step.distance.text, step.maneuver)).ToList();
+
 
                 WeakReferenceMessenger.Default.Send(directionResModel.routes[0].overview_polyline.points.ToList());
             });

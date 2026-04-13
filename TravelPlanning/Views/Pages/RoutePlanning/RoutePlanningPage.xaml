@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.RoutePlanning"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="RoutePlanningPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -19,6 +20,7 @@
     <Grid x:Name="container">
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -72,6 +74,36 @@
             Command="{Binding RoutePlanningCommaned}">
             建立路線
         </Button>
+
+        <ItemsControl
+            Grid.Row="4"
+            Grid.Column="1"
+            ItemsSource="{Binding RouteSteps}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="4*" />
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon
+                            Grid.Column="0"
+                            FontSize="24"
+                            Foreground="White"
+                            Symbol="{Binding icon}" />
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <Label Content="{Binding instructions}" />
+                            <Label Content="{Binding distance}" />
+                        </StackPanel>
+
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
     </Grid>
 </Page>
