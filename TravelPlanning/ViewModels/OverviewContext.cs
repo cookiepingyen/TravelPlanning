@@ -10,13 +10,18 @@ using TravelPlanning.Utilities.Interfaces;
 namespace TravelPlanning.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    internal class OverviewContext : INavigationAware
+    public class OverviewContext : INavigationAware
     {
         public PlaceOverview placeOverview { get; set; }
 
         public OverviewContext()
         {
 
+        }
+
+        public void LoadData(PlaceOverview placeOverview)
+        {
+            this.placeOverview = placeOverview;
         }
 
 

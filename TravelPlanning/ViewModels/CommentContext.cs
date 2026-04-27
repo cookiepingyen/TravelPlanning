@@ -13,7 +13,7 @@ using static GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail.PlaceD
 namespace TravelPlanning.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    internal class CommentContext : INavigationAware
+    public class CommentContext : INavigationAware
     {
         private const int PageSize = 3;
 

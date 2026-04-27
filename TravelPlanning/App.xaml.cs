@@ -17,6 +17,7 @@ using TravelPlanning.Database;
 using GoogleMap.SDK.Core;
 using GoogleMap.SDK.UI.WPF;
 using TravelPlanning.Views.Pages.RoutePlanning;
+using TravelPlanning.ViewModels;
 
 namespace TravelPlanning
 {
@@ -43,9 +44,13 @@ namespace TravelPlanning
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
-            collection.AddTransient<OverviewPage, OverviewPage>();
+            collection.AddTransient<OverviewControl, OverviewControl>();
             collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
-            collection.AddTransient<CommentPage, CommentPage>();
+            collection.AddTransient<CommentControl, CommentControl>();
+            collection.AddTransient<CommentContext, CommentContext>();
+            collection.AddTransient<OverviewContext, OverviewContext>();
+
+
             provider = collection.BuildServiceProvider();
 
             Window window = provider.GetService<Window>();

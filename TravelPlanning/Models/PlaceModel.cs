@@ -10,7 +10,7 @@ using static GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail.PlaceD
 namespace TravelPlanning.Models
 {
     [AddINotifyPropertyChangedInterface]
-    internal class PlaceModel
+    public class PlaceModel
     {
         public string PlaceID { get; set; }
         public String PlaceName { get; set; }
