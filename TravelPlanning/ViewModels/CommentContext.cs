@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Xml.Linq;
 using TravelPlanning.Utilities.Interfaces;
 using static GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail.PlaceDetailResModel;
@@ -44,6 +45,12 @@ namespace TravelPlanning.ViewModels
         {
             _allComments = new List<Review>((Review[])data);
             DisplayedComments = new ObservableCollection<Review>(_allComments.Take(PageSize));
+            HasMoreComments = _allComments.Count > PageSize;
+        }
+
+        public void LoadComments(IEnumerable<Review> reviews)
+        {
+            DisplayedComments = new ObservableCollection<Review>(reviews.Take(PageSize));
             HasMoreComments = _allComments.Count > PageSize;
         }
     }

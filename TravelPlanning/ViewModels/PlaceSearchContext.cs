@@ -63,9 +63,10 @@ namespace TravelPlanning.ViewModels
                 {
                     CurrentPage = overviewContext;
                 }
-                else if (pageName == "Pagination")
+                else if (pageName == "Comment")
                 {
                     CurrentPage = commentContext;
+                    commentContext.LoadComments(Reviews);
                 }
             });
 
@@ -117,6 +118,7 @@ namespace TravelPlanning.ViewModels
 
             this.OverviewContext.LoadData(new PlaceOverview(Address, Phone, BusinessStatus));
         }
+
 
 
         public void DataAware(object data)
