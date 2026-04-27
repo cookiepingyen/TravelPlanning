@@ -250,8 +250,8 @@
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="ViewModels\RoutePlanningContext.cs" />
     <Compile Include="ViewModels\RouteStep.cs" />
-    <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml.cs">
-      <DependentUpon>CommentPage.xaml</DependentUpon>
+    <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentControl.xaml.cs">
+      <DependentUpon>CommentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
       <DependentUpon>CreateTripPage.xaml</DependentUpon>
@@ -262,8 +262,8 @@
     <Compile Include="Views\Pages\MyTripPage.xaml.cs">
       <DependentUpon>MyTripPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\MapPanel\PlaceSearch\OverviewPage.xaml.cs">
-      <DependentUpon>OverviewPage.xaml</DependentUpon>
+    <Compile Include="Views\Pages\MapPanel\PlaceSearch\OverviewControl.xaml.cs">
+      <DependentUpon>OverviewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MapPanelPage.xaml.cs">
       <DependentUpon>MapPanelPage.xaml</DependentUpon>
@@ -295,7 +295,7 @@
       <DependentUpon>MainTravelWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Pages\MapPanel\PlaceSearch\CommentPage.xaml">
+    <Page Include="Views\Pages\MapPanel\PlaceSearch\CommentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,7 +311,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\MapPanel\PlaceSearch\OverviewPage.xaml">
+    <Page Include="Views\Pages\MapPanel\PlaceSearch\OverviewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

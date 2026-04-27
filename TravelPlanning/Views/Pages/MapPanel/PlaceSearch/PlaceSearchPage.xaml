@@ -7,12 +7,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.MapPanel.PlaceSearch"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:TravelPlanning.ViewModels"
     Title="PlaceSearchPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:OverviewContext}">
+            <local:OverviewControl />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:CommentContext}">
+            <local:CommentControl />
+        </DataTemplate>
         <!--  深色背景色  -->
         <SolidColorBrush x:Key="DarkBg" Color="#1E1E1E" />
         <SolidColorBrush x:Key="DarkNavBg" Color="#2A2A2A" />
@@ -132,7 +139,8 @@
                         <RadioButton
                             Padding="16,6"
                             Background="Transparent"
-                            Command="{Binding OverviewClickCommand}"
+                            Command="{Binding OnChangePageCommand}"
+                            CommandParameter="Overview"
                             Content="總覽"
                             Cursor="Hand"
                             FontSize="13"
@@ -143,7 +151,8 @@
                         <RadioButton
                             Padding="16,6"
                             Background="Transparent"
-                            Command="{Binding CommentClickCommand}"
+                            Command="{Binding OnChangePageCommand}"
+                            CommandParameter="Comment"
                             Content="評論"
                             Cursor="Hand"
                             FontSize="13"
@@ -153,10 +162,10 @@
 
                     <Separator Margin="0,0,0,12" Background="{StaticResource DarkBorder}" />
 
-                    <Frame
+                    <ContentControl
                         x:Name="frame"
                         Grid.Row="1"
-                        NavigationUIVisibility="Hidden" />
+                        Content="{Binding CurrentPage}" />
 
                 </StackPanel>
 

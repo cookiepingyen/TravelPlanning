@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,21 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Xml.Linq;
+using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 
 namespace TravelPlanning.Views.Pages.MapPanel.PlaceSearch
 {
     /// <summary>
-    /// Comment.xaml 的互動邏輯
+    /// Overview.xaml 的互動邏輯
     /// </summary>
-    public partial class CommentPage : Page
+    public partial class OverviewControl : UserControl
     {
 
-        public CommentPage()
+        public OverviewControl()
         {
             InitializeComponent();
-            DataContext = new CommentContext();
         }
     }
 }

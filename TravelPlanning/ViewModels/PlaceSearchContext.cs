@@ -23,7 +23,7 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace TravelPlanning.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    internal class PlaceSearchContext : INavigationAware
+    public class PlaceSearchContext : INavigationAware
     {
         public string PlaceID = "";
 
@@ -39,26 +39,34 @@ namespace TravelPlanning.ViewModels
         public Review[] Reviews { get; set; }
         public BitmapImage Photo { get; set; }
         public ICommand SearchCommand { get; set; }
-        public ICommand CommentClickCommand { get; set; }
-        public ICommand OverviewClickCommand { get; set; }
+
+        public object CurrentPage { get; set; }
+
+        public OverviewContext OverviewContext { get; set; }
+
+        public ICommand OnChangePageCommand { get; set; }
         public ICommand AutoCompleteCommaned { get; set; }
 
         IGoogleAPIContext googleAPIContext;
 
 
         private INavigationService navigationService;
-        public PlaceSearchContext(INavigationService navigationService, IGoogleAPIContext googleAPIContext)
+        public PlaceSearchContext(IGoogleAPIContext googleAPIContext, OverviewContext overviewContext, CommentContext commentContext)
         {
-            this.navigationService = navigationService;
-            this.SearchCommand = new RelayCommand(() =>
-            {
-                navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus));
-            });
+            this.OverviewContext = overviewContext;
 
-            this.OverviewClickCommand = new RelayCommand(() => navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus)));
-            this.CommentClickCommand = new RelayCommand(() =>
+            CurrentPage = overviewContext;
+
+            this.OnChangePageCommand = new RelayCommand<string>(pageName =>
             {
-                navigationService.Navigate("CommentPage", Reviews);
+                if (pageName == "Overview")
+                {
+                    CurrentPage = overviewContext;
+                }
+                else if (pageName == "Pagination")
+                {
+                    CurrentPage = commentContext;
+                }
             });
 
             this.AutoCompleteCommaned = new RelayCommand<PlaceDetailResModel>(async e =>
@@ -107,7 +115,7 @@ namespace TravelPlanning.ViewModels
             Reviews = placeModel.Reviews;
             Photo = placeModel.Photo;
 
-            navigationService.Navigate("OverviewPage", new PlaceOverview(Address, Phone, BusinessStatus));
+            this.OverviewContext.LoadData(new PlaceOverview(Address, Phone, BusinessStatus));
         }
 
 
