@@ -15,6 +15,8 @@ namespace TravelPlanning.Utilities
     {
         private Frame _frame;
         private string currentPage = "";
+
+        private Dictionary<string, Page> pages = new Dictionary<string, Page>();
         public NavService(Frame frame)
         {
             this._frame = frame;
@@ -25,12 +27,23 @@ namespace TravelPlanning.Utilities
             if (currentPage == pageName)
                 return;
 
+            Page page = null;
+
             Type pageType = Assembly.GetExecutingAssembly().DefinedTypes.First(x => x.Name == pageName);
 
-            Page page = (Page)App.provider.GetService(pageType);
-            if (page == null)
+            if (pages.ContainsKey(pageName))
             {
-                page = (Page)Activator.CreateInstance(pageType);
+                page = pages[pageName];
+            }
+            else
+            {
+                page = (Page)App.provider.GetService(pageType);
+                if (page == null)
+                {
+                    page = (Page)Activator.CreateInstance(pageType);
+                }
+
+                pages.Add(pageName, page);
             }
 
 

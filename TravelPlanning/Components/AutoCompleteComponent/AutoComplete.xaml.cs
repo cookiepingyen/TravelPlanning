@@ -62,6 +62,9 @@ namespace TravelPlanning.Components.AutoCompleteComponent
 
         private void AutoComplete_Loaded(object sender, RoutedEventArgs e)
         {
+            if (AutoCompleteView != null)
+                return;
+
             AutoCompleteView = (PlaceAutoCompleteView)App.provider.GetService<IAutoCompleteView>();
             AutoCompleteView.selectChange += PlaceAutoCompleteView_selectChange;
 
@@ -72,7 +75,6 @@ namespace TravelPlanning.Components.AutoCompleteComponent
             AutoCompleteView.BorderThickness = new Thickness(0);
 
             autoCompletePanel.Children.Add(AutoCompleteView);
-
         }
 
         private void PlaceAutoCompleteView_selectChange(object sender, PlaceDetailResModel e)
