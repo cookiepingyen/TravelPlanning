@@ -1,4 +1,5 @@
-﻿using PropertyChanged;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace TravelPlanning.ViewModels
         public ICommand PlaceSearchCommand { get; set; }
         public ICommand RoutePlanningPageCommand { get; set; }
 
+        public bool IsPlaceSearchSelected { get; set; } = true;
+        public bool IsRoutePlanningSelected { get; set; } = false;
 
         public MapPanelContext(INavigationService navigationService)
         {
@@ -29,14 +32,22 @@ namespace TravelPlanning.ViewModels
             this.PlaceSearchCommand = new RelayCommand(() =>
             {
                 navigationService.Navigate("PlaceSearchPage", navigationService);
-
+                IsPlaceSearchSelected = true;
+                IsRoutePlanningSelected = false;
             });
 
             this.RoutePlanningPageCommand = new RelayCommand(() =>
             {
                 navigationService.Navigate("RoutePlanningPage");
+                IsRoutePlanningSelected = true;
+                IsPlaceSearchSelected = false;
             });
 
+            WeakReferenceMessenger.Default.Register<NavigateToRoutePlanningMessage>(this, (recipient, message) =>
+            {
+                IsRoutePlanningSelected = true;
+                IsPlaceSearchSelected = false;
+            });
         }
 
 

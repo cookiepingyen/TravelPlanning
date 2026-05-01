@@ -105,6 +105,7 @@ namespace TravelPlanning.ViewModels
             this.RoutePlanningPageCommand = new RelayCommand(() =>
             {
                 navigationService.Navigate("RoutePlanningPage", navigationService);
+                WeakReferenceMessenger.Default.Send(new NavigateToRoutePlanningMessage());
             });
         }
 

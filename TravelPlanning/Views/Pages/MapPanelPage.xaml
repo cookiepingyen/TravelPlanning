@@ -114,7 +114,7 @@
                 <!--  已儲存  -->
                 <RadioButton
                     GroupName="NavGroup"
-                    IsChecked="True"
+                    IsChecked="{Binding IsPlaceSearchSelected, Mode=TwoWay}"
                     Command="{Binding PlaceSearchCommand}"
                     Style="{StaticResource NavButtonStyle}">
                     <StackPanel HorizontalAlignment="Center">
@@ -130,6 +130,7 @@
                 <!--  路線  -->
                 <RadioButton
                     GroupName="NavGroup"
+                    IsChecked="{Binding IsRoutePlanningSelected, Mode=TwoWay}"
                     Command="{Binding RoutePlanningPageCommand}"
                     Style="{StaticResource NavButtonStyle}">
                     <StackPanel HorizontalAlignment="Center">
