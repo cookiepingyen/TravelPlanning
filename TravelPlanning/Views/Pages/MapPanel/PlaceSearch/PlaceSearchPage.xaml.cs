@@ -34,11 +34,11 @@ namespace TravelPlanning.Views.Pages.MapPanel.PlaceSearch
     public partial class PlaceSearchPage : Page
     {
 
-        public PlaceSearchPage(IGoogleAPIContext googleAPIContext, OverviewContext overviewContext, CommentContext commentContext)
+        public PlaceSearchPage(PlaceSearchContext placeSearchContext)
         {
             InitializeComponent();
 
-            DataContext = new PlaceSearchContext(googleAPIContext, overviewContext, commentContext);
+            DataContext = placeSearchContext;
         }
 
     }

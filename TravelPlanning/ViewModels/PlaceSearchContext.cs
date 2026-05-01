@@ -46,6 +46,7 @@ namespace TravelPlanning.ViewModels
 
         public ICommand OnChangePageCommand { get; set; }
         public ICommand AutoCompleteCommaned { get; set; }
+        public ICommand RoutePlanningPageCommand { get; set; }
 
         IGoogleAPIContext googleAPIContext;
 
@@ -100,6 +101,11 @@ namespace TravelPlanning.ViewModels
                 WeakReferenceMessenger.Default.Send(e);
             });
             this.googleAPIContext = googleAPIContext;
+
+            this.RoutePlanningPageCommand = new RelayCommand(() =>
+            {
+                navigationService.Navigate("RoutePlanningPage", navigationService);
+            });
         }
 
 
@@ -123,7 +129,8 @@ namespace TravelPlanning.ViewModels
 
         public void DataAware(object data)
         {
-            PlaceID = (string)data;
+            navigationService = (INavigationService)data;
+            OverviewContext.RoutePlanningPageCommand = this.RoutePlanningPageCommand;
         }
 
         private BitmapImage CreateImage(byte[] bytes)

@@ -23,12 +23,12 @@ namespace TravelPlanning.ViewModels
 
         public MapPanelContext(INavigationService navigationService)
         {
-            navigationService.Navigate("PlaceSearchPage");
+            navigationService.Navigate("PlaceSearchPage", navigationService);
             this.navigationService = navigationService;
 
             this.PlaceSearchCommand = new RelayCommand(() =>
             {
-                navigationService.Navigate("PlaceSearchPage");
+                navigationService.Navigate("PlaceSearchPage", navigationService);
 
             });
 

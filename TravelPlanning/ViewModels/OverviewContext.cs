@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TravelPlanning.Models;
 using TravelPlanning.Utilities.Interfaces;
 
@@ -13,6 +14,7 @@ namespace TravelPlanning.ViewModels
     public class OverviewContext : INavigationAware
     {
         public PlaceOverview placeOverview { get; set; }
+        public ICommand RoutePlanningPageCommand { get; set; }
 
         public OverviewContext()
         {

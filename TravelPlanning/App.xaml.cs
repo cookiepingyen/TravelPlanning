@@ -46,6 +46,7 @@ namespace TravelPlanning
             collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewControl, OverviewControl>();
             collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
+            collection.AddTransient<PlaceSearchContext, PlaceSearchContext>();
             collection.AddTransient<CommentControl, CommentControl>();
             collection.AddTransient<CommentContext, CommentContext>();
             collection.AddTransient<OverviewContext, OverviewContext>();

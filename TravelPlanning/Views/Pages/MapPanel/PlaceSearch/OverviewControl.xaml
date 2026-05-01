@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:TravelPlanning.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.MapPanel.PlaceSearch"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -47,6 +48,11 @@
                         HorizontalAlignment="Center"
                         Background="{StaticResource ActiveBlueBg}"
                         CornerRadius="22">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <i:InvokeCommandAction Command="{Binding RoutePlanningPageCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ui:SymbolIcon
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
