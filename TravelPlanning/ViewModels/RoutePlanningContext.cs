@@ -13,10 +13,11 @@ using TravelPlanning.Models;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Direction;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using TravelPlanning.Utilities.Interfaces;
 
 namespace TravelPlanning.ViewModels
 {
-    internal class RoutePlanningContext : INotifyPropertyChanged
+    internal class RoutePlanningContext : INotifyPropertyChanged, INavigationAware
     {
         public string PlaceID = "";
 
@@ -75,6 +76,10 @@ namespace TravelPlanning.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void DataAware(object data)
+        {
+            End = (PlaceDetailResModel)data;
+        }
 
         public RoutePlanningContext(IGoogleAPIContext googleAPIContext)
         {

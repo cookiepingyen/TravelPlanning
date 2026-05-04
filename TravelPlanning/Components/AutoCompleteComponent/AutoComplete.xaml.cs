@@ -46,7 +46,13 @@ namespace TravelPlanning.Components.AutoCompleteComponent
             nameof(SelectedItem),
             typeof(PlaceDetailResModel),
             typeof(AutoComplete),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata((d, e) =>
+            {
+                AutoComplete autoComplete = (AutoComplete)d;
+                PlaceDetailResModel placeDetailResModel = (PlaceDetailResModel)e.NewValue;
+
+                autoComplete.AutoCompleteView.Text = placeDetailResModel.result.name;
+            }));
 
         public PlaceDetailResModel SelectedItem
         {

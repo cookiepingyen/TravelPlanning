@@ -48,6 +48,8 @@ namespace TravelPlanning.ViewModels
         public ICommand AutoCompleteCommaned { get; set; }
         public ICommand RoutePlanningPageCommand { get; set; }
 
+        public PlaceDetailResModel placeDetailResModel { get; set; }
+
         IGoogleAPIContext googleAPIContext;
 
 
@@ -73,6 +75,8 @@ namespace TravelPlanning.ViewModels
 
             this.AutoCompleteCommaned = new RelayCommand<PlaceDetailResModel>(async e =>
             {
+                this.placeDetailResModel = e;
+
                 byte[] photobytes = await googleAPIContext.Place.PlacePhoto(new PlacePhotoRequest()
                 {
                     photo_reference = e.result.photos[0].photo_reference,
@@ -104,7 +108,7 @@ namespace TravelPlanning.ViewModels
 
             this.RoutePlanningPageCommand = new RelayCommand(() =>
             {
-                navigationService.Navigate("RoutePlanningPage", navigationService);
+                navigationService.Navigate("RoutePlanningPage", placeDetailResModel);
                 WeakReferenceMessenger.Default.Send(new NavigateToRoutePlanningMessage());
             });
         }
