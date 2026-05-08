@@ -96,6 +96,7 @@
                                 VerticalAlignment="Center"
                                 Fill="#4FC3F7" />
                             <autoComplete:AutoComplete
+                                x:Name="Start"
                                 Grid.Column="1"
                                 VerticalContentAlignment="Center"
                                 Background="Transparent"
@@ -128,6 +129,7 @@
                                 Foreground="{StaticResource AccentRed}"
                                 Symbol="Location24" />
                             <autoComplete:AutoComplete
+                                x:Name="End"
                                 Grid.Column="1"
                                 VerticalContentAlignment="Center"
                                 Background="Transparent"

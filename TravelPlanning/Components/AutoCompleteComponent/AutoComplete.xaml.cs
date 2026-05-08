@@ -46,8 +46,9 @@ namespace TravelPlanning.Components.AutoCompleteComponent
             nameof(SelectedItem),
             typeof(PlaceDetailResModel),
             typeof(AutoComplete),
-            new FrameworkPropertyMetadata((d, e) =>
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
             {
+                if (e.NewValue == null) return;
                 AutoComplete autoComplete = (AutoComplete)d;
                 PlaceDetailResModel placeDetailResModel = (PlaceDetailResModel)e.NewValue;
 
@@ -62,15 +63,7 @@ namespace TravelPlanning.Components.AutoCompleteComponent
 
         public AutoComplete()
         {
-
             InitializeComponent();
-        }
-
-        private void AutoComplete_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (AutoCompleteView != null)
-                return;
-
             AutoCompleteView = (PlaceAutoCompleteView)App.provider.GetService<IAutoCompleteView>();
             AutoCompleteView.selectChange += PlaceAutoCompleteView_selectChange;
 
