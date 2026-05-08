@@ -12,10 +12,9 @@ namespace TravelPlanning.Database.Repositories
 {
     public class TripRepository : ITripRepository
     {
-
+        public DatabaseContext db = new DatabaseContext();
         public void CreateTrip(TripDAO tripDAO)
         {
-            DatabaseContext db = new DatabaseContext();
             Trip trip = Mapper.Map<TripDAO, Trip>(tripDAO);
             trip.Ended_time = trip.Started_time.Value.AddDays(tripDAO.Days);
             trip.Id = Guid.NewGuid();

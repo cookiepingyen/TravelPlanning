@@ -113,9 +113,9 @@
 
                 <!--  已儲存  -->
                 <RadioButton
+                    Command="{Binding PlaceSearchCommand}"
                     GroupName="NavGroup"
                     IsChecked="{Binding IsPlaceSearchSelected, Mode=TwoWay}"
-                    Command="{Binding PlaceSearchCommand}"
                     Style="{StaticResource NavButtonStyle}">
                     <StackPanel HorizontalAlignment="Center">
                         <ui:SymbolIcon Symbol="Bookmark24" />
@@ -129,9 +129,9 @@
 
                 <!--  路線  -->
                 <RadioButton
+                    Command="{Binding RoutePlanningPageCommand}"
                     GroupName="NavGroup"
                     IsChecked="{Binding IsRoutePlanningSelected, Mode=TwoWay}"
-                    Command="{Binding RoutePlanningPageCommand}"
                     Style="{StaticResource NavButtonStyle}">
                     <StackPanel HorizontalAlignment="Center">
                         <ui:SymbolIcon Symbol="Directions16" />
@@ -142,6 +142,23 @@
                             Text="路線" />
                     </StackPanel>
                 </RadioButton>
+
+                <!--  地點清單  -->
+                <RadioButton
+                    Command="{Binding FavoritePageCommand}"
+                    GroupName="NavGroup"
+                    IsChecked="{Binding IsFavoriteSelected, Mode=TwoWay}"
+                    Style="{StaticResource NavButtonStyle}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <ui:SymbolIcon Symbol="Directions16" />
+                        <TextBlock
+                            Margin="0,3,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="11"
+                            Text="地點清單" />
+                    </StackPanel>
+                </RadioButton>
+
 
             </StackPanel>
         </Border>

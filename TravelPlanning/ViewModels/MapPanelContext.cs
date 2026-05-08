@@ -20,9 +20,11 @@ namespace TravelPlanning.ViewModels
         private INavigationService navigationService;
         public ICommand PlaceSearchCommand { get; set; }
         public ICommand RoutePlanningPageCommand { get; set; }
+        public ICommand FavoritePageCommand { get; set; }
 
         public bool IsPlaceSearchSelected { get; set; } = true;
         public bool IsRoutePlanningSelected { get; set; } = false;
+        public bool IsFavoriteSelected { get; set; } = false;
 
         public MapPanelContext(INavigationService navigationService)
         {
@@ -34,14 +36,27 @@ namespace TravelPlanning.ViewModels
                 navigationService.Navigate("PlaceSearchPage", navigationService);
                 IsPlaceSearchSelected = true;
                 IsRoutePlanningSelected = false;
+                IsFavoriteSelected = false;
             });
 
             this.RoutePlanningPageCommand = new RelayCommand(() =>
             {
                 navigationService.Navigate("RoutePlanningPage");
-                IsRoutePlanningSelected = true;
                 IsPlaceSearchSelected = false;
+                IsRoutePlanningSelected = true;
+                IsFavoriteSelected = false;
             });
+
+
+            this.FavoritePageCommand = new RelayCommand(() =>
+            {
+                navigationService.Navigate("FavoritePage");
+                IsPlaceSearchSelected = false;
+                IsRoutePlanningSelected = false;
+                IsFavoriteSelected = true;
+            });
+
+
 
             WeakReferenceMessenger.Default.Register<NavigateToRoutePlanningMessage>(this, (recipient, message) =>
             {

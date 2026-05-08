@@ -9,7 +9,6 @@ namespace TravelPlanning.Database.Interface
 {
     public interface ITripRepository
     {
-
         void CreateTrip(TripDAO tripDAO);
     }
 }
