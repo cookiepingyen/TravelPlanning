@@ -65,9 +65,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAO\FavoriteDAO.cs" />
-    <Compile Include="DAO\FavoriteItemDAO.cs" />
-    <Compile Include="DAO\TripDAO.cs" />
+    <Compile Include="Contract\FavoriteContract.cs" />
+    <Compile Include="Models\DAO\FavoriteDAO.cs" />
+    <Compile Include="Models\DAO\FavoriteItemDAO.cs" />
+    <Compile Include="Models\DAO\TripDAO.cs" />
     <Compile Include="Entities\DatabaseContext.cs" />
     <Compile Include="Entities\Favorite.cs" />
     <Compile Include="Entities\FavoriteItem.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Utility\Mapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Contract\" />
+    <Folder Include="Models\DTO\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

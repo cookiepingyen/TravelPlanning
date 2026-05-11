@@ -10,7 +10,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid>
-        <Label>FavoritePage</Label>
-    </Grid>
+    <StackPanel>
+        <TextBox Text="{Binding FavoriteName}" />
+        <Button Command="{Binding CreateFavoriteCommand}" Content="新增清單" />
+    </StackPanel>
 </Page>

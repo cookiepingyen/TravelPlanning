@@ -226,6 +226,7 @@
     <Compile Include="Components\CommentComponent\Comment.xaml.cs">
       <DependentUpon>Comment.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\CreateFavoriteContract.cs" />
     <Compile Include="Contracts\CreateTripContract.cs" />
     <Compile Include="Converters\RatingToStarsConverter.cs" />
     <Compile Include="MapToolTip.xaml.cs">
@@ -235,6 +236,7 @@
     <Compile Include="Models\NavigateToRoutePlanningMessage.cs" />
     <Compile Include="Models\PlaceModel.cs" />
     <Compile Include="Models\PlaceOverview.cs" />
+    <Compile Include="Presenters\FavoritePresenter.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />
     <Compile Include="Utilities\Interfaces\INavigationService.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="Utilities\Mapper.cs" />
     <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
+    <Compile Include="ViewModels\FavoriteContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\MapPanelContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />

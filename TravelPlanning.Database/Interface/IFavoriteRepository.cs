@@ -8,7 +8,7 @@ using TravelPlanning.Database.Entities;
 
 namespace TravelPlanning.Database.Interface
 {
-    internal interface IFavoriteRepository
+    public interface IFavoriteRepository
     {
         List<FavoriteDAO> GetFavorites();
         void CreateFavorite(FavoriteDAO favoriteDAO);
