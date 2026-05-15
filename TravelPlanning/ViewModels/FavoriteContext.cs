@@ -1,20 +1,39 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
+using IOCServiceCollection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TravelPlanning.Database.DAO;
+using TravelPlanning.Database.Entities;
+using TravelPlanning.Models.DTO;
+using TravelPlanning.Utilities;
+using Wpf.Ui.Controls;
 using static TravelPlanning.Contracts.CreateFavoriteContract;
 using static TravelPlanning.Contracts.CreateTripContract;
 
 namespace TravelPlanning.ViewModels
 {
-    public class FavoriteContext : INotifyPropertyChanged, ICreateFavoriteView
+    public class FavoriteContext : INotifyPropertyChanged, IFavoriteView
     {
+        public SymbolRegular[] Icons { get; set; }
+        private SymbolRegular _selectedIcon = SymbolRegular.Star24;
+        public SymbolRegular SelectedIcon
+        {
+            get => _selectedIcon;
+            set
+            {
+                _selectedIcon = value;
+                OnPropertyChanged(nameof(SelectedIcon));
+            }
+        }
+
         public IFavoritePresenter createFavoritePresenter;
         public string _favoriteName { get; set; }
         public string FavoriteName
@@ -34,7 +53,20 @@ namespace TravelPlanning.ViewModels
 
         public ICommand CreateFavoriteCommand { get; set; }
 
+        private ObservableCollection<FavoriteListItemContext> favoriteContexts;
+        public ObservableCollection<FavoriteListItemContext> FavoriteListItems
+        {
+            get
+            {
+                return favoriteContexts;
+            }
+            set
+            {
+                favoriteContexts = value;
+                OnPropertyChanged(nameof(FavoriteListItems));
+            }
 
+        }
 
         public void OnPropertyChanged(string propertyName)
         {
@@ -42,13 +74,38 @@ namespace TravelPlanning.ViewModels
         }
 
 
-        public FavoriteContext(IFavoritePresenter createFavoritePresenter)
+        public FavoriteContext(PresenterFactory presenterFactory)
         {
+            Icons = (SymbolRegular[])Enum.GetValues(typeof(SymbolRegular));
+
+            createFavoritePresenter = presenterFactory.Create<IFavoritePresenter, IFavoriteView>(this);
+
+
+            createFavoritePresenter.GetFavoriteListItems();
+
             this.CreateFavoriteCommand = new RelayCommand(() =>
             {
-                createFavoritePresenter.CreateFavorite(_favoriteName);
+                createFavoritePresenter.CreateFavorite(_favoriteName, _selectedIcon.ToString());
                 _favoriteName = null;
             });
+
+
+        }
+
+        public void OnFaviriteItemsResponse(List<FavoriteDAO> favoriteDAOs)
+        {
+            List<FavoriteListItemContext> favoriteListItemContexts = favoriteDAOs.Select(x =>
+            {
+                return Mapper.Map<FavoriteDAO, FavoriteListItemContext>(x);
+            }).ToList();
+
+            FavoriteListItems = new ObservableCollection<FavoriteListItemContext>(favoriteListItemContexts);
+        }
+
+
+        public void AddCreatedFaviriteListItem(FavoriteDAO favoriteDAO)
+        {
+            this.FavoriteListItems.Add(Mapper.Map<FavoriteDAO, FavoriteListItemContext>(favoriteDAO));
         }
 
     }

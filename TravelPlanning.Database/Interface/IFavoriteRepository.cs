@@ -11,7 +11,7 @@ namespace TravelPlanning.Database.Interface
     public interface IFavoriteRepository
     {
         List<FavoriteDAO> GetFavorites();
-        void CreateFavorite(FavoriteDAO favoriteDAO);
+        FavoriteDAO CreateFavorite(FavoriteDAO favoriteDAO);
         void UpdateFavorite(FavoriteDAO favoriteDAO);
         void DeleteFavorite(Guid favoriteID);
 

@@ -5,13 +5,88 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.Favorite"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="FavoritePage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <StackPanel>
-        <TextBox Text="{Binding FavoriteName}" />
-        <Button Command="{Binding CreateFavoriteCommand}" Content="新增清單" />
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ComboBox
+            Grid.Column="0"
+            Width="400"
+            Height="50"
+            Margin="10"
+            ItemsSource="{Binding Icons}"
+            ScrollViewer.CanContentScroll="True"
+            SelectedItem="{Binding SelectedIcon}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"
+                            Symbol="{Binding}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBox
+            Grid.Column="1"
+            Width="400"
+            Height="50"
+            Text="{Binding FavoriteName}" />
+        <Button
+            Grid.Column="2"
+            Height="50"
+            Margin="10"
+            Command="{Binding CreateFavoriteCommand}"
+            Content="新增清單" />
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <ItemsControl ItemsSource="{Binding FavoriteListItems}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Foreground="White" Symbol="{Binding Icon}" />
+                            <TextBlock
+                                Margin="0,3,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="11"
+                                Foreground="White"
+                                Text="{Binding Name}" />
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="White"
+                                Text="{Binding PlaceCount, StringFormat={}{0}個地點}" />
+                            <!--<TextBlock FontSize="11" Foreground="White">
+                                <Run Text="{Binding PlaceCount}" />
+                                <Run Text="個地點" />
+                            </TextBlock>-->
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
 </Page>

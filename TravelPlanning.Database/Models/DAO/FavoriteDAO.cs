@@ -11,5 +11,8 @@ namespace TravelPlanning.Database.DAO
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+        public int PlaceCount { get; set; }
+
+        public string Icon { get; set; }
     }
 }

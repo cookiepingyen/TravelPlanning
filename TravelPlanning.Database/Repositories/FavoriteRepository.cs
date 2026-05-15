@@ -29,7 +29,7 @@ namespace TravelPlanning.Database.Repositories
 
         }
 
-        public void CreateFavorite(FavoriteDAO favoriteDAO)
+        public FavoriteDAO CreateFavorite(FavoriteDAO favoriteDAO)
         {
             Favorite favorite = Mapper.Map<FavoriteDAO, Favorite>(favoriteDAO);
 
@@ -37,6 +37,8 @@ namespace TravelPlanning.Database.Repositories
             favorite.User_id = Guid.Parse("2CB96EE9-689F-44A6-A730-C14AE767E5C8");
             db.Favorite.Add(favorite);
             db.SaveChanges();
+
+            return favoriteDAO;
         }
 
         public void UpdateFavorite(FavoriteDAO favoriteDAO)
@@ -48,9 +50,15 @@ namespace TravelPlanning.Database.Repositories
 
         public List<FavoriteDAO> GetFavorites()
         {
-            List<Favorite> favorites = db.Favorite.ToList();
-            List<FavoriteDAO> favoriteDAOs = Mapper.Map<List<Favorite>, List<FavoriteDAO>>(favorites);
-            return favoriteDAOs;
+            List<FavoriteDAO> favorites = db.Favorite.Select(x => new FavoriteDAO()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Icon = x.Icon,
+                PlaceCount = x.FavoriteItem.Count
+
+            }).OrderBy(f => f.Name).ToList();
+            return favorites;
         }
 
         public void DeleteFavorite(Guid favoriteID)
@@ -73,5 +81,7 @@ namespace TravelPlanning.Database.Repositories
             List<FavoriteItemDAO> favoriteItemDAOs = Mapper.Map<List<FavoriteItem>, List<FavoriteItemDAO>>(favoriteItems);
             return favoriteItemDAOs;
         }
+
+
     }
 }

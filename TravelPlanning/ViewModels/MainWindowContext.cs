@@ -36,6 +36,7 @@ namespace TravelPlanning.ViewModels
                 .ToList()
                 .ForEach(x => MenuItems.Add(x));
 
+
         }
 
 
