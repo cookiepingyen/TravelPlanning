@@ -63,27 +63,74 @@
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="2">
+            Grid.ColumnSpan="3">
             <ItemsControl ItemsSource="{Binding FavoriteListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Foreground="White" Symbol="{Binding Icon}" />
-                            <TextBlock
-                                Margin="0,3,0,0"
-                                HorizontalAlignment="Center"
-                                FontSize="11"
-                                Foreground="White"
-                                Text="{Binding Name}" />
-                            <TextBlock
-                                FontSize="11"
-                                Foreground="White"
-                                Text="{Binding PlaceCount, StringFormat={}{0}個地點}" />
-                            <!--<TextBlock FontSize="11" Foreground="White">
-                                <Run Text="{Binding PlaceCount}" />
-                                <Run Text="個地點" />
-                            </TextBlock>-->
-                        </StackPanel>
+
+                        <Border
+                            Margin="8"
+                            Padding="12"
+                            Background="#1E1E1E"
+                            CornerRadius="12">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="40" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  左側 Icon  -->
+                                <Border
+                                    Width="32"
+                                    Height="32"
+                                    VerticalAlignment="Center"
+                                    Background="#2D2D2D"
+                                    CornerRadius="16">
+
+                                    <ui:SymbolIcon
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="#8AB4F8"
+                                        Symbol="{Binding Icon}" />
+                                </Border>
+
+                                <!--  中間文字  -->
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center">
+
+                                    <TextBlock
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Foreground="White"
+                                        Text="{Binding Name}" />
+
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        FontSize="12"
+                                        Foreground="#A0A0A0"
+                                        Text="{Binding PlaceCount, StringFormat=私人 · {0} 個地點}" />
+
+                                </StackPanel>
+
+                                <!--  右側更多按鈕  -->
+                                <Button
+                                    Grid.Column="2"
+                                    Width="32"
+                                    Height="32"
+                                    Background="Transparent"
+                                    BorderBrush="{x:Null}"
+                                    Cursor="Hand">
+
+                                    <ui:SymbolIcon Foreground="#B0B0B0" Symbol="MoreVertical24" />
+                                </Button>
+
+                            </Grid>
+                        </Border>
+
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
