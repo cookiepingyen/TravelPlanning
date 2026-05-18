@@ -52,6 +52,8 @@ namespace TravelPlanning.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand CreateFavoriteCommand { get; set; }
+        public ICommand EditFavoriteCommand { get; set; }
+        public ICommand DeleteFavoriteCommand { get; set; }
 
         private ObservableCollection<FavoriteListItemContext> favoriteContexts;
         public ObservableCollection<FavoriteListItemContext> FavoriteListItems
@@ -81,12 +83,19 @@ namespace TravelPlanning.ViewModels
             createFavoritePresenter = presenterFactory.Create<IFavoritePresenter, IFavoriteView>(this);
 
 
-            createFavoritePresenter.GetFavoriteListItems();
+            createFavoritePresenter.GetFavoriteListItemsAsync();
 
             this.CreateFavoriteCommand = new RelayCommand(() =>
             {
                 createFavoritePresenter.CreateFavorite(_favoriteName, _selectedIcon.ToString());
                 _favoriteName = null;
+            });
+
+            //this.EditFavoriteCommand = new RelayCommand(() => { });
+            this.DeleteFavoriteCommand = new RelayCommand<FavoriteListItemContext>((item) =>
+            {
+                createFavoritePresenter.RemoveFavoriteAsync(item.Id);
+                FavoriteListItems.Remove(item);
             });
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,11 +62,13 @@ namespace TravelPlanning.Database.Repositories
             return favorites;
         }
 
-        public void DeleteFavorite(Guid favoriteID)
+        public async Task DeleteFavoriteAsync(Guid favoriteID)
         {
-            Favorite favorite = db.Favorite.FirstOrDefault(x => x.Id == favoriteID);
+            Favorite favorite = await db.Favorite.FirstOrDefaultAsync(x => x.Id == favoriteID) ?? throw new KeyNotFoundException();
+            List<FavoriteItem> favoriteItems = db.FavoriteItem.Where(x => x.Favorite_id == favoriteID).ToList();
+            db.FavoriteItem.RemoveRange(favoriteItems);
             db.Favorite.Remove(favorite);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
         public void DeleteFavoriteItem(Guid favoriteItemID)

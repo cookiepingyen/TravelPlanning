@@ -23,7 +23,11 @@ namespace TravelPlanning.Contracts
         {
             void CreateFavorite(string name, string selectIcon);
 
-            Task GetFavoriteListItems();
+            Task GetFavoriteListItemsAsync();
+
+            Task RemoveFavoriteAsync(Guid favoriteId);
+            Task RemoveFavoriteItemAsync();
+
         }
 
 

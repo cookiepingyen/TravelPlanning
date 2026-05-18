@@ -35,9 +35,20 @@ namespace TravelPlanning.Presenters
 
         }
 
-        public Task GetFavoriteListItems()
+        public Task GetFavoriteListItemsAsync()
         {
             return Task.Run(() => this.FavoriteView.OnFaviriteItemsResponse(FavoriteRepository.GetFavorites()));
+        }
+
+        public async Task RemoveFavoriteAsync(Guid favoriteId)
+        {
+            await this.FavoriteRepository.DeleteFavoriteAsync(favoriteId);
+
+        }
+
+        public Task RemoveFavoriteItemAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -118,20 +118,59 @@
                                 </StackPanel>
 
                                 <!--  右側更多按鈕  -->
-                                <Button
-                                    Grid.Column="2"
-                                    Width="32"
-                                    Height="32"
-                                    Background="Transparent"
-                                    BorderBrush="{x:Null}"
-                                    Cursor="Hand">
+                                <Grid Grid.Column="2">
+                                    <ToggleButton
+                                        x:Name="MoreToggleButton"
+                                        Width="32"
+                                        Height="32"
+                                        Background="Transparent"
+                                        BorderBrush="{x:Null}"
+                                        Cursor="Hand">
+                                        <ui:SymbolIcon Foreground="#B0B0B0" Symbol="MoreVertical24" />
+                                    </ToggleButton>
 
-                                    <ui:SymbolIcon Foreground="#B0B0B0" Symbol="MoreVertical24" />
-                                </Button>
-
+                                    <Popup
+                                        AllowsTransparency="True"
+                                        IsOpen="{Binding IsChecked, ElementName=MoreToggleButton, Mode=TwoWay}"
+                                        Placement="Bottom"
+                                        PlacementTarget="{Binding ElementName=MoreToggleButton}"
+                                        StaysOpen="False">
+                                        <Border
+                                            Background="#2D2D2D"
+                                            BorderBrush="#444444"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                            <StackPanel MinWidth="120">
+                                                <Button
+                                                    Width="120"
+                                                    Padding="12,8"
+                                                    HorizontalContentAlignment="Left"
+                                                    Background="Transparent"
+                                                    BorderBrush="{x:Null}"
+                                                    Command="{Binding DataContext.EditFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}"
+                                                    Cursor="Hand"
+                                                    Foreground="White">
+                                                    編輯清單
+                                                </Button>
+                                                <Button
+                                                    Width="120"
+                                                    Padding="12,8"
+                                                    HorizontalContentAlignment="Left"
+                                                    Background="Transparent"
+                                                    BorderBrush="{x:Null}"
+                                                    Command="{Binding DataContext.DeleteFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}"
+                                                    Cursor="Hand"
+                                                    Foreground="#FF6B6B">
+                                                    刪除清單
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
                             </Grid>
                         </Border>
-
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

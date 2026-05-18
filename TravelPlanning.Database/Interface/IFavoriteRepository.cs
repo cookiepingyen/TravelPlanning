@@ -13,7 +13,7 @@ namespace TravelPlanning.Database.Interface
         List<FavoriteDAO> GetFavorites();
         FavoriteDAO CreateFavorite(FavoriteDAO favoriteDAO);
         void UpdateFavorite(FavoriteDAO favoriteDAO);
-        void DeleteFavorite(Guid favoriteID);
+        Task DeleteFavoriteAsync(Guid favoriteID);
 
 
         void AddFavoriteItem(FavoriteDAO favoriteDAO, FavoriteItemDAO favoriteItemDAO);
