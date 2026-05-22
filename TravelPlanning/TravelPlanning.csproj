@@ -232,6 +232,7 @@
     <Compile Include="MapToolTip.xaml.cs">
       <DependentUpon>MapToolTip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTO\FavoriteDTO.cs" />
     <Compile Include="Models\DTO\TripDTO.cs" />
     <Compile Include="Models\NavigateToRoutePlanningMessage.cs" />
     <Compile Include="Models\PlaceModel.cs" />

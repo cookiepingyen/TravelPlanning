@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TravelPlanning.Database.DAO;
+using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Interface;
 using TravelPlanning.Database.Repositories;
+using TravelPlanning.Models.DTO;
+using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 using Wpf.Ui.Controls;
 using static TravelPlanning.Contracts.CreateFavoriteContract;
@@ -49,6 +52,12 @@ namespace TravelPlanning.Presenters
         public Task RemoveFavoriteItemAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UpdateFavorite(FavoriteDTO favoriteDTO)
+        {
+            FavoriteDAO favoriteDAO = Mapper.Map<FavoriteDTO, FavoriteDAO>(favoriteDTO);
+            await this.FavoriteRepository.UpdateFavoriteAsync(favoriteDAO);
         }
     }
 }

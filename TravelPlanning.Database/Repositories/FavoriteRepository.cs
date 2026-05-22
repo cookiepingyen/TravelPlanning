@@ -42,11 +42,11 @@ namespace TravelPlanning.Database.Repositories
             return favoriteDAO;
         }
 
-        public void UpdateFavorite(FavoriteDAO favoriteDAO)
+        public async Task UpdateFavoriteAsync(FavoriteDAO favoriteDAO)
         {
             Favorite favorite = db.Favorite.FirstOrDefault(x => x.Id == favoriteDAO.Id);
             favorite.Name = favoriteDAO.Name;
-
+            int count = await db.SaveChangesAsync();
         }
 
         public List<FavoriteDAO> GetFavorites()

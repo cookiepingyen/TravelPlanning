@@ -52,8 +52,10 @@ namespace TravelPlanning.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand CreateFavoriteCommand { get; set; }
-        public ICommand EditFavoriteCommand { get; set; }
         public ICommand DeleteFavoriteCommand { get; set; }
+        public ICommand EditFavoriteCommand { get; set; }
+        public ICommand ConfirmEditCommand { get; set; }
+        public ICommand CancelEditCommand { get; set; }
 
         private ObservableCollection<FavoriteListItemContext> favoriteContexts;
         public ObservableCollection<FavoriteListItemContext> FavoriteListItems
@@ -91,7 +93,6 @@ namespace TravelPlanning.ViewModels
                 _favoriteName = null;
             });
 
-            //this.EditFavoriteCommand = new RelayCommand(() => { });
             this.DeleteFavoriteCommand = new RelayCommand<FavoriteListItemContext>((item) =>
             {
                 createFavoritePresenter.RemoveFavoriteAsync(item.Id);
@@ -99,6 +100,28 @@ namespace TravelPlanning.ViewModels
             });
 
 
+            EditFavoriteCommand = new RelayCommand<FavoriteListItemContext>(item =>
+            {
+                item.EditingName = item.Name;
+                item.IsEditing = true;
+            });
+
+            // 打勾確認
+            ConfirmEditCommand = new RelayCommand<FavoriteListItemContext>(async item =>
+            {
+                item.Name = item.EditingName;
+                item.IsEditing = false;
+                // 再接 DB 更新
+
+                FavoriteDTO favoriteDTO = Mapper.Map<FavoriteListItemContext, FavoriteDTO>(item);
+                await createFavoritePresenter.UpdateFavorite(favoriteDTO);
+            });
+
+            // 叉叉取消
+            CancelEditCommand = new RelayCommand<FavoriteListItemContext>(item =>
+            {
+                item.IsEditing = false;
+            });
         }
 
         public void OnFaviriteItemsResponse(List<FavoriteDAO> favoriteDAOs)

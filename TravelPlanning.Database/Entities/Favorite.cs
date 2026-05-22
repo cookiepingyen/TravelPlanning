@@ -19,7 +19,7 @@ namespace TravelPlanning.Database.Entities
 
         public Guid User_id { get; set; }
 
-        [StringLength(10)]
+        [StringLength(20)]
         public string Name { get; set; }
 
         [StringLength(50)]

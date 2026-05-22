@@ -28,6 +28,8 @@ namespace TravelPlanning.Contracts
             Task RemoveFavoriteAsync(Guid favoriteId);
             Task RemoveFavoriteItemAsync();
 
+            Task UpdateFavorite(FavoriteDTO favoriteDTO);
+
         }
 
 

@@ -68,7 +68,6 @@
             <ItemsControl ItemsSource="{Binding FavoriteListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-
                         <Border
                             Margin="8"
                             Padding="12"
@@ -98,24 +97,72 @@
                                 </Border>
 
                                 <!--  中間文字  -->
-                                <StackPanel
+                                <!--  中間文字  -->
+                                <Grid
                                     Grid.Column="1"
                                     Margin="12,0,0,0"
                                     VerticalAlignment="Center">
 
-                                    <TextBlock
-                                        FontSize="15"
-                                        FontWeight="SemiBold"
-                                        Foreground="White"
-                                        Text="{Binding Name}" />
+                                    <!--  一般顯示模式  -->
+                                    <StackPanel>
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock
+                                            FontSize="15"
+                                            FontWeight="SemiBold"
+                                            Foreground="White"
+                                            Text="{Binding Name}" />
+                                        <TextBlock
+                                            Margin="0,4,0,0"
+                                            FontSize="12"
+                                            Foreground="#A0A0A0"
+                                            Text="{Binding PlaceCount, StringFormat=私人 · {0} 個地點}" />
+                                    </StackPanel>
 
-                                    <TextBlock
-                                        Margin="0,4,0,0"
-                                        FontSize="12"
-                                        Foreground="#A0A0A0"
-                                        Text="{Binding PlaceCount, StringFormat=私人 · {0} 個地點}" />
-
-                                </StackPanel>
+                                    <!--  編輯模式  -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBox
+                                            Width="140"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding EditingName, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Button
+                                            Margin="6,0,0,0"
+                                            Background="Transparent"
+                                            BorderBrush="{x:Null}"
+                                            Command="{Binding DataContext.ConfirmEditCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Cursor="Hand">
+                                            <ui:SymbolIcon Foreground="#4CAF50" Symbol="Checkmark24" />
+                                        </Button>
+                                        <Button
+                                            Margin="4,0,0,0"
+                                            Background="Transparent"
+                                            BorderBrush="{x:Null}"
+                                            Command="{Binding DataContext.CancelEditCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Cursor="Hand">
+                                            <ui:SymbolIcon Foreground="#FF6B6B" Symbol="Dismiss24" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
 
                                 <!--  右側更多按鈕  -->
                                 <Grid Grid.Column="2">
