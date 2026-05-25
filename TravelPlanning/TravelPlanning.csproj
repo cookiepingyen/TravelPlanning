@@ -249,7 +249,7 @@
     <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\FavoriteContext.cs" />
-    <Compile Include="ViewModels\FavoriteItemContext.cs" />
+    <Compile Include="ViewModels\FavoriteListItemContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\MapPanelContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />

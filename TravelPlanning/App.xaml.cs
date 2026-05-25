@@ -50,7 +50,6 @@ namespace TravelPlanning
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
-            collection.AddTransient<FavoritePage, FavoritePage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewControl, OverviewControl>();
             collection.AddTransient<PlaceSearchPage, PlaceSearchPage>();
@@ -59,6 +58,9 @@ namespace TravelPlanning
             collection.AddTransient<CommentContext, CommentContext>();
             collection.AddTransient<OverviewContext, OverviewContext>();
             collection.AddTransient<FavoriteContext, FavoriteContext>();
+            collection.AddTransient<FavoritePage, FavoritePage>();
+            collection.AddTransient<FavoriteListItemContext, FavoriteListItemContext>();
+            collection.AddTransient<FavoriteListItemPage, FavoriteListItemPage>();
             collection.AddTransient<IFavoritePresenter, FavoritePresenter>();
             collection.AddTransient<IFavoriteRepository, FavoriteRepository>();
 
