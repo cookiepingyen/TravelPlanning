@@ -46,6 +46,7 @@ namespace TravelPlanning.Database.Repositories
         {
             Favorite favorite = db.Favorite.FirstOrDefault(x => x.Id == favoriteDAO.Id);
             favorite.Name = favoriteDAO.Name;
+            favorite.Icon = favoriteDAO.Icon;
             int count = await db.SaveChangesAsync();
         }
 

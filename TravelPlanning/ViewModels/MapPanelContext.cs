@@ -50,7 +50,7 @@ namespace TravelPlanning.ViewModels
 
             this.FavoritePageCommand = new RelayCommand(() =>
             {
-                navigationService.Navigate("FavoritePage");
+                navigationService.Navigate("FavoritePage", navigationService);
                 IsPlaceSearchSelected = false;
                 IsRoutePlanningSelected = false;
                 IsFavoriteSelected = true;

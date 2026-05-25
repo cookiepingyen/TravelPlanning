@@ -14,13 +14,14 @@ using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
 using TravelPlanning.Models.DTO;
 using TravelPlanning.Utilities;
+using TravelPlanning.Utilities.Interfaces;
 using Wpf.Ui.Controls;
 using static TravelPlanning.Contracts.CreateFavoriteContract;
 using static TravelPlanning.Contracts.CreateTripContract;
 
 namespace TravelPlanning.ViewModels
 {
-    public class FavoriteContext : INotifyPropertyChanged, IFavoriteView
+    public class FavoriteContext : INotifyPropertyChanged, IFavoriteView, INavigationAware
     {
         public SymbolRegular[] Icons { get; set; }
         private SymbolRegular _selectedIcon = SymbolRegular.Star24;
@@ -56,6 +57,9 @@ namespace TravelPlanning.ViewModels
         public ICommand EditFavoriteCommand { get; set; }
         public ICommand ConfirmEditCommand { get; set; }
         public ICommand CancelEditCommand { get; set; }
+        public ICommand RouteFavoriteItemPageCommand { get; set; }
+
+        private INavigationService navigationService;
 
         private ObservableCollection<FavoriteListItemContext> favoriteContexts;
         public ObservableCollection<FavoriteListItemContext> FavoriteListItems
@@ -110,6 +114,7 @@ namespace TravelPlanning.ViewModels
             ConfirmEditCommand = new RelayCommand<FavoriteListItemContext>(async item =>
             {
                 item.Name = item.EditingName;
+                //item.Icon = item.Icon;
                 item.IsEditing = false;
                 // 再接 DB 更新
 
@@ -121,6 +126,12 @@ namespace TravelPlanning.ViewModels
             CancelEditCommand = new RelayCommand<FavoriteListItemContext>(item =>
             {
                 item.IsEditing = false;
+            });
+
+            // 進入 FavoriteItem 頁面
+            RouteFavoriteItemPageCommand = new RelayCommand<FavoriteListItemContext>(item =>
+            {
+                navigationService.Navigate("FavoriteListItemPage");
             });
         }
 
@@ -140,5 +151,9 @@ namespace TravelPlanning.ViewModels
             this.FavoriteListItems.Add(Mapper.Map<FavoriteDAO, FavoriteListItemContext>(favoriteDAO));
         }
 
+        public void DataAware(object data)
+        {
+            navigationService = (INavigationService)data;
+        }
     }
 }
