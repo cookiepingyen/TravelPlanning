@@ -234,6 +234,7 @@
     </Compile>
     <Compile Include="Models\DTO\FavoriteDTO.cs" />
     <Compile Include="Models\DTO\TripDTO.cs" />
+    <Compile Include="Models\FavoriteItemObject.cs" />
     <Compile Include="Models\NavigateToRoutePlanningMessage.cs" />
     <Compile Include="Models\PlaceModel.cs" />
     <Compile Include="Models\PlaceOverview.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\FavoriteContext.cs" />
+    <Compile Include="ViewModels\FavoriteItemPlaceContext.cs" />
     <Compile Include="ViewModels\FavoriteListItemContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\MapPanelContext.cs" />

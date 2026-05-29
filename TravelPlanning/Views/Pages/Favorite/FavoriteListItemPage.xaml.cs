@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelPlanning.ViewModels;
 
 namespace TravelPlanning.Views.Pages.Favorite
 {
@@ -20,9 +21,12 @@ namespace TravelPlanning.Views.Pages.Favorite
     /// </summary>
     public partial class FavoriteListItemPage : Page
     {
-        public FavoriteListItemPage()
+
+
+        public FavoriteListItemPage(FavoriteItemPlaceContext favoriteItemPlaceContext)
         {
             InitializeComponent();
+            DataContext = favoriteItemPlaceContext;
         }
     }
 }

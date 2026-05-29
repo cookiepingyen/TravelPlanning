@@ -102,7 +102,7 @@
 
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseLeftButtonUp">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.RouteFavoriteItemPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" />
+                                                <i:InvokeCommandAction Command="{Binding DataContext.RouteFavoriteItemPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
 

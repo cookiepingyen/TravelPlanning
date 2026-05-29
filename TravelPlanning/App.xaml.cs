@@ -61,6 +61,7 @@ namespace TravelPlanning
             collection.AddTransient<FavoritePage, FavoritePage>();
             collection.AddTransient<FavoriteListItemContext, FavoriteListItemContext>();
             collection.AddTransient<FavoriteListItemPage, FavoriteListItemPage>();
+            collection.AddTransient<FavoriteItemPlaceContext, FavoriteItemPlaceContext>();
             collection.AddTransient<IFavoritePresenter, FavoritePresenter>();
             collection.AddTransient<IFavoriteRepository, FavoriteRepository>();
 

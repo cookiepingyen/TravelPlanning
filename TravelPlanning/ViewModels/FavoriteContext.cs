@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
+using TravelPlanning.Models;
 using TravelPlanning.Models.DTO;
 using TravelPlanning.Utilities;
 using TravelPlanning.Utilities.Interfaces;
@@ -131,7 +132,8 @@ namespace TravelPlanning.ViewModels
             // 進入 FavoriteItem 頁面
             RouteFavoriteItemPageCommand = new RelayCommand<FavoriteListItemContext>(item =>
             {
-                navigationService.Navigate("FavoriteListItemPage");
+                FavoriteItemObject favoriteItemObject = new FavoriteItemObject(item, navigationService);
+                navigationService.Navigate("FavoriteListItemPage", favoriteItemObject);
             });
         }
 
