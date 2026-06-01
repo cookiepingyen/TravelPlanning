@@ -46,7 +46,6 @@ namespace TravelPlanning.Presenters
         public async Task RemoveFavoriteAsync(Guid favoriteId)
         {
             await this.FavoriteRepository.DeleteFavoriteAsync(favoriteId);
-
         }
 
         public Task RemoveFavoriteItemAsync()

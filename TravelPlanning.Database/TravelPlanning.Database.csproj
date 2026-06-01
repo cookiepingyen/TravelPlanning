@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract\FavoriteContract.cs" />
+    <Compile Include="Interface\IFavoriteItemRepository.cs" />
     <Compile Include="Models\DAO\FavoriteDAO.cs" />
     <Compile Include="Models\DAO\FavoriteItemDAO.cs" />
     <Compile Include="Models\DAO\TripDAO.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Interface\ITripRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FavoriteRepository.cs" />
+    <Compile Include="Repositories\IFavoriteItemRepository.cs" />
     <Compile Include="Repositories\TripRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="TravelPlanningDatabaseRegistration.cs" />

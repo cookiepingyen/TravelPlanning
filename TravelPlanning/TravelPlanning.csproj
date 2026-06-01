@@ -228,6 +228,7 @@
     </Compile>
     <Compile Include="Contracts\CreateFavoriteContract.cs" />
     <Compile Include="Contracts\CreateTripContract.cs" />
+    <Compile Include="Contracts\FaviriteItemContract.cs" />
     <Compile Include="Converters\RatingToStarsConverter.cs" />
     <Compile Include="MapToolTip.xaml.cs">
       <DependentUpon>MapToolTip.xaml</DependentUpon>
@@ -238,6 +239,7 @@
     <Compile Include="Models\NavigateToRoutePlanningMessage.cs" />
     <Compile Include="Models\PlaceModel.cs" />
     <Compile Include="Models\PlaceOverview.cs" />
+    <Compile Include="Presenters\FavoriteItemPresenter.cs" />
     <Compile Include="Presenters\FavoritePresenter.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />
@@ -250,11 +252,11 @@
     <Compile Include="ViewModels\CommentContext.cs" />
     <Compile Include="ViewModels\CreateTripContext.cs" />
     <Compile Include="ViewModels\FavoriteContext.cs" />
-    <Compile Include="ViewModels\FavoriteItemPlaceContext.cs" />
     <Compile Include="ViewModels\FavoriteListItemContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\MapPanelContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />
+    <Compile Include="ViewModels\FavoriteItemPlaceContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="ViewModels\RoutePlanningContext.cs" />
     <Compile Include="ViewModels\RouteStep.cs" />

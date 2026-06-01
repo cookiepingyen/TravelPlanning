@@ -139,10 +139,7 @@ namespace TravelPlanning.ViewModels
 
         public void OnFaviriteItemsResponse(List<FavoriteDAO> favoriteDAOs)
         {
-            List<FavoriteListItemContext> favoriteListItemContexts = favoriteDAOs.Select(x =>
-            {
-                return Mapper.Map<FavoriteDAO, FavoriteListItemContext>(x);
-            }).ToList();
+            List<FavoriteListItemContext> favoriteListItemContexts = Mapper.Map<FavoriteDAO, FavoriteListItemContext>(favoriteDAOs).ToList();
 
             FavoriteListItems = new ObservableCollection<FavoriteListItemContext>(favoriteListItemContexts);
         }

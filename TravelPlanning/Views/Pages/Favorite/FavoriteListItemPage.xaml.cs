@@ -22,11 +22,10 @@ namespace TravelPlanning.Views.Pages.Favorite
     public partial class FavoriteListItemPage : Page
     {
 
-
-        public FavoriteListItemPage(FavoriteItemPlaceContext favoriteItemPlaceContext)
+        public FavoriteListItemPage(FavoriteListItemContext favoriteListItemContext)
         {
             InitializeComponent();
-            DataContext = favoriteItemPlaceContext;
+            DataContext = favoriteListItemContext;
         }
     }
 }
