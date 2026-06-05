@@ -9,7 +9,7 @@ namespace TravelPlanning.Database.Interface
 {
     public interface IFavoriteItemRepository
     {
-        Task CreateFavoriteItemAsync(Guid favoriteID, string Name);
+        Task<FavoriteItemDAO> CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID);
 
         List<FavoriteItemDAO> GetFavoriteItems(Guid favoriteID);
 

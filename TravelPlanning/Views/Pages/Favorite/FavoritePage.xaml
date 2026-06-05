@@ -225,9 +225,7 @@
                                                     <ui:SymbolIcon Foreground="#FF6B6B" Symbol="Dismiss24" />
                                                 </Button>
                                             </StackPanel>
-
                                         </Grid>
-
                                     </StackPanel>
                                 </Grid>
 

@@ -25,7 +25,7 @@ namespace TravelPlanning.ViewModels
     {
         public Guid Id { get; set; }
         public String Name { get; set; }
-        public int PlaceCount { get; set; }
+        public int PlaceCount => FavoriteItemPlaceContexts.Count;
         public SymbolRegular Icon { get; set; }
         public string EditingName { get; set; }
         public bool IsEditing { get; set; }
@@ -35,24 +35,25 @@ namespace TravelPlanning.ViewModels
 
 
         public ICommand AutoCompleteCommaned { get; set; }
-        public ICommand AddPlaceCommand { get; set; }
+        public ICommand AddFavoriteItemPlaceCommand { get; set; }
         public ICommand GoBackCommand { get; set; }
+        public ICommand DeleteFavoriteItemPlaceCommand { get; set; }
 
         IGoogleAPIContext googleAPIContext;
         private INavigationService navigationService;
 
-        public IFavoriteItemPresenter favoriteItemPresenter;
+        public IFavoriteListItemPresenter favoriteItemPresenter;
 
         public PlaceDetailResModel Place { get; set; }
 
-        public ObservableCollection<FavoriteItemPlaceContext> FavoriteItemPlaceContexts { get; set; }
+        public ObservableCollection<FavoriteItemPlaceContext> FavoriteItemPlaceContexts { get; set; } = new ObservableCollection<FavoriteItemPlaceContext>();
 
         public FavoriteListItemContext(IGoogleAPIContext googleAPIContext, PresenterFactory presenterFactory)
         {
 
             this.googleAPIContext = googleAPIContext;
 
-            favoriteItemPresenter = presenterFactory.Create<IFavoriteItemPresenter, IFavoriteItemView>(this);
+            favoriteItemPresenter = presenterFactory.Create<IFavoriteListItemPresenter, IFavoriteItemView>(this);
 
 
             this.AutoCompleteCommaned = new RelayCommand<PlaceDetailResModel>(e =>
@@ -60,8 +61,9 @@ namespace TravelPlanning.ViewModels
                 WeakReferenceMessenger.Default.Send(e);
             });
 
-            this.AddPlaceCommand = new RelayCommand<PlaceDetailResModel>(e =>
+            this.AddFavoriteItemPlaceCommand = new RelayCommand(async () =>
             {
+                await favoriteItemPresenter.CreateFavoriteItemAsync(Id, Place.result.name, Place.result.place_id);
 
             });
 
@@ -69,12 +71,21 @@ namespace TravelPlanning.ViewModels
             {
                 navigationService.Navigate("FavoritePage", item);
             });
+
+            this.DeleteFavoriteItemPlaceCommand = new RelayCommand<FavoriteItemPlaceContext>(async (item) =>
+            {
+                await favoriteItemPresenter.RemoveFavoriteItemAsync(item.Id);
+                FavoriteItemPlaceContexts.Remove(item);
+            });
+
         }
 
         public FavoriteListItemContext()
         {
 
         }
+
+
 
         public void DataAware(object data)
         {
@@ -83,18 +94,15 @@ namespace TravelPlanning.ViewModels
 
             Id = favoriteItemObject.favoriteListItemContext.Id;
             Name = favoriteItemObject.favoriteListItemContext.Name;
-            Name = favoriteItemObject.favoriteListItemContext.Name;
             Icon = favoriteItemObject.favoriteListItemContext.Icon;
             EditingName = favoriteItemObject.favoriteListItemContext.EditingName;
             IsEditing = favoriteItemObject.favoriteListItemContext.IsEditing;
-
+            favoriteItemPresenter.GetFavoriteItems(Id);
 
         }
 
         public void OnFaviriteItemsResponse(List<FavoriteItemDAO> favoriteItemDAOs)
         {
-
-
             List<FavoriteItemPlaceContext> favoriteListItemContexts = favoriteItemDAOs.Select(x =>
             {
                 return Mapper.Map<FavoriteItemDAO, FavoriteItemPlaceContext>(x);
@@ -103,9 +111,10 @@ namespace TravelPlanning.ViewModels
             FavoriteItemPlaceContexts = new ObservableCollection<FavoriteItemPlaceContext>(favoriteListItemContexts);
         }
 
-        public void AddCreatedFaviriteListItem(FavoriteItemDAO favoriteItemDAO)
+        public void OnCreatedFaviriteListItem(FavoriteItemDAO favoriteItemDAO)
         {
-            throw new NotImplementedException();
+            FavoriteItemPlaceContext placeItem = Mapper.Map<FavoriteItemDAO, FavoriteItemPlaceContext>(favoriteItemDAO);
+            FavoriteItemPlaceContexts.Add(placeItem);
         }
 
 

@@ -239,7 +239,7 @@
     <Compile Include="Models\NavigateToRoutePlanningMessage.cs" />
     <Compile Include="Models\PlaceModel.cs" />
     <Compile Include="Models\PlaceOverview.cs" />
-    <Compile Include="Presenters\FavoriteItemPresenter.cs" />
+    <Compile Include="Presenters\FavoriteListItemPresenter.cs" />
     <Compile Include="Presenters\FavoritePresenter.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />

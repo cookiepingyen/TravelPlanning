@@ -138,7 +138,7 @@
                         Background="#1A3A5C"
                         BorderBrush="#8AB4F8"
                         BorderThickness="1"
-                        Command="{Binding AddPlaceCommand}"
+                        Command="{Binding AddFavoriteItemPlaceCommand}"
                         CornerRadius="10"
                         Cursor="Hand"
                         Foreground="#8AB4F8">
@@ -162,8 +162,6 @@
                         Foreground="#A0A0A0"
                         Text="{Binding PlaceCount, StringFormat=私人 · {0} 個地點}" />
                 </Grid>
-
-
             </Grid>
         </Border>
 
@@ -180,216 +178,99 @@
                 <!--  實際上應綁定 ItemsControl + ItemsSource="{Binding Places}"  -->
 
                 <!--  項目 1  -->
-                <Border
-                    Margin="0,0,0,8"
-                    Background="#242424"
-                    CornerRadius="12"
-                    Cursor="Hand">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#2D2D2D" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <Grid Margin="16,14">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                <ItemsControl ItemsSource="{Binding FavoriteItemPlaceContexts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,0,0,8"
+                                Background="#242424"
+                                CornerRadius="12"
+                                Cursor="Hand">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#2D2D2D" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid Margin="16,14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border
+                                        Grid.Column="0"
+                                        Width="44"
+                                        Height="44"
+                                        Margin="0,0,14,0"
+                                        VerticalAlignment="Center"
+                                        Background="#1A3A5C"
+                                        CornerRadius="22">
+                                        <ui:SymbolIcon
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="#8AB4F8"
+                                            Symbol="Location24" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock
+                                            FontSize="14"
+                                            FontWeight="SemiBold"
+                                            Foreground="White"
+                                            Text="{Binding Name}" />
+                                        <TextBlock
+                                            Margin="0,3,0,0"
+                                            FontSize="12"
+                                            Foreground="#A0A0A0"
+                                            Text="饒河街, 松山區" />
+                                    </StackPanel>
+                                    <Grid Grid.Column="2">
+                                        <ToggleButton
+                                            x:Name="MoreToggleButton"
+                                            Width="32"
+                                            Height="32"
+                                            Background="Transparent"
+                                            BorderBrush="{x:Null}"
+                                            Cursor="Hand">
+                                            <ui:SymbolIcon Foreground="#B0B0B0" Symbol="MoreVertical24" />
+                                        </ToggleButton>
 
-                        <!--  左側圓形 Icon  -->
-                        <Border
-                            Grid.Column="0"
-                            Width="44"
-                            Height="44"
-                            Margin="0,0,14,0"
-                            VerticalAlignment="Center"
-                            Background="#1A3A5C"
-                            CornerRadius="22">
-                            <ui:SymbolIcon
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#8AB4F8"
-                                Symbol="Location24" />
-                        </Border>
-
-                        <!--  地點名稱 + 地址  -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock
-                                FontSize="14"
-                                FontWeight="SemiBold"
-                                Foreground="White"
-                                Text="台北101" />
-                            <TextBlock
-                                Margin="0,3,0,0"
-                                FontSize="12"
-                                Foreground="#A0A0A0"
-                                Text="信義路五段7號, 信義區" />
-                        </StackPanel>
-
-                        <!--  右側更多按鈕  -->
-                        <Button
-                            Grid.Column="2"
-                            Width="32"
-                            Height="32"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="{x:Null}"
-                            Cursor="Hand">
-                            <ui:SymbolIcon Foreground="#606060" Symbol="MoreVertical24" />
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <!--  項目 2  -->
-                <Border
-                    Margin="0,0,0,8"
-                    Background="#242424"
-                    CornerRadius="12"
-                    Cursor="Hand">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#2D2D2D" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <Grid Margin="16,14">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Border
-                            Grid.Column="0"
-                            Width="44"
-                            Height="44"
-                            Margin="0,0,14,0"
-                            VerticalAlignment="Center"
-                            Background="#1A3A5C"
-                            CornerRadius="22">
-                            <ui:SymbolIcon
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#8AB4F8"
-                                Symbol="Location24" />
-                        </Border>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock
-                                FontSize="14"
-                                FontWeight="SemiBold"
-                                Foreground="White"
-                                Text="大安森林公園" />
-                            <TextBlock
-                                Margin="0,3,0,0"
-                                FontSize="12"
-                                Foreground="#A0A0A0"
-                                Text="新生南路二段1號, 大安區" />
-                        </StackPanel>
-                        <Button
-                            Grid.Column="2"
-                            Width="32"
-                            Height="32"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="{x:Null}"
-                            Cursor="Hand">
-                            <ui:SymbolIcon Foreground="#606060" Symbol="MoreVertical24" />
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <!--  項目 3  -->
-                <Border
-                    Margin="0,0,0,8"
-                    Background="#242424"
-                    CornerRadius="12"
-                    Cursor="Hand">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#2D2D2D" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <Grid Margin="16,14">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Border
-                            Grid.Column="0"
-                            Width="44"
-                            Height="44"
-                            Margin="0,0,14,0"
-                            VerticalAlignment="Center"
-                            Background="#1A3A5C"
-                            CornerRadius="22">
-                            <ui:SymbolIcon
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#8AB4F8"
-                                Symbol="Location24" />
-                        </Border>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock
-                                FontSize="14"
-                                FontWeight="SemiBold"
-                                Foreground="White"
-                                Text="饒河街夜市" />
-                            <TextBlock
-                                Margin="0,3,0,0"
-                                FontSize="12"
-                                Foreground="#A0A0A0"
-                                Text="饒河街, 松山區" />
-                        </StackPanel>
-                        <Button
-                            Grid.Column="2"
-                            Width="32"
-                            Height="32"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="{x:Null}"
-                            Cursor="Hand">
-                            <ui:SymbolIcon Foreground="#606060" Symbol="MoreVertical24" />
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <!--  空狀態提示（實際使用時可用 Visibility Binding 控制）  -->
-                <!--
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    Margin="0,60,0,0">
-                    <ui:SymbolIcon
-                        HorizontalAlignment="Center"
-                        Foreground="#444444"
-                        Symbol="LocationOff24"
-                        FontSize="48" />
-                    <TextBlock
-                        Margin="0,12,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="14"
-                        Foreground="#606060"
-                        Text="尚無地點" />
-                    <TextBlock
-                        Margin="0,4,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="12"
-                        Foreground="#444444"
-                        Text="點擊「新增地點」來加入你的第一個地點" />
-                </StackPanel>
-                -->
-
+                                        <Popup
+                                            AllowsTransparency="True"
+                                            IsOpen="{Binding IsChecked, ElementName=MoreToggleButton, Mode=TwoWay}"
+                                            Placement="Bottom"
+                                            PlacementTarget="{Binding ElementName=MoreToggleButton}"
+                                            StaysOpen="False">
+                                            <Border
+                                                Background="#2D2D2D"
+                                                BorderBrush="#444444"
+                                                BorderThickness="1"
+                                                CornerRadius="8">
+                                                <StackPanel MinWidth="120">
+                                                    <Button
+                                                        Width="120"
+                                                        Padding="12,8"
+                                                        HorizontalContentAlignment="Left"
+                                                        Background="Transparent"
+                                                        BorderBrush="{x:Null}"
+                                                        Command="{Binding DataContext.DeleteFavoriteItemPlaceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                        CommandParameter="{Binding}"
+                                                        Cursor="Hand"
+                                                        Foreground="#FF6B6B">
+                                                        刪除地點
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>

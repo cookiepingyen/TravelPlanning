@@ -16,18 +16,22 @@ namespace TravelPlanning.Database.Repositories
 
         public DatabaseContext db = new DatabaseContext();
 
-        public async Task CreateFavoriteItemAsync(Guid favoriteID, string Name)
+        public async Task<FavoriteItemDAO> CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID)
         {
 
             FavoriteItem favoriteItem = new FavoriteItem()
             {
                 Id = Guid.NewGuid(),
                 Favorite_id = favoriteID,
+                Place_id = placeID,
                 Name = Name,
             };
 
             db.FavoriteItem.Add(favoriteItem);
             await db.SaveChangesAsync();
+
+            return Mapper.Map<FavoriteItem, FavoriteItemDAO>(favoriteItem);
+
         }
 
         public List<FavoriteItemDAO> GetFavoriteItems(Guid favoriteID)

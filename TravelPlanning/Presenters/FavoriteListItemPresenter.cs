@@ -9,34 +9,41 @@ using static TravelPlanning.Contracts.FaviriteItemContract;
 using TravelPlanning.Database.Repositories;
 using System.Xml.Linq;
 using TravelPlanning.Database.Entities;
+using TravelPlanning.Database.DAO;
 
 namespace TravelPlanning.Presenters
 {
-    public class FavoriteItemPresenter : IFavoriteItemPresenter
+    public class FavoriteListItemPresenter : IFavoriteListItemPresenter
     {
         public IFavoriteItemView FavoriteItemView { get; set; }
         public IFavoriteItemRepository FavoriteItemRepository { get; set; }
 
 
-        public FavoriteItemPresenter(IFavoriteItemView favoriteItemView, IFavoriteItemRepository favoriteItemRepository)
+        public FavoriteListItemPresenter(IFavoriteItemView favoriteItemView, IFavoriteItemRepository favoriteItemRepository)
         {
             FavoriteItemView = favoriteItemView;
             FavoriteItemRepository = favoriteItemRepository;
         }
 
-        public Task CreateFavoriteItemAsync(Guid favoriteID, string Name)
+        public async Task CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID)
         {
-            return FavoriteItemRepository.CreateFavoriteItemAsync(favoriteID, Name);
+            FavoriteItemDAO favoriteItemDAO = await FavoriteItemRepository.CreateFavoriteItemAsync(favoriteID, Name, placeID);
+
+            this.FavoriteItemView.OnCreatedFaviriteListItem(favoriteItemDAO);
+
         }
 
         public void GetFavoriteItems(Guid favoriteID)
         {
-            this.FavoriteItemView.OnFaviriteItemsResponse(FavoriteItemRepository.GetFavoriteItems(favoriteID));
+            var temps = FavoriteItemRepository.GetFavoriteItems(favoriteID);
+            this.FavoriteItemView.OnFaviriteItemsResponse(temps);
         }
 
         public Task RemoveFavoriteItemAsync(Guid favoriteItemID)
         {
             return FavoriteItemRepository.RemoveFavoriteItemAsync(favoriteItemID);
         }
+
+
     }
 }

@@ -15,12 +15,12 @@ namespace TravelPlanning.Contracts
         {
             void OnFaviriteItemsResponse(List<FavoriteItemDAO> favoriteItemDAOs);
 
-            void AddCreatedFaviriteListItem(FavoriteItemDAO favoriteItemDAO);
+            void OnCreatedFaviriteListItem(FavoriteItemDAO favoriteItemDAO);
         }
 
-        public interface IFavoriteItemPresenter
+        public interface IFavoriteListItemPresenter
         {
-            Task CreateFavoriteItemAsync(Guid favoriteID, string Name);
+            Task CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID);
 
             void GetFavoriteItems(Guid favoriteID);
 
