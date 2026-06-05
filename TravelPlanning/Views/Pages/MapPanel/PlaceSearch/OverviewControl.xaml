@@ -74,18 +74,76 @@
                     Width="60"
                     HorizontalAlignment="Center"
                     Cursor="Hand">
-                    <Border
-                        Width="44"
-                        Height="44"
-                        HorizontalAlignment="Center"
-                        Background="{StaticResource InputBg}"
-                        CornerRadius="22">
-                        <ui:SymbolIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource TextPrimary}"
-                            Symbol="Bookmark24" />
-                    </Border>
+                    <Grid HorizontalAlignment="Center">
+                        <ToggleButton
+                            x:Name="SaveToggleButton"
+                            Width="44"
+                            Height="44"
+                            Cursor="Hand">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                            <Border
+                                Width="44"
+                                Height="44"
+                                Background="{StaticResource InputBg}"
+                                CornerRadius="22">
+                                <ui:SymbolIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextPrimary}"
+                                    Symbol="Bookmark24" />
+                            </Border>
+                        </ToggleButton>
+
+                        <Popup
+                            AllowsTransparency="True"
+                            IsOpen="{Binding IsChecked, ElementName=SaveToggleButton, Mode=TwoWay}"
+                            Placement="Bottom"
+                            PlacementTarget="{Binding ElementName=SaveToggleButton}"
+                            StaysOpen="False">
+                            <Border
+                                Background="#2D2D2D"
+                                BorderBrush="#444444"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel MinWidth="160">
+                                    <TextBlock
+                                        Margin="12,8,12,4"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondary}"
+                                        Text="加入清單" />
+                                    <ItemsControl ItemsSource="{Binding FavoriteListItems}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button
+                                                    Width="160"
+                                                    Padding="12,8"
+                                                    HorizontalContentAlignment="Left"
+                                                    Background="Transparent"
+                                                    BorderBrush="{x:Null}"
+                                                    Command="{Binding DataContext.AddToFavoriteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Cursor="Hand"
+                                                    Foreground="White">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <ui:SymbolIcon
+                                                            Margin="0,0,8,0"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="#8AB4F8"
+                                                            Symbol="{Binding Icon}" />
+                                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </Grid>
                     <TextBlock
                         Margin="0,4,0,0"
                         HorizontalAlignment="Center"
