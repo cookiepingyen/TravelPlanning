@@ -76,6 +76,8 @@ namespace TravelPlanning.ViewModels
             {
                 await favoriteItemPresenter.RemoveFavoriteItemAsync(item.Id);
                 FavoriteItemPlaceContexts.Remove(item);
+                FavoriteItemPlaceContexts = new ObservableCollection<FavoriteItemPlaceContext>(FavoriteItemPlaceContexts);
+
             });
 
         }
@@ -115,6 +117,7 @@ namespace TravelPlanning.ViewModels
         {
             FavoriteItemPlaceContext placeItem = Mapper.Map<FavoriteItemDAO, FavoriteItemPlaceContext>(favoriteItemDAO);
             FavoriteItemPlaceContexts.Add(placeItem);
+            FavoriteItemPlaceContexts = new ObservableCollection<FavoriteItemPlaceContext>(FavoriteItemPlaceContexts);
         }
 
 
