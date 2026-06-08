@@ -26,6 +26,7 @@ namespace TravelPlanning.ViewModels
         public IFavoritePresenter createFavoritePresenter;
 
         public ObservableCollection<FavoriteListItemContext> FavoriteListItems { get; set; }
+        public bool IsPlaceSaved { get; set; }
 
         public OverviewContext(PresenterFactory presenterFactory)
         {
@@ -33,9 +34,11 @@ namespace TravelPlanning.ViewModels
             createFavoritePresenter.GetFavoriteListItemsAsync();
 
 
-            this.AddToFavoriteCommand = new RelayCommand<FavoriteListItemContext>(item =>
+            this.AddToFavoriteCommand = new RelayCommand<FavoriteListItemContext>(async item =>
             {
-                createFavoritePresenter.CreateFavoriteItemAsync(item.Id, placeOverview.PlaceName, placeOverview.PlaceID);
+                await createFavoritePresenter.CreateFavoriteItemAsync(item.Id, placeOverview.PlaceName, placeOverview.PlaceID);
+                item.IsContainsCurrentPlace = true;
+                IsPlaceSaved = true;
             });
 
         }
@@ -43,6 +46,16 @@ namespace TravelPlanning.ViewModels
         public void LoadData(PlaceOverview placeOverview)
         {
             this.placeOverview = placeOverview;
+            _ = UpdateContainsFlagsAsync(placeOverview.PlaceID);
+        }
+
+        private async Task UpdateContainsFlagsAsync(string placeId)
+        {
+            List<Guid> containedIds = await createFavoritePresenter.GetFavoriteIdsByPlaceIdAsync(placeId);
+            if (FavoriteListItems == null) return;
+            foreach (var item in FavoriteListItems)
+                item.IsContainsCurrentPlace = containedIds.Contains(item.Id);
+            IsPlaceSaved = FavoriteListItems.Any(x => x.IsContainsCurrentPlace);
         }
 
 

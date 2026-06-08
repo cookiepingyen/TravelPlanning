@@ -44,6 +44,11 @@ namespace TravelPlanning.Presenters
             return FavoriteItemRepository.CreateFavoriteItemAsync(favoriteID, Name, placeID);
         }
 
+        public Task<List<Guid>> GetFavoriteIdsByPlaceIdAsync(string placeId)
+        {
+            return Task.Run(() => FavoriteRepository.GetFavoriteIdsByPlaceId(placeId));
+        }
+
         public Task GetFavoriteListItemsAsync()
         {
             return Task.Run(() => this.FavoriteView.OnFaviriteItemsResponse(FavoriteRepository.GetFavorites()));

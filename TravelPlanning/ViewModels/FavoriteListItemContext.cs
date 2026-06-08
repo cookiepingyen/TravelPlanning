@@ -29,6 +29,7 @@ namespace TravelPlanning.ViewModels
         public SymbolRegular Icon { get; set; }
         public string EditingName { get; set; }
         public bool IsEditing { get; set; }
+        public bool IsContainsCurrentPlace { get; set; }
 
 
         // ==================================

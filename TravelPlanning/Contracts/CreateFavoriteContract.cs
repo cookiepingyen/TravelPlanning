@@ -31,6 +31,8 @@ namespace TravelPlanning.Contracts
             Task UpdateFavorite(FavoriteDTO favoriteDTO);
             Task CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID);
 
+            Task<List<Guid>> GetFavoriteIdsByPlaceIdAsync(string placeId);
+
         }
 
 

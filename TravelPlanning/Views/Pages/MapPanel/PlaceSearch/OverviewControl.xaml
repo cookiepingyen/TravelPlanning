@@ -92,8 +92,17 @@
                             <Border
                                 Width="44"
                                 Height="44"
-                                Background="{StaticResource InputBg}"
                                 CornerRadius="22">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource InputBg}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPlaceSaved}" Value="True">
+                                                <Setter Property="Background" Value="#1A3A5C" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <ui:SymbolIcon
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -126,12 +135,21 @@
                                                     Width="160"
                                                     Padding="12,8"
                                                     HorizontalContentAlignment="Left"
-                                                    Background="Transparent"
                                                     BorderBrush="{x:Null}"
                                                     Command="{Binding DataContext.AddToFavoriteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"
                                                     Cursor="Hand"
                                                     Foreground="White">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsContainsCurrentPlace}" Value="True">
+                                                                    <Setter Property="Background" Value="#1A3A5C" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
                                                     <StackPanel Orientation="Horizontal">
                                                         <ui:SymbolIcon
                                                             Margin="0,0,8,0"

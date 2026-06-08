@@ -21,6 +21,7 @@ namespace TravelPlanning.Database.Interface
 
         void DeleteFavoriteItem(Guid favoriteItemID);
 
+        List<Guid> GetFavoriteIdsByPlaceId(string placeId);
 
     }
 }

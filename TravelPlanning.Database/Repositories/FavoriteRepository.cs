@@ -90,6 +90,13 @@ namespace TravelPlanning.Database.Repositories
             return favoriteItemDAOs;
         }
 
+        public List<Guid> GetFavoriteIdsByPlaceId(string placeId)
+        {
+            return db.FavoriteItem
+                .Where(x => x.Place_id == placeId)
+                .Select(x => x.Favorite_id)
+                .ToList();
+        }
 
     }
 }
