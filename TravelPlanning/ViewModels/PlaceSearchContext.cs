@@ -127,7 +127,7 @@ namespace TravelPlanning.ViewModels
             Reviews = placeModel.Reviews;
             Photo = placeModel.Photo;
 
-            this.OverviewContext.LoadData(new PlaceOverview(Address, Phone, BusinessStatus));
+            this.OverviewContext.LoadData(new PlaceOverview(PlaceID, PlaceName, Address, Phone, BusinessStatus));
         }
 
 

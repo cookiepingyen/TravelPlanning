@@ -118,12 +118,12 @@
                     IsChecked="{Binding IsPlaceSearchSelected, Mode=TwoWay}"
                     Style="{StaticResource NavButtonStyle}">
                     <StackPanel HorizontalAlignment="Center">
-                        <ui:SymbolIcon Symbol="Bookmark24" />
+                        <ui:SymbolIcon Symbol="Search16" />
                         <TextBlock
                             Margin="0,3,0,0"
                             HorizontalAlignment="Center"
                             FontSize="11"
-                            Text="已儲存" />
+                            Text="地點搜尋" />
                     </StackPanel>
                 </RadioButton>
 

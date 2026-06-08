@@ -19,14 +19,18 @@ namespace TravelPlanning.Database.Repositories
         {
             Favorite favorite = db.Favorite.FirstOrDefault(x => x.Id == favoriteDAO.Id);
 
-            if (favorite != null)
-            {
-                FavoriteItem favoriteItem = Mapper.Map<FavoriteItemDAO, FavoriteItem>(favoriteItemDAO);
-                favoriteItem.Favorite_id = favoriteDAO.Id;
-                favoriteItem.Id = Guid.NewGuid();
-                db.FavoriteItem.Add(favoriteItem);
-                db.SaveChanges();
-            }
+            if (favorite == null)
+                return;
+
+            if (db.FavoriteItem.Any(x => x.Place_id == favoriteItemDAO.Place_id))
+                return;
+
+
+            FavoriteItem favoriteItem = Mapper.Map<FavoriteItemDAO, FavoriteItem>(favoriteItemDAO);
+            favoriteItem.Favorite_id = favoriteDAO.Id;
+            favoriteItem.Id = Guid.NewGuid();
+            db.FavoriteItem.Add(favoriteItem);
+            db.SaveChanges();
 
         }
 

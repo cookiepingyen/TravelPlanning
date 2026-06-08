@@ -20,10 +20,12 @@ namespace TravelPlanning.Presenters
     {
         public IFavoriteView FavoriteView { get; set; }
         public IFavoriteRepository FavoriteRepository { get; set; }
-        public FavoritePresenter(IFavoriteView favoriteView, IFavoriteRepository favoriteRepository)
+        public IFavoriteItemRepository FavoriteItemRepository { get; set; }
+        public FavoritePresenter(IFavoriteView favoriteView, IFavoriteRepository favoriteRepository, IFavoriteItemRepository favoriteItemRepository)
         {
             this.FavoriteView = favoriteView;
             this.FavoriteRepository = favoriteRepository;
+            this.FavoriteItemRepository = favoriteItemRepository;
         }
 
         public void CreateFavorite(string name, string selectIcon)
@@ -36,6 +38,10 @@ namespace TravelPlanning.Presenters
             favoriteDAO = FavoriteRepository.CreateFavorite(favoriteDAO);
             FavoriteView.AddCreatedFaviriteListItem(favoriteDAO);
 
+        }
+        public Task CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID)
+        {
+            return FavoriteItemRepository.CreateFavoriteItemAsync(favoriteID, Name, placeID);
         }
 
         public Task GetFavoriteListItemsAsync()

@@ -29,7 +29,11 @@
     </UserControl.Resources>
 
     <Grid Cursor="">
-        <StackPanel Orientation="Vertical">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23*"/>
+            <RowDefinition Height="67*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.RowSpan="2">
             <!--  動作按鈕列：規劃路線 / 儲存地點  -->
             <StackPanel
                 Margin="0,0,0,12"
