@@ -76,11 +76,11 @@ namespace TravelPlanning.Database.Repositories
             await db.SaveChangesAsync();
         }
 
-        public void DeleteFavoriteItem(Guid favoriteItemID)
+        public async Task DeleteFavoriteItemAsync(Guid favoriteListID, string placeID)
         {
-            FavoriteItem favoriteItem = db.FavoriteItem.FirstOrDefault(x => x.Id == favoriteItemID);
+            FavoriteItem favoriteItem = db.FavoriteItem.FirstOrDefault(x => x.Favorite_id == favoriteListID && x.Place_id == placeID);
             db.FavoriteItem.Remove(favoriteItem);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
         List<FavoriteItemDAO> IFavoriteRepository.GetFavoriteItems(Guid favoriteID)
@@ -97,6 +97,7 @@ namespace TravelPlanning.Database.Repositories
                 .Select(x => x.Favorite_id)
                 .ToList();
         }
+
 
     }
 }

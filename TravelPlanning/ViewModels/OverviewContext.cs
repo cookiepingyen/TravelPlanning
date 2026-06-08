@@ -21,7 +21,9 @@ namespace TravelPlanning.ViewModels
     {
         public PlaceOverview placeOverview { get; set; }
         public ICommand RoutePlanningPageCommand { get; set; }
-        public ICommand AddToFavoriteCommand { get; set; }
+        public ICommand ToggleFavoriteCommand { get; set; }
+        //public ICommand RemoveFavoriteItemCommand { get; set; }
+
 
         public IFavoritePresenter createFavoritePresenter;
 
@@ -34,13 +36,16 @@ namespace TravelPlanning.ViewModels
             createFavoritePresenter.GetFavoriteListItemsAsync();
 
 
-            this.AddToFavoriteCommand = new RelayCommand<FavoriteListItemContext>(async item =>
+            this.ToggleFavoriteCommand = new RelayCommand<FavoriteListItemContext>(async item =>
             {
-                await createFavoritePresenter.CreateFavoriteItemAsync(item.Id, placeOverview.PlaceName, placeOverview.PlaceID);
-                item.IsContainsCurrentPlace = true;
-                IsPlaceSaved = true;
-            });
+                if (item.IsContainsCurrentPlace)
+                    await createFavoritePresenter.RemoveFavoriteItemAsync(item.Id, placeOverview.PlaceID);
+                else
+                    await createFavoritePresenter.CreateFavoriteItemAsync(item.Id, placeOverview.PlaceName, placeOverview.PlaceID);
 
+                item.IsContainsCurrentPlace = !item.IsContainsCurrentPlace;
+                IsPlaceSaved = FavoriteListItems.Any(x => x.IsContainsCurrentPlace);
+            });
         }
 
         public void LoadData(PlaceOverview placeOverview)

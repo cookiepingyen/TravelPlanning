@@ -26,7 +26,7 @@ namespace TravelPlanning.Contracts
             Task GetFavoriteListItemsAsync();
 
             Task RemoveFavoriteAsync(Guid favoriteId);
-            Task RemoveFavoriteItemAsync();
+            Task RemoveFavoriteItemAsync(Guid favoriteListId, String placeID);
 
             Task UpdateFavorite(FavoriteDTO favoriteDTO);
             Task CreateFavoriteItemAsync(Guid favoriteID, string Name, string placeID);

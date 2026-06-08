@@ -30,10 +30,10 @@
 
     <Grid Cursor="">
         <Grid.RowDefinitions>
-            <RowDefinition Height="23*"/>
-            <RowDefinition Height="67*"/>
+            <RowDefinition Height="23*" />
+            <RowDefinition Height="67*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" Grid.RowSpan="2">
+        <StackPanel Grid.RowSpan="2" Orientation="Vertical">
             <!--  動作按鈕列：規劃路線 / 儲存地點  -->
             <StackPanel
                 Margin="0,0,0,12"
@@ -136,7 +136,7 @@
                                                     Padding="12,8"
                                                     HorizontalContentAlignment="Left"
                                                     BorderBrush="{x:Null}"
-                                                    Command="{Binding DataContext.AddToFavoriteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"
                                                     Cursor="Hand"
                                                     Foreground="White">
