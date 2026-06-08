@@ -61,7 +61,42 @@
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="12,10" />
         </Style>
+
+        <Style x:Key="TravelModeRadioStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                            x:Name="Bd"
+                            Padding="8,6"
+                            Background="Transparent"
+                            CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--  選中狀態：藍底白字  -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentBlue}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <!--  Hover  -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#3C4043" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
+
+
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -78,7 +113,55 @@
                 Padding="12"
                 Background="{StaticResource SurfaceColor}"
                 CornerRadius="12">
+
                 <StackPanel>
+                    <!--  交通模式 Tab  -->
+                    <Border
+                        Margin="0,0,0,8"
+                        Padding="4,4"
+                        Background="#252628"
+                        CornerRadius="24">
+                        <UniformGrid Columns="4">
+
+                            <!--  開車  -->
+                            <RadioButton
+                                Command="{Binding SelectTravelModeCommand}"
+                                CommandParameter="DRIVE"
+                                GroupName="TravelMode"
+                                IsChecked="True"
+                                Style="{StaticResource TravelModeRadioStyle}">
+                                <ui:SymbolIcon FontSize="20" Symbol="VehicleCar24" />
+                            </RadioButton>
+
+                            <!--  機車 / 兩輪  -->
+                            <RadioButton
+                                Command="{Binding SelectTravelModeCommand}"
+                                CommandParameter="TWO_WHEELER"
+                                GroupName="TravelMode"
+                                Style="{StaticResource TravelModeRadioStyle}">
+                                <ui:SymbolIcon FontSize="20" Symbol="VehicleBicycle24" />
+                            </RadioButton>
+
+                            <!--  大眾運輸  -->
+                            <RadioButton
+                                Command="{Binding SelectTravelModeCommand}"
+                                CommandParameter="TRANSIT"
+                                GroupName="TravelMode"
+                                Style="{StaticResource TravelModeRadioStyle}">
+                                <ui:SymbolIcon FontSize="20" Symbol="VehicleBus24" />
+                            </RadioButton>
+
+                            <!--  步行  -->
+                            <RadioButton
+                                Command="{Binding SelectTravelModeCommand}"
+                                CommandParameter="WALK"
+                                GroupName="TravelMode"
+                                Style="{StaticResource TravelModeRadioStyle}">
+                                <ui:SymbolIcon FontSize="20" Symbol="PersonWalking24" />
+                            </RadioButton>
+
+                        </UniformGrid>
+                    </Border>
 
                     <!--  起點  -->
                     <Border Margin="0,0,0,8" Style="{StaticResource SearchBoxStyle}">
