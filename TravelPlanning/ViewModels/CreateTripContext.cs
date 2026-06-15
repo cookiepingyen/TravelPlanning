@@ -27,6 +27,7 @@ namespace TravelPlanning.ViewModels
         public BitmapImage CoverImg { get; set; }
 
         public ICommand CreateTripCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         public ICommand UploadImageCommand { get; set; }
 
         public CreateTripContext(PresenterFactory presenterFactory)
@@ -36,7 +37,14 @@ namespace TravelPlanning.ViewModels
             this.CreateTripCommand = new RelayCommand(CreateTrip);
             this.UploadImageCommand = new RelayCommand(Image_Click);
 
-            CoverImg = new BitmapImage(new Uri("https://png.pngtree.com/png-vector/20191129/ourmid/pngtree-image-upload-icon-photo-upload-icon-png-image_2047546.jpg"));
+            this.CancelCommand = new RelayCommand(() =>
+            {
+                Name = "";
+                Days = 0;
+            });
+
+
+            CoverImg = new BitmapImage(new Uri("/Resources/Images/upload.png", UriKind.Relative));
         }
 
 

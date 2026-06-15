@@ -26,10 +26,7 @@
             PaneDisplayMode="Left"
             Transition="FadeInWithSlide">
             <ui:NavigationView.Header>
-                <StackPanel Margin="42,32,42,20">
-                    <Label>Header</Label>
-                    <ui:BreadcrumbBar x:Name="BreadcrumbBar" />
-                </StackPanel>
+                <StackPanel Margin="42,32,42,20" />
             </ui:NavigationView.Header>
             <ui:NavigationView.AutoSuggestBox>
                 <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Search">
