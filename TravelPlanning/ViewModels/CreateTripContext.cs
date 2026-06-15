@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TravelPlanning.Models.DTO;
@@ -27,7 +28,7 @@ namespace TravelPlanning.ViewModels
         public BitmapImage CoverImg { get; set; }
 
         public ICommand CreateTripCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
+        public ICommand ClearCommand { get; set; }
         public ICommand UploadImageCommand { get; set; }
 
         public CreateTripContext(PresenterFactory presenterFactory)
@@ -37,7 +38,7 @@ namespace TravelPlanning.ViewModels
             this.CreateTripCommand = new RelayCommand(CreateTrip);
             this.UploadImageCommand = new RelayCommand(Image_Click);
 
-            this.CancelCommand = new RelayCommand(() =>
+            this.ClearCommand = new RelayCommand(() =>
             {
                 Name = "";
                 Days = 0;
@@ -48,7 +49,7 @@ namespace TravelPlanning.ViewModels
         }
 
 
-        public void CreateTrip()
+        public async void CreateTrip()
         {
             TripDTO tripDTO = new TripDTO();
 
@@ -58,6 +59,13 @@ namespace TravelPlanning.ViewModels
             tripDTO.Cover = CoverImg;
 
             createTripPresenter.CreateTrip(tripDTO);
+
+            var uiMessageBox = new Wpf.Ui.Controls.MessageBox
+            {
+                Content = "新增成功"
+            };
+
+            _ = await uiMessageBox.ShowDialogAsync();
         }
 
 

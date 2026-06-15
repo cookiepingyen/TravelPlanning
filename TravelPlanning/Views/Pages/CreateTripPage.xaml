@@ -193,8 +193,8 @@
 
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button
-                    Command="{Binding CancelCommand}"
-                    Content="取消"
+                    Command="{Binding ClearCommand}"
+                    Content="清空"
                     Style="{StaticResource CancelButton}" />
                 <Button
                     Margin="12,0,0,0"
