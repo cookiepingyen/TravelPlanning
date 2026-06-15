@@ -14,6 +14,8 @@ using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Direction;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using TravelPlanning.Utilities.Interfaces;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Enums;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Routes;
 
 namespace TravelPlanning.ViewModels
 {
@@ -26,8 +28,10 @@ namespace TravelPlanning.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand AutoCompleteCommaned { get; set; }
-        public ICommand RoutePlanningCommaned { get; set; }
 
+        public string TravelMode { get; set; } = "DRIVE";
+        public ICommand RoutePlanningCommaned { get; set; }
+        public ICommand SelectTravelModeCommand { get; set; }
         private PlaceDetailResModel _start { get; set; }
         public PlaceDetailResModel Start
         {
@@ -90,17 +94,49 @@ namespace TravelPlanning.ViewModels
                 WeakReferenceMessenger.Default.Send(e);
             });
 
-            this.RoutePlanningCommaned = new RelayCommand(async () =>
+            this.SelectTravelModeCommand = new RelayCommand<string>(e =>
             {
-                DirectionRequest directionRequest = new DirectionRequest(End.result.place_id, Start.result.place_id, true);
-                DirectionResModel directionResModel = await googleAPIContext.Direction.GetDirections(directionRequest);
-
-                RouteSteps = directionResModel.routes[0].legs[0].steps.Select(step => new RouteStep(step.html_instructions, step.distance.text, step.maneuver)).ToList();
-
-
-                WeakReferenceMessenger.Default.Send(directionResModel.routes[0].overview_polyline.points.ToList());
+                TravelMode = e;
+                CallRoutePlanning();
             });
 
+
+            this.RoutePlanningCommaned = new RelayCommand(async () =>
+            {
+                CallRoutePlanning();
+            });
+
+        }
+
+
+
+        public async void CallRoutePlanning()
+        {
+            if (_start == null || _end == null)
+                return;
+
+            TravelMode travelMode = (TravelMode)Enum.Parse(typeof(TravelMode), TravelMode);
+
+            RoutesRequest routesRequest = new RoutesRequest(Start.result.place_id, End.result.place_id, travelMode, AddressType.PlaceId);
+
+
+            RoutesResModel routesResModel = await googleAPIContext.Route.GetRoutes(routesRequest);
+
+            //DirectionRequest directionRequest = new DirectionRequest(End.result.place_id, Start.result.place_id, true);
+
+            //DirectionResModel directionResModel = await googleAPIContext.Direction.GetDirections(directionRequest);
+
+
+
+            RouteSteps = routesResModel.routes[0].legs[0].steps.Select(step =>
+            {
+                if (step.navigationInstruction == null)
+                    return null;
+                return new RouteStep(step.navigationInstruction.instructions, step.localizedValues.distance.text, step.navigationInstruction.maneuver);
+            }).Where(x => x != null).ToList();
+
+
+            WeakReferenceMessenger.Default.Send(routesResModel.routes[0].polyline.encodedPolyline.ToList());
         }
     }
 }

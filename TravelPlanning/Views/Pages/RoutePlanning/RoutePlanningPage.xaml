@@ -136,7 +136,7 @@
                             <!--  機車 / 兩輪  -->
                             <RadioButton
                                 Command="{Binding SelectTravelModeCommand}"
-                                CommandParameter="TWO_WHEELER"
+                                CommandParameter="BICYCLE"
                                 GroupName="TravelMode"
                                 Style="{StaticResource TravelModeRadioStyle}">
                                 <ui:SymbolIcon FontSize="20" Symbol="VehicleBicycle24" />

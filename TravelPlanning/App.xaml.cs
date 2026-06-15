@@ -25,6 +25,7 @@ using TravelPlanning.Presenters;
 using TravelPlanning.Database.Repositories;
 using TravelPlanning.Database.Interface;
 using static TravelPlanning.Contracts.FaviriteItemContract;
+using static TravelPlanning.Contracts.CreateTripContract;
 
 namespace TravelPlanning
 {
@@ -49,6 +50,8 @@ namespace TravelPlanning
 
             collection.AddSingleton<Window, MainTravelWindow>();
             collection.AddTransient<CreateTripPage, CreateTripPage>();
+            collection.AddTransient<ICreateTripView, CreateTripContext>();
+            collection.AddTransient<ICreateTripPresenter, CreateTripPresenter>();
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
@@ -60,8 +63,8 @@ namespace TravelPlanning
             collection.AddTransient<OverviewContext, OverviewContext>();
             collection.AddTransient<FavoriteContext, FavoriteContext>();
             collection.AddTransient<FavoritePage, FavoritePage>();
-            collection.AddTransient<FavoriteListItemContext, FavoriteListItemContext>();
             collection.AddTransient<FavoriteListItemPage, FavoriteListItemPage>();
+            collection.AddTransient<FavoriteListItemContext, FavoriteListItemContext>();
             collection.AddTransient<IFavoritePresenter, FavoritePresenter>();
             collection.AddTransient<IFavoriteRepository, FavoriteRepository>();
             collection.AddTransient<IFavoriteListItemPresenter, FavoriteListItemPresenter>();

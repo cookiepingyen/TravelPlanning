@@ -53,6 +53,7 @@ namespace TravelPlanning.Views.Pages
 
         private void CreateRoute(object recipient, List<Location> locations)
         {
+            this.mapControl.RemoveRoute("Route");
             this.mapControl.AddRoute("Route", locations);
         }
 
