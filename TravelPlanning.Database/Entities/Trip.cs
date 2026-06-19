@@ -23,11 +23,13 @@ namespace TravelPlanning.Database.Entities
 
         public Guid User_id { get; set; }
 
-        public DateTime? Started_time { get; set; }
+        [Required]
+        public DateTime Started_time { get; set; }
 
-        public DateTime? Ended_time { get; set; }
+        [Required]
+        public DateTime Ended_time { get; set; }
 
-        public int? Days { get; set; }
+        public int Days { get; set; }
 
         [StringLength(500)]
         public string Cover { get; set; }

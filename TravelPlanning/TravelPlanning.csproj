@@ -229,6 +229,7 @@
     <Compile Include="Contracts\CreateFavoriteContract.cs" />
     <Compile Include="Contracts\CreateTripContract.cs" />
     <Compile Include="Contracts\FaviriteItemContract.cs" />
+    <Compile Include="Contracts\MyTripContract.cs" />
     <Compile Include="Converters\RatingToStarsConverter.cs" />
     <Compile Include="MapToolTip.xaml.cs">
       <DependentUpon>MapToolTip.xaml</DependentUpon>
@@ -242,6 +243,7 @@
     <Compile Include="Presenters\FavoriteListItemPresenter.cs" />
     <Compile Include="Presenters\FavoritePresenter.cs" />
     <Compile Include="Presenters\CreateTripPresenter.cs" />
+    <Compile Include="Presenters\MyTripPresenter.cs" />
     <Compile Include="Utilities\Interfaces\INavigationAware.cs" />
     <Compile Include="Utilities\Interfaces\INavigationService.cs" />
     <Compile Include="Utilities\NavigationService.cs" />
@@ -255,6 +257,7 @@
     <Compile Include="ViewModels\FavoriteListItemContext.cs" />
     <Compile Include="ViewModels\MainWindowContext.cs" />
     <Compile Include="ViewModels\MapPanelContext.cs" />
+    <Compile Include="ViewModels\MyTripContext.cs" />
     <Compile Include="ViewModels\OverviewContext.cs" />
     <Compile Include="ViewModels\FavoriteItemPlaceContext.cs" />
     <Compile Include="ViewModels\PlaceSearchContext.cs" />

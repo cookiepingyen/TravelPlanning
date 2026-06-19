@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TravelPlanning.Attributes;
+using TravelPlanning.ViewModels;
+using static TravelPlanning.Contracts.MyTripContract;
 
 namespace TravelPlanning.Views.Pages
 {
@@ -22,9 +24,12 @@ namespace TravelPlanning.Views.Pages
     [LeftSidebarAttribute("我的旅程", Wpf.Ui.Controls.SymbolRegular.Directions16)]
     public partial class MyTripPage : Page
     {
-        public MyTripPage()
+
+
+        public MyTripPage(IMyTripView context)
         {
             InitializeComponent();
+            DataContext = context;
         }
     }
 }

@@ -26,6 +26,7 @@ using TravelPlanning.Database.Repositories;
 using TravelPlanning.Database.Interface;
 using static TravelPlanning.Contracts.FaviriteItemContract;
 using static TravelPlanning.Contracts.CreateTripContract;
+using static TravelPlanning.Contracts.MyTripContract;
 
 namespace TravelPlanning
 {
@@ -52,7 +53,11 @@ namespace TravelPlanning
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<ICreateTripView, CreateTripContext>();
             collection.AddTransient<ICreateTripPresenter, CreateTripPresenter>();
+
             collection.AddTransient<MyTripPage, MyTripPage>();
+            collection.AddTransient<IMyTripPresenter, MyTripPresenter>();
+            collection.AddTransient<IMyTripView, MyTripContext>();
+
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
             collection.AddTransient<OverviewControl, OverviewControl>();
