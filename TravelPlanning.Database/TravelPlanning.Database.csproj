@@ -66,17 +66,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract\FavoriteContract.cs" />
-    <Compile Include="Interface\IFavoriteItemRepository.cs" />
-    <Compile Include="Models\DAO\FavoriteDAO.cs" />
-    <Compile Include="Models\DAO\FavoriteItemDAO.cs" />
-    <Compile Include="Models\DAO\TripDAO.cs" />
     <Compile Include="Entities\DatabaseContext.cs" />
     <Compile Include="Entities\Favorite.cs" />
     <Compile Include="Entities\FavoriteItem.cs" />
     <Compile Include="Entities\sysdiagrams.cs" />
     <Compile Include="Entities\Trip.cs" />
-    <Compile Include="Entities\TripDetail.cs" />
+    <Compile Include="Entities\TripDayPlace.cs" />
+    <Compile Include="Entities\TripDays.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Interface\IFavoriteItemRepository.cs" />
+    <Compile Include="Models\DAO\FavoriteDAO.cs" />
+    <Compile Include="Models\DAO\FavoriteItemDAO.cs" />
+    <Compile Include="Models\DAO\TripDAO.cs" />
     <Compile Include="Interface\IFavoriteRepository.cs" />
     <Compile Include="Interface\ITripRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

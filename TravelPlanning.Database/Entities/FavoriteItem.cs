@@ -16,9 +16,9 @@ namespace TravelPlanning.Database.Entities
         [StringLength(50)]
         public string Place_id { get; set; }
 
-        public virtual Favorite Favorite { get; set; }
-
         [StringLength(50)]
         public string Name { get; set; }
+
+        public virtual Favorite Favorite { get; set; }
     }
 }

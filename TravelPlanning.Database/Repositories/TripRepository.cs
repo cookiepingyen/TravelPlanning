@@ -48,9 +48,9 @@ namespace TravelPlanning.Database.Repositories
         public async Task DeleteTripAsync(Guid tripID)
         {
             Trip trip = await db.Trip.FirstOrDefaultAsync(x => x.Id == tripID) ?? throw new KeyNotFoundException();
-            List<TripDetail> tripDetail = db.TripDetail.Where(x => x.Trip_id == tripID).ToList();
+            List<TripDays> tripDetail = db.TripDays.Where(x => x.Trip_id == tripID).ToList();
 
-            db.TripDetail.RemoveRange(tripDetail);
+            db.TripDays.RemoveRange(tripDetail);
             db.Trip.Remove(trip);
             await db.SaveChangesAsync();
         }

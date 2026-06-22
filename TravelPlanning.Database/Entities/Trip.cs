@@ -12,7 +12,7 @@ namespace TravelPlanning.Database.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Trip()
         {
-            TripDetail = new HashSet<TripDetail>();
+            TripDays = new HashSet<TripDays>();
         }
 
         public Guid Id { get; set; }
@@ -23,10 +23,8 @@ namespace TravelPlanning.Database.Entities
 
         public Guid User_id { get; set; }
 
-        [Required]
         public DateTime Started_time { get; set; }
 
-        [Required]
         public DateTime Ended_time { get; set; }
 
         public int Days { get; set; }
@@ -37,6 +35,6 @@ namespace TravelPlanning.Database.Entities
         public virtual User User { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TripDetail> TripDetail { get; set; }
+        public virtual ICollection<TripDays> TripDays { get; set; }
     }
 }

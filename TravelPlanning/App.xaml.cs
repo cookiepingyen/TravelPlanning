@@ -27,6 +27,7 @@ using TravelPlanning.Database.Interface;
 using static TravelPlanning.Contracts.FaviriteItemContract;
 using static TravelPlanning.Contracts.CreateTripContract;
 using static TravelPlanning.Contracts.MyTripContract;
+using TravelPlanning.Views.Pages.Trip;
 
 namespace TravelPlanning
 {
@@ -50,6 +51,8 @@ namespace TravelPlanning
             collection.AddSingleton<INavigationService, NavigationService>();
 
             collection.AddSingleton<Window, MainTravelWindow>();
+
+            #region Trip
             collection.AddTransient<CreateTripPage, CreateTripPage>();
             collection.AddTransient<ICreateTripView, CreateTripContext>();
             collection.AddTransient<ICreateTripPresenter, CreateTripPresenter>();
@@ -57,6 +60,12 @@ namespace TravelPlanning
             collection.AddTransient<MyTripPage, MyTripPage>();
             collection.AddTransient<IMyTripPresenter, MyTripPresenter>();
             collection.AddTransient<IMyTripView, MyTripContext>();
+
+            collection.AddTransient<TripDetailPage, TripDetailPage>();
+            #endregion
+
+
+
 
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();
             collection.AddTransient<MapPanelPage, MapPanelPage>();
@@ -66,6 +75,9 @@ namespace TravelPlanning
             collection.AddTransient<CommentControl, CommentControl>();
             collection.AddTransient<CommentContext, CommentContext>();
             collection.AddTransient<OverviewContext, OverviewContext>();
+
+
+            #region Favorite
             collection.AddTransient<FavoriteContext, FavoriteContext>();
             collection.AddTransient<FavoritePage, FavoritePage>();
             collection.AddTransient<FavoriteListItemPage, FavoriteListItemPage>();
@@ -74,6 +86,7 @@ namespace TravelPlanning
             collection.AddTransient<IFavoriteRepository, FavoriteRepository>();
             collection.AddTransient<IFavoriteListItemPresenter, FavoriteListItemPresenter>();
             collection.AddTransient<IFavoriteItemRepository, FavoriteItemRepository>();
+            #endregion
 
 
             collection.AddTransient<FavoriteListItemContext, FavoriteListItemContext>();
