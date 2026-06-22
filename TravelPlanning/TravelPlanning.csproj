@@ -263,6 +263,7 @@
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="ViewModels\RoutePlanningContext.cs" />
     <Compile Include="ViewModels\RouteStep.cs" />
+    <Compile Include="ViewModels\TripDetailContext.cs" />
     <Compile Include="Views\Pages\Favorite\FavoriteListItemPage.xaml.cs">
       <DependentUpon>FavoriteListItemPage.xaml</DependentUpon>
     </Compile>
@@ -272,13 +273,13 @@
     <Compile Include="Views\Pages\MapPanel\PlaceSearch\CommentControl.xaml.cs">
       <DependentUpon>CommentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\CreateTripPage.xaml.cs">
+    <Compile Include="Views\Pages\Trip\CreateTripPage.xaml.cs">
       <DependentUpon>CreateTripPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MapPanel\PlaceSearch\PlaceSearchPage.xaml.cs">
       <DependentUpon>PlaceSearchPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\MyTripPage.xaml.cs">
+    <Compile Include="Views\Pages\Trip\MyTripPage.xaml.cs">
       <DependentUpon>MyTripPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MapPanel\PlaceSearch\OverviewControl.xaml.cs">
@@ -289,6 +290,9 @@
     </Compile>
     <Compile Include="Views\Pages\RoutePlanning\RoutePlanningPage.xaml.cs">
       <DependentUpon>RoutePlanningPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\Trip\TripDetailPage.xaml.cs">
+      <DependentUpon>TripDetailPage.xaml</DependentUpon>
     </Compile>
     <Page Include="Components\AutoCompleteComponent\AutoComplete.xaml">
       <SubType>Designer</SubType>
@@ -326,7 +330,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\CreateTripPage.xaml">
+    <Page Include="Views\Pages\Trip\CreateTripPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -334,7 +338,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\MyTripPage.xaml">
+    <Page Include="Views\Pages\Trip\MyTripPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -347,6 +351,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\RoutePlanning\RoutePlanningPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\Trip\TripDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

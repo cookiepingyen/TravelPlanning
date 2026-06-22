@@ -16,13 +16,14 @@ namespace TravelPlanning.Database.Entities
         public virtual DbSet<FavoriteItem> FavoriteItem { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Trip> Trip { get; set; }
-        public virtual DbSet<TripDetail> TripDetail { get; set; }
+        public virtual DbSet<TripDayPlace> TripDayPlace { get; set; }
+        public virtual DbSet<TripDays> TripDays { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Favorite>()
-                .Property(e => e.Name)
+                .Property(e => e.Icon)
                 .IsFixedLength();
 
             modelBuilder.Entity<Favorite>()
@@ -33,7 +34,7 @@ namespace TravelPlanning.Database.Entities
 
             modelBuilder.Entity<FavoriteItem>()
                 .Property(e => e.Place_id)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<Trip>()
                 .Property(e => e.Name)
@@ -44,14 +45,24 @@ namespace TravelPlanning.Database.Entities
                 .IsFixedLength();
 
             modelBuilder.Entity<Trip>()
-                .HasMany(e => e.TripDetail)
+                .HasMany(e => e.TripDays)
                 .WithRequired(e => e.Trip)
                 .HasForeignKey(e => e.Trip_id)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<TripDetail>()
+            modelBuilder.Entity<TripDayPlace>()
+                .Property(e => e.Place_id)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<TripDays>()
                 .Property(e => e.Place_id)
                 .IsFixedLength();
+
+            modelBuilder.Entity<TripDays>()
+                .HasMany(e => e.TripDayPlace)
+                .WithRequired(e => e.TripDays)
+                .HasForeignKey(e => e.TripDays_id)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Favorite)

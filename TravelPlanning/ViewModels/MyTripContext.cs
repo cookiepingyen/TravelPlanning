@@ -12,10 +12,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TravelPlanning.Database.DAO;
+using TravelPlanning.Models;
 using TravelPlanning.Models.DTO;
 using TravelPlanning.Presenters;
 using TravelPlanning.Utilities;
 using TravelPlanning.Views.Pages;
+using TravelPlanning.Views.Pages.Trip;
 using Wpf.Ui;
 using static TravelPlanning.Contracts.CreateFavoriteContract;
 using static TravelPlanning.Contracts.MyTripContract;
@@ -30,6 +32,9 @@ namespace TravelPlanning.ViewModels
         public PresenterFactory presenterFactory { get; set; }
 
         public ICommand CreateTripPageCommand { get; set; }
+
+        public ICommand TripDetailPageCommand { get; set; }
+
         public ICommand DeleteTripCommand { get; set; }
         private INavigationService navigationService;
 
@@ -45,6 +50,10 @@ namespace TravelPlanning.ViewModels
                 this.navigationService.Navigate(typeof(CreateTripPage));
             });
 
+            this.TripDetailPageCommand = new RelayCommand<Guid>(ID =>
+            {
+                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID));
+            });
 
             this.DeleteTripCommand = new RelayCommand<TripDTO>(x =>
             {

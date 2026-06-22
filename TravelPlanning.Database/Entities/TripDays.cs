@@ -6,9 +6,14 @@ namespace TravelPlanning.Database.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("TripDetail")]
-    public partial class TripDetail
+    public partial class TripDays
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TripDays()
+        {
+            TripDayPlace = new HashSet<TripDayPlace>();
+        }
+
         public Guid Id { get; set; }
 
         public Guid Trip_id { get; set; }
@@ -22,5 +27,8 @@ namespace TravelPlanning.Database.Entities
         public string Place_id { get; set; }
 
         public virtual Trip Trip { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TripDayPlace> TripDayPlace { get; set; }
     }
 }
