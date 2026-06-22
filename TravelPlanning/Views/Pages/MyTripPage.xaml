@@ -43,8 +43,8 @@
             </Style.Triggers>
         </Style>
 
-        <!--  "..." 圓形小按鈕：底色加深 + 邊框，確保在亮色封面圖上仍清晰可辨  -->
-        <Style x:Key="CircleIconButton" TargetType="Button">
+        <!--  "..." 圓形小按鈕：底色加深 + 邊框，確保在亮色封面圖上仍清晰可辨；改為 ToggleButton 以便掛 Popup  -->
+        <Style x:Key="CircleIconButton" TargetType="ToggleButton">
             <Setter Property="Background" Value="#1A1A1A" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -54,8 +54,9 @@
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="Button">
+                    <ControlTemplate TargetType="ToggleButton">
                         <Border
+                            x:Name="IconBorder"
                             Background="{TemplateBinding Background}"
                             CornerRadius="8"
                             Opacity="0.78">
@@ -75,14 +76,49 @@
                                 Foreground="White"
                                 Text="&#x22EF;" />
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="IconBorder" Property="Background" Value="#000000" />
+                            </Trigger>
+                            <!--  選單開啟時維持高亮，避免點擊後按鈕視覺上又「恢復原狀」造成混淆  -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="IconBorder" Property="Background" Value="#1A73E8" />
+                                <Setter TargetName="IconBorder" Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#000000" />
-                </Trigger>
-            </Style.Triggers>
+        </Style>
+
+        <!--  選單彈出視窗內的選項按鈕（紅色文字，代表危險操作）  -->
+        <Style x:Key="DangerMenuItemButton" TargetType="Button">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="Foreground" Value="#FF6B6B" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ItemBorder"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#3A2222" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--  行程卡片：加入 Hover 微互動（陰影 + 邊框亮起）  -->
@@ -137,7 +173,7 @@
             Orientation="Horizontal">
             <Button
                 Margin="0,0,20,0"
-                Command="{Binding CreateTripCommand}"
+                Command="{Binding CreateTripPageCommand}"
                 Style="{StaticResource PrimaryButton}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
@@ -207,12 +243,43 @@
                                                 Text="&#xE707;" />
                                         </Border>
 
-                                        <!--  "..." 選單按鈕  -->
-                                        <Button
-                                            Command="{Binding DataContext.TripMenuCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource CircleIconButton}"
-                                            ToolTip="更多選項" />
+                                        <!--  "..." 選單按鈕 + 下拉選單（刪除行程）  -->
+                                        <Grid>
+                                            <ToggleButton
+                                                x:Name="MoreToggleButton"
+                                                Style="{StaticResource CircleIconButton}"
+                                                ToolTip="更多選項" />
+
+                                            <Popup
+                                                AllowsTransparency="True"
+                                                IsOpen="{Binding IsChecked, ElementName=MoreToggleButton, Mode=TwoWay}"
+                                                Placement="Bottom"
+                                                PlacementTarget="{Binding ElementName=MoreToggleButton}"
+                                                StaysOpen="False">
+                                                <Border
+                                                    Margin="0,4,0,0"
+                                                    Background="#2D2D2D"
+                                                    BorderBrush="#444444"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect
+                                                            BlurRadius="12"
+                                                            Direction="270"
+                                                            Opacity="0.35"
+                                                            ShadowDepth="2"
+                                                            Color="Black" />
+                                                    </Border.Effect>
+                                                    <StackPanel MinWidth="120">
+                                                        <Button
+                                                            Command="{Binding DataContext.DeleteTripCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="刪除行程"
+                                                            Style="{StaticResource DangerMenuItemButton}" />
+                                                    </StackPanel>
+                                                </Border>
+                                            </Popup>
+                                        </Grid>
                                     </StackPanel>
                                 </Grid>
 

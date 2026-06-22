@@ -29,7 +29,8 @@ namespace TravelPlanning.ViewModels
 
         public PresenterFactory presenterFactory { get; set; }
 
-        public ICommand CreateTripCommand { get; set; }
+        public ICommand CreateTripPageCommand { get; set; }
+        public ICommand DeleteTripCommand { get; set; }
         private INavigationService navigationService;
 
         public MyTripContext(PresenterFactory presenterFactory, INavigationService navigationService)
@@ -39,9 +40,16 @@ namespace TravelPlanning.ViewModels
             myTripPresenter.GetTrips();
             this.navigationService = navigationService;
 
-            this.CreateTripCommand = new RelayCommand(() =>
+            this.CreateTripPageCommand = new RelayCommand(() =>
             {
                 this.navigationService.Navigate(typeof(CreateTripPage));
+            });
+
+
+            this.DeleteTripCommand = new RelayCommand<TripDTO>(x =>
+            {
+                myTripPresenter.DeleteTrip(x.Id);
+                this.Trips.Remove(x);
             });
 
         }

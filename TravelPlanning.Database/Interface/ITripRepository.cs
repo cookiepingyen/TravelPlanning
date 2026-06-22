@@ -12,5 +12,7 @@ namespace TravelPlanning.Database.Interface
         void CreateTrip(TripDAO tripDAO);
 
         List<TripDAO> GetTrips();
+
+        Task DeleteTripAsync(Guid tripID);
     }
 }

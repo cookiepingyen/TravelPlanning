@@ -17,6 +17,8 @@ namespace TravelPlanning.Contracts
         public interface IMyTripPresenter
         {
             void GetTrips();
+
+            Task DeleteTrip(Guid tripID);
         }
     }
 }

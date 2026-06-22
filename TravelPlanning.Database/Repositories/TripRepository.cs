@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,5 +44,15 @@ namespace TravelPlanning.Database.Repositories
             return trips;
         }
 
+
+        public async Task DeleteTripAsync(Guid tripID)
+        {
+            Trip trip = await db.Trip.FirstOrDefaultAsync(x => x.Id == tripID) ?? throw new KeyNotFoundException();
+            List<TripDetail> tripDetail = db.TripDetail.Where(x => x.Trip_id == tripID).ToList();
+
+            db.TripDetail.RemoveRange(tripDetail);
+            db.Trip.Remove(trip);
+            await db.SaveChangesAsync();
+        }
     }
 }

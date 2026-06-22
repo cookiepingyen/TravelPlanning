@@ -9,6 +9,8 @@ namespace TravelPlanning.Models.DTO
 {
     public class TripDTO
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public DateTime Started_time { get; set; }

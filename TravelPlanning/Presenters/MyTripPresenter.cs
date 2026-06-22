@@ -26,5 +26,11 @@ namespace TravelPlanning.Presenters
             var trips = tripRepository.GetTrips();
             this.myTripView.OnTripsResponse(trips);
         }
+
+
+        public async Task DeleteTrip(Guid tripID)
+        {
+            await tripRepository.DeleteTripAsync(tripID);
+        }
     }
 }
