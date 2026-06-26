@@ -23,9 +23,6 @@ namespace TravelPlanning.Database.Entities
 
         public DateTime? Startime { get; set; }
 
-        [StringLength(50)]
-        public string Place_id { get; set; }
-
         public virtual Trip Trip { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

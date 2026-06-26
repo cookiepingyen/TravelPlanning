@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TravelPlanning.Database.DAO;
+using TravelPlanning.Database.Entities;
+using TravelPlanning.Database.Interface;
+using TravelPlanning.Database.Models.DAO;
+using TravelPlanning.Database.Utility;
+
+namespace TravelPlanning.Database.Repositories
+{
+    public class TripDayRepository : ITripDayRepository
+    {
+        public DatabaseContext db = new DatabaseContext();
+
+        public async Task<TripDaysDAO> CreateTripDayAsync(Guid TripID)
+        {
+            var lastDay = db.TripDays.Where(x => x.Trip_id == TripID)
+                .OrderBy(x => x.Date)
+                .LastOrDefault();
+
+            DateTime nextDay = lastDay?.Date.Value.AddDays(1) ?? db.Trip.Find(TripID).Started_time;
+
+            TripDays tripDays = new TripDays()
+            {
+                Id = Guid.NewGuid(),
+                Date = nextDay,
+                Startime = new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 8, 0, 0),
+            };
+
+            db.TripDays.Add(tripDays);
+            await db.SaveChangesAsync();
+
+            TripDaysDAO tripDaysDAO = Mapper.Map<TripDays, TripDaysDAO>(tripDays);
+            return tripDaysDAO;
+        }
+
+        public async Task DeleteTripDayAsync(Guid id)
+        {
+            TripDays tripDays = await db.TripDays.FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException();
+
+            List<TripDayPlace> TripDayPlaces = db.TripDayPlace.Where(x => x.TripDays_id == tripDays.Id).ToList();
+            db.TripDayPlace.RemoveRange(TripDayPlaces);
+
+            db.TripDays.Remove(tripDays);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<List<TripDaysDAO>> GetTripDaysAsync(Guid tripId)
+        {
+            List<TripDays> tripDays = await db.TripDays.Where(x => x.Trip_id == tripId).ToListAsync();
+            List<TripDaysDAO> tripDaysDAO = Mapper.Map<TripDays, TripDaysDAO>(tripDays).ToList();
+            return tripDaysDAO;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TravelPlanning.Database.Models.DAO
+{
+    public class TripDayPlaceDAO
+    {
+        public Guid Id { get; set; }
+        public Guid TripDays_id { get; set; }
+        public DateTime Travel_time { get; set; }
+        public int Transit_time { get; set; }
+        public int Stay_time { get; set; }
+        public string Place_name { get; set; }
+        public string Place_id { get; set; }
+    }
+}

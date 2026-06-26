@@ -55,10 +55,6 @@ namespace TravelPlanning.Database.Entities
                 .IsUnicode(false);
 
             modelBuilder.Entity<TripDays>()
-                .Property(e => e.Place_id)
-                .IsFixedLength();
-
-            modelBuilder.Entity<TripDays>()
                 .HasMany(e => e.TripDayPlace)
                 .WithRequired(e => e.TripDays)
                 .HasForeignKey(e => e.TripDays_id)
