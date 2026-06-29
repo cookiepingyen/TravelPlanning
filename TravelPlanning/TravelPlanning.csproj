@@ -263,6 +263,7 @@
     <Compile Include="ViewModels\PlaceSearchContext.cs" />
     <Compile Include="ViewModels\RoutePlanningContext.cs" />
     <Compile Include="ViewModels\RouteStep.cs" />
+    <Compile Include="ViewModels\TripDaysContext.cs" />
     <Compile Include="ViewModels\TripDetailContext.cs" />
     <Compile Include="Views\Pages\Favorite\FavoriteListItemPage.xaml.cs">
       <DependentUpon>FavoriteListItemPage.xaml</DependentUpon>

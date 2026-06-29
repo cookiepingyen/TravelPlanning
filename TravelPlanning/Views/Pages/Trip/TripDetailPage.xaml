@@ -6,12 +6,606 @@
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.Trip"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="TripDetailPage"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="800"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock Foreground="White" Text="{Binding TripID}" />
+    <Page.Resources>
+        <!--  ===== 色彩系統 =====  -->
+        <SolidColorBrush x:Key="DarkBg" Color="#121212" />
+        <SolidColorBrush x:Key="SurfaceBg" Color="#1E1E1E" />
+        <SolidColorBrush x:Key="CardBg" Color="#2A2A2A" />
+        <SolidColorBrush x:Key="DividerColor" Color="#3A3A3A" />
+        <SolidColorBrush x:Key="AccentBlue" Color="#1E78E9" />
+        <SolidColorBrush x:Key="AccentBlueLight" Color="#4DB8FF" />
+        <SolidColorBrush x:Key="TextPrimary" Color="#F0F0F0" />
+        <SolidColorBrush x:Key="TextSecondary" Color="#9E9E9E" />
+        <SolidColorBrush x:Key="TextMuted" Color="#616161" />
+        <SolidColorBrush x:Key="TabActiveBg" Color="#1A2433" />
+
+        <!--  ===== 行程卡片樣式 =====  -->
+        <Style x:Key="StopCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBg}" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+
+        <!--  ===== 底部操作按鈕 =====  -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CardBg}" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0,14" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#333333" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  ===== Tab 按鈕樣式 =====  -->
+        <Style x:Key="TabButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4,4" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                            x:Name="TabBorder"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8">
+                            <!--  ContentPresenter 直接渲染呼叫端傳入的 Content（Grid）  -->
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource TabActiveBg}" />
+                                <Setter Property="Foreground" Value="{StaticResource AccentBlue}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#252525" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource DarkBg}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="340"
+                MinWidth="300"
+                MaxWidth="400" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  ==================== 左側面板 ====================  -->
+        <Border
+            Grid.Column="0"
+            Background="{StaticResource SurfaceBg}"
+            BorderBrush="{StaticResource DividerColor}"
+            BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!--  Header  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Tabs  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Day info  -->
+                    <RowDefinition Height="*" />
+                    <!--  Scroll content  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Bottom buttons  -->
+                </Grid.RowDefinitions>
+
+                <!--  === Header：行程標題 + 編輯 ===  -->
+                <Grid Grid.Row="0" Margin="20,20,20,12">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource TextPrimary}"
+                        Text="行程" />
+                    <Button
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Foreground="{StaticResource TextSecondary}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="16" Text="✎ " />
+                            <TextBlock FontSize="13" Text="編輯" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!--  === 日期導航列 ===  -->
+                <Border
+                    Grid.Row="1"
+                    Margin="12,0,12,12"
+                    Padding="4,4"
+                    Background="{StaticResource CardBg}"
+                    CornerRadius="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="36" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  左箭頭  -->
+                        <Button
+                            x:Name="BtnScrollLeft"
+                            Grid.Column="0"
+                            Width="28"
+                            Height="28"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        x:Name="Bg"
+                                        Background="Transparent"
+                                        CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bg" Property="Background" Value="#383838" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="{StaticResource AccentBlue}"
+                                Text="&#x276E;" />
+                        </Button>
+
+
+
+                        <!--  可捲動日期區  -->
+                        <ScrollViewer
+                            x:Name="DayTabScroller"
+                            Grid.Column="1"
+                            HorizontalScrollBarVisibility="Hidden"
+                            VerticalScrollBarVisibility="Disabled">
+                            <StackPanel x:Name="DayTabPanel" Orientation="Horizontal">
+
+                                <ItemsControl ItemsSource="{Binding tripDaysContexts}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <RadioButton
+                                                GroupName="DayTab"
+                                                IsChecked="{Binding IsChecked}"
+                                                Style="{StaticResource TabButtonStyle}">
+                                                <RadioButton.Content>
+                                                    <Grid Width="68">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="16" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Button
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="3"
+                                                            Grid.Column="1"
+                                                            Padding="0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Cursor="Hand">
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <ContentPresenter />
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                            <TextBlock
+                                                                FontSize="11"
+                                                                Foreground="#E05555"
+                                                                Text="🗑" />
+                                                        </Button>
+                                                        <TextBlock
+                                                            Grid.Row="0"
+                                                            Grid.RowSpan="1"
+                                                            Grid.Column="0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="12"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding DateText}" />
+                                                        <TextBlock
+                                                            Grid.Row="2"
+                                                            Grid.Column="0"
+                                                            HorizontalAlignment="Center"
+                                                            FontSize="10"
+                                                            Opacity="0.7"
+                                                            Text="{Binding Day, StringFormat=第{0}天}" />
+                                                    </Grid>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+
+
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!--  右箭頭  -->
+                        <Button
+                            x:Name="BtnScrollRight"
+                            Grid.Column="2"
+                            Width="28"
+                            Height="28"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        x:Name="Bg"
+                                        Background="Transparent"
+                                        CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bg" Property="Background" Value="#383838" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="{StaticResource AccentBlue}"
+                                Text="&#x276F;" />
+                        </Button>
+
+                        <!--  + 新增天數  -->
+                        <Button
+                            x:Name="BtnAddDay"
+                            Grid.Column="3"
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        x:Name="Bg"
+                                        Background="Transparent"
+                                        CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bg" Property="Background" Value="#383838" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="Light"
+                                Foreground="{StaticResource AccentBlue}"
+                                Text="+" />
+                        </Button>
+
+                    </Grid>
+                </Border>
+
+                <!--  === 當天資訊列 ===  -->
+                <Grid Grid.Row="2" Margin="20,0,20,12">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource AccentBlue}"
+                            Text="第1天" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{StaticResource TextMuted}"
+                            Text="2026/1/5 (週一)" />
+                    </StackPanel>
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{StaticResource TextMuted}">
+                        <Run Text="出發時間：" />
+                        <Run
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextSecondary}"
+                            Text="08:00" />
+                    </TextBlock>
+                </Grid>
+
+                <!--  === 行程清單（可捲動）===  -->
+                <ScrollViewer
+                    Grid.Row="3"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="12,0,12,0">
+
+                        <!--  ── 景點 1：西門町 ──  -->
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  時間軸左欄  -->
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="11"
+                                    Foreground="{StaticResource TextMuted}"
+                                    Text="08:00" />
+                                <!--  圓點  -->
+                                <Ellipse
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource AccentBlue}" />
+                                <!--  豎線  -->
+                                <Rectangle
+                                    Width="2"
+                                    Height="80"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource DividerColor}" />
+                            </StackPanel>
+
+                            <!--  卡片內容  -->
+                            <Border
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Style="{StaticResource StopCardStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="15"
+                                            FontWeight="SemiBold"
+                                            Foreground="{StaticResource TextPrimary}"
+                                            Text="西門町" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{StaticResource AccentBlue}"
+                                            Text="停留 2 小時" />
+                                    </StackPanel>
+                                    <!--  縮圖  -->
+                                    <Border
+                                        Grid.Column="1"
+                                        Width="60"
+                                        Height="60"
+                                        Margin="8,0,0,0"
+                                        CornerRadius="8">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
+                                        </Border.Background>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!--  ── 交通段：約 1 分 ──  -->
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <Rectangle
+                                    Width="2"
+                                    Height="6"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource DividerColor}" />
+                            </StackPanel>
+                            <Border
+                                Grid.Column="1"
+                                Margin="8,4,0,4"
+                                Padding="10,6"
+                                Background="Transparent">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        FontSize="18"
+                                        Foreground="{StaticResource TextMuted}"
+                                        Text="🚗 " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextMuted}"
+                                        Text="約 1 分鐘" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        Foreground="{StaticResource AccentBlue}"
+                                        Text="➤" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!--  ── 景點 2：臺北車站 ──  -->
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="11"
+                                    Foreground="{StaticResource TextMuted}"
+                                    Text="10:01" />
+                                <Ellipse
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource AccentBlue}" />
+                                <Rectangle
+                                    Width="2"
+                                    Height="100"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource DividerColor}" />
+                            </StackPanel>
+
+                            <Border
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Style="{StaticResource StopCardStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="15"
+                                            FontWeight="SemiBold"
+                                            Foreground="{StaticResource TextPrimary}"
+                                            Text="臺北車站" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{StaticResource AccentBlue}"
+                                            Text="停留 20 分" />
+                                        <TextBlock
+                                            Margin="0,4,0,0"
+                                            FontSize="11"
+                                            Foreground="{StaticResource TextMuted}"
+                                            Text="台北車站位於台灣台北市中正區，為臺鐵、臺灣高鐵、臺北捷運..."
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <!--  即買即用 tag  -->
+                                        <Border
+                                            Margin="0,6,0,0"
+                                            Padding="8,4"
+                                            HorizontalAlignment="Left"
+                                            Background="#1A1A3A"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                FontSize="11"
+                                                FontWeight="SemiBold"
+                                                Foreground="#7B9FFF"
+                                                Text="⚡ 即買即用" />
+                                        </Border>
+                                    </StackPanel>
+                                    <Border
+                                        Grid.Column="1"
+                                        Width="60"
+                                        Height="60"
+                                        Margin="8,0,0,0"
+                                        CornerRadius="8">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Taipei_Main_Station.JPG/320px-Taipei_Main_Station.JPG" Stretch="UniformToFill" />
+                                        </Border.Background>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!--  ── 加入更多提示 ──  -->
+                        <Grid Margin="0,4,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <Rectangle
+                                    Width="2"
+                                    Height="20"
+                                    HorizontalAlignment="Center"
+                                    Fill="{StaticResource DividerColor}" />
+                                <Ellipse
+                                    Width="12"
+                                    Height="12"
+                                    HorizontalAlignment="Center"
+                                    Fill="Transparent"
+                                    Stroke="{StaticResource DividerColor}"
+                                    StrokeThickness="2" />
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!--  === 底部操作按鈕 ===  -->
+                <Border
+                    Grid.Row="4"
+                    Padding="12,12,12,16"
+                    BorderBrush="{StaticResource DividerColor}"
+                    BorderThickness="0,1,0,0">
+                    <UniformGrid
+                        HorizontalAlignment="Stretch"
+                        Columns="2"
+                        Rows="1">
+                        <Button Margin="0,0,6,0" Style="{StaticResource ActionButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="16" Text="＋ " />
+                                <TextBlock Text="加入景點" />
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="6,0,0,0" Style="{StaticResource ActionButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="16" Text="🎟 " />
+                                <TextBlock Text="門票 &amp; 觀光行程" />
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <!--  ==================== 右側地圖區（保持原有邏輯）====================  -->
+        <Grid
+            x:Name="container"
+            Grid.Column="1"
+            Background="#121212" />
 
     </Grid>
 </Page>
