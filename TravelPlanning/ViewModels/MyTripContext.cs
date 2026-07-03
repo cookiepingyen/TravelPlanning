@@ -52,7 +52,7 @@ namespace TravelPlanning.ViewModels
 
             this.TripDetailPageCommand = new RelayCommand<Guid>(ID =>
             {
-                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID));
+                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID, presenterFactory));
             });
 
             this.DeleteTripCommand = new RelayCommand<TripDTO>(x =>

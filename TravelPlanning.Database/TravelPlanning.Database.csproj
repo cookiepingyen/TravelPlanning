@@ -88,7 +88,6 @@
     <Compile Include="Repositories\FavoriteRepository.cs" />
     <Compile Include="Repositories\FavoriteItemRepository.cs" />
     <Compile Include="Repositories\TripDayPlaceRepository.cs" />
-    <Compile Include="Repositories\TripDayRepository.cs" />
     <Compile Include="Repositories\TripRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="TravelPlanningDatabaseRegistration.cs" />

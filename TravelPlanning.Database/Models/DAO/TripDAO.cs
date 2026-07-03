@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelPlanning.Database.Models.DAO;
 
 namespace TravelPlanning.Database.DAO
 {
@@ -18,5 +19,7 @@ namespace TravelPlanning.Database.DAO
         public int Days { get; set; }
 
         public string Cover { get; set; }
+
+        public List<TripDaysDAO> TripDays { get; set; }
     }
 }

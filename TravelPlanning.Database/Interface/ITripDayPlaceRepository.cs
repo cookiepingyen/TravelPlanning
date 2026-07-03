@@ -14,5 +14,12 @@ namespace TravelPlanning.Database.Interface
         Task CreateTripDayPlaceAsync(TripDayPlaceDAO tripDayPlace);
         Task DeleteTripDayPlaceAsync(Guid id);
         Task<List<TripDayPlaceDAO>> GetTripDayPlacesAsync(Guid tripDayId);
+
+        Task<TripDaysDAO> CreateTripDayAsync(Guid TripID);
+
+        Task DeleteTripDayAsync(Guid id);
+
+        Task<List<TripDaysDAO>> GetTripDaysAsync(Guid tripId);
+
     }
 }

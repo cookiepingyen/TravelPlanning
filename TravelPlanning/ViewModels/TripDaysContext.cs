@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TravelPlanning.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class TripDaysContext
+    internal class TripDaysContext
     {
         public int Day { get; set; }
         public DateTime Date { get; set; }
