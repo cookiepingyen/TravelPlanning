@@ -122,12 +122,6 @@ namespace TravelPlanning.ViewModels
 
             RoutesResModel routesResModel = await googleAPIContext.Route.GetRoutes(routesRequest);
 
-            //DirectionRequest directionRequest = new DirectionRequest(End.result.place_id, Start.result.place_id, true);
-
-            //DirectionResModel directionResModel = await googleAPIContext.Direction.GetDirections(directionRequest);
-
-
-
             RouteSteps = routesResModel.routes[0].legs[0].steps.Select(step =>
             {
                 if (step.navigationInstruction == null)

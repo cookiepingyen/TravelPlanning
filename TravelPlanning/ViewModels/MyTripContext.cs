@@ -1,4 +1,5 @@
-﻿using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
+﻿using GoogleMap.SDK.Contract.GoogleMapAPI;
+using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
 using IOCServiceCollection;
 using Microsoft.Win32;
 using PropertyChanged;
@@ -38,7 +39,7 @@ namespace TravelPlanning.ViewModels
         public ICommand DeleteTripCommand { get; set; }
         private INavigationService navigationService;
 
-        public MyTripContext(PresenterFactory presenterFactory, INavigationService navigationService)
+        public MyTripContext(PresenterFactory presenterFactory, INavigationService navigationService, IGoogleAPIContext googleAPIContext)
         {
 
             IMyTripPresenter myTripPresenter = presenterFactory.Create<IMyTripPresenter, IMyTripView>(this);
@@ -52,7 +53,7 @@ namespace TravelPlanning.ViewModels
 
             this.TripDetailPageCommand = new RelayCommand<Guid>(ID =>
             {
-                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID, presenterFactory));
+                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID, presenterFactory, googleAPIContext));
             });
 
             this.DeleteTripCommand = new RelayCommand<TripDTO>(x =>

@@ -103,6 +103,7 @@
         <!--  ==================== 左側面板 ====================  -->
         <Border
             Grid.Column="0"
+            Height="800"
             Background="{StaticResource SurfaceBg}"
             BorderBrush="{StaticResource DividerColor}"
             BorderThickness="0,0,1,0">

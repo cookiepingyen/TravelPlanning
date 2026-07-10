@@ -66,6 +66,10 @@
     </Page.Resources>
 
     <Grid>
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Disabled"
+            PanningMode="VerticalOnly"
+            VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="16">
             <TextBlock
                 Margin="0,0,0,12"
@@ -173,5 +177,6 @@
             <!--  ===== PlaceCard 結束 =====  -->
 
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
