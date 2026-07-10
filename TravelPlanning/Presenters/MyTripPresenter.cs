@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Interface;
 using static TravelPlanning.Contracts.MyTripContract;
+using static TravelPlanning.Contracts.TripDetailContract;
 
 namespace TravelPlanning.Presenters
 {
@@ -28,11 +29,6 @@ namespace TravelPlanning.Presenters
             this.myTripView.OnTripsResponse(trips);
         }
 
-
-        public TripDAO GetTrip(Guid tripID)
-        {
-            return tripRepository.GetTrip(tripID);
-        }
 
         public async Task DeleteTrip(Guid tripID)
         {

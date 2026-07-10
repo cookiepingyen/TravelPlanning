@@ -10,8 +10,9 @@ namespace TravelPlanning.Database.Models.DAO
     {
         public Guid Id { get; set; }
         public Guid Trip_id { get; set; }
+        public int Day { get; set; }
         public DateTime Date { get; set; }
-        public DateTime Startime { get; set; }
+        public DateTime StartTime { get; set; }
         public List<TripDayPlaceDAO> TripDayPlaces { get; set; }
     }
 }

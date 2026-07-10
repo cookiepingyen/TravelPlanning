@@ -18,8 +18,6 @@ namespace TravelPlanning.Contracts
         {
             void GetTrips();
 
-            TripDAO GetTrip(Guid tripID);
-
             Task DeleteTrip(Guid tripID);
         }
     }

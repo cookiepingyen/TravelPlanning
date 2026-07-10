@@ -28,6 +28,7 @@ using static TravelPlanning.Contracts.FaviriteItemContract;
 using static TravelPlanning.Contracts.CreateTripContract;
 using static TravelPlanning.Contracts.MyTripContract;
 using TravelPlanning.Views.Pages.Trip;
+using static TravelPlanning.Contracts.TripDetailContract;
 
 namespace TravelPlanning
 {
@@ -61,10 +62,15 @@ namespace TravelPlanning
             collection.AddTransient<IMyTripPresenter, MyTripPresenter>();
             collection.AddTransient<IMyTripView, MyTripContext>();
 
-            collection.AddTransient<TripDetailPage, TripDetailPage>();
             #endregion
 
 
+            #region TripDetail
+            collection.AddTransient<TripDetailPage, TripDetailPage>();
+            collection.AddTransient<ITripDetailPresenter, TripDetailPresenter>();
+            collection.AddTransient<ITripDetailView, TripDetailContext>();
+
+            #endregion
 
 
             collection.AddTransient<RoutePlanningPage, RoutePlanningPage>();

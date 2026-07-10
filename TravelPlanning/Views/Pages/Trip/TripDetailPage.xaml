@@ -205,6 +205,8 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <RadioButton
+                                                Command="{Binding DataContext.SelectDayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"
                                                 GroupName="DayTab"
                                                 IsChecked="{Binding IsChecked}"
                                                 Style="{StaticResource TabButtonStyle}">
@@ -344,11 +346,11 @@
                             FontSize="15"
                             FontWeight="Bold"
                             Foreground="{StaticResource AccentBlue}"
-                            Text="第1天" />
+                            Text="{Binding CurrentDay.Day, StringFormat=第{0}天}" />
                         <TextBlock
                             FontSize="12"
                             Foreground="{StaticResource TextMuted}"
-                            Text="2026/1/5 (週一)" />
+                            Text="{Binding CurrentDay.DateText}" />
                     </StackPanel>
                     <TextBlock
                         HorizontalAlignment="Right"
@@ -359,7 +361,7 @@
                         <Run
                             FontWeight="SemiBold"
                             Foreground="{StaticResource TextSecondary}"
-                            Text="08:00" />
+                            Text="{Binding CurrentDay.StartTimeText, Mode=OneWay}" />
                     </TextBlock>
                 </Grid>
 
@@ -370,110 +372,140 @@
                     VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="12,0,12,0">
 
-                        <!--  ── 景點 1：西門町 ──  -->
-                        <Grid Margin="0,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <ItemsControl ItemsSource="{Binding CurrentDay.TripDayPlaces}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <!--  ── 景點 1：西門町 ──  -->
+                                        <Grid Margin="0,0,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="44" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                            <!--  時間軸左欄  -->
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontSize="11"
-                                    Foreground="{StaticResource TextMuted}"
-                                    Text="08:00" />
-                                <!--  圓點  -->
-                                <Ellipse
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource AccentBlue}" />
-                                <!--  豎線  -->
-                                <Rectangle
-                                    Width="2"
-                                    Height="80"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource DividerColor}" />
-                            </StackPanel>
+                                            <!--  時間軸左欄  -->
+                                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="11"
+                                                    Foreground="{StaticResource TextMuted}"
+                                                    Text="{Binding TravelTimeText}" />
+                                                <!--  圓點  -->
+                                                <Ellipse
+                                                    Width="16"
+                                                    Height="16"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="{StaticResource AccentBlue}" />
+                                                <!--  豎線  -->
+                                                <Rectangle
+                                                    Width="2"
+                                                    Height="80"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="{StaticResource DividerColor}" />
+                                            </StackPanel>
 
-                            <!--  卡片內容  -->
-                            <Border
-                                Grid.Column="1"
-                                Margin="8,0,0,0"
-                                Style="{StaticResource StopCardStyle}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock
-                                            FontSize="15"
-                                            FontWeight="SemiBold"
-                                            Foreground="{StaticResource TextPrimary}"
-                                            Text="西門町" />
-                                        <TextBlock
-                                            FontSize="12"
-                                            Foreground="{StaticResource AccentBlue}"
-                                            Text="停留 2 小時" />
+                                            <!--  卡片內容  -->
+                                            <Border
+                                                Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                Style="{StaticResource StopCardStyle}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock
+                                                            FontSize="15"
+                                                            FontWeight="SemiBold"
+                                                            Foreground="{StaticResource TextPrimary}"
+                                                            Text="{Binding Place_name}" />
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="{StaticResource AccentBlue}"
+                                                            Text="{Binding Stay_time, StringFormat=停留{0}分鐘}" />
+                                                    </StackPanel>
+                                                    <!--  縮圖  -->
+                                                    <Border
+                                                        Grid.Column="1"
+                                                        Width="60"
+                                                        Height="60"
+                                                        Margin="8,0,0,0"
+                                                        CornerRadius="8">
+                                                        <Border.Background>
+                                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
+                                                        </Border.Background>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+
+                                        <!--  ── 交通段：約 1 分 ──  -->
+                                        <Grid Margin="0,0,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="44" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                <Rectangle
+                                                    Width="2"
+                                                    Height="20"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="{StaticResource DividerColor}" />
+                                                <Ellipse
+                                                    Width="12"
+                                                    Height="12"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="Transparent"
+                                                    Stroke="{StaticResource DividerColor}"
+                                                    StrokeThickness="2" />
+                                                <Rectangle
+                                                    Width="2"
+                                                    Height="20"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="{StaticResource DividerColor}" />
+                                            </StackPanel>
+                                            <!--<StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                                <Rectangle
+                                                    Width="2"
+                                                    Height="6"
+                                                    HorizontalAlignment="Center"
+                                                    Fill="{StaticResource DividerColor}" />
+                                            </StackPanel>-->
+                                            <Border
+                                                Grid.Column="1"
+                                                Margin="8,4,0,4"
+                                                Padding="10,6"
+                                                Background="Transparent">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock
+                                                        FontSize="18"
+                                                        Foreground="{StaticResource TextMuted}"
+                                                        Text="🚗 " />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontSize="12"
+                                                        Foreground="{StaticResource TextMuted}"
+                                                        Text="{Binding Transit_time, StringFormat=花{0}分鐘}" />
+                                                    <TextBlock
+                                                        Margin="8,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="18"
+                                                        Foreground="{StaticResource AccentBlue}"
+                                                        Text="➤" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+
+
                                     </StackPanel>
-                                    <!--  縮圖  -->
-                                    <Border
-                                        Grid.Column="1"
-                                        Width="60"
-                                        Height="60"
-                                        Margin="8,0,0,0"
-                                        CornerRadius="8">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
-                                        </Border.Background>
-                                    </Border>
-                                </Grid>
-                            </Border>
-                        </Grid>
 
-                        <!--  ── 交通段：約 1 分 ──  -->
-                        <Grid Margin="0,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <Rectangle
-                                    Width="2"
-                                    Height="6"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource DividerColor}" />
-                            </StackPanel>
-                            <Border
-                                Grid.Column="1"
-                                Margin="8,4,0,4"
-                                Padding="10,6"
-                                Background="Transparent">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        FontSize="18"
-                                        Foreground="{StaticResource TextMuted}"
-                                        Text="🚗 " />
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Foreground="{StaticResource TextMuted}"
-                                        Text="約 1 分鐘" />
-                                    <TextBlock
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="18"
-                                        Foreground="{StaticResource AccentBlue}"
-                                        Text="➤" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
                         <!--  ── 景點 2：臺北車站 ──  -->
-                        <Grid Margin="0,0,0,0">
+                        <!--<Grid Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="44" />
                                 <ColumnDefinition Width="*" />
@@ -536,29 +568,7 @@
                                     </Border>
                                 </Grid>
                             </Border>
-                        </Grid>
-
-                        <!--  ── 加入更多提示 ──  -->
-                        <Grid Margin="0,4,0,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <Rectangle
-                                    Width="2"
-                                    Height="20"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource DividerColor}" />
-                                <Ellipse
-                                    Width="12"
-                                    Height="12"
-                                    HorizontalAlignment="Center"
-                                    Fill="Transparent"
-                                    Stroke="{StaticResource DividerColor}"
-                                    StrokeThickness="2" />
-                            </StackPanel>
-                        </Grid>
+                        </Grid>-->
 
                     </StackPanel>
                 </ScrollViewer>

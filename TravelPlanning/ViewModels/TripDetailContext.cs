@@ -1,4 +1,5 @@
-﻿using IOCServiceCollection;
+﻿using AutoMapper;
+using IOCServiceCollection;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
+using TravelPlanning.Database.Models.DAO;
 using TravelPlanning.Models.DTO;
 using static TravelPlanning.Contracts.MyTripContract;
+using static TravelPlanning.Contracts.TripDetailContract;
 
 namespace TravelPlanning.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    internal class TripDetailContext : IMyTripView
+    internal class TripDetailContext : ITripDetailView
     {
         public Guid TripID { get; set; }
 
@@ -24,28 +27,28 @@ namespace TravelPlanning.ViewModels
 
         public ICommand AddDayBtnCommand { get; set; }
         public ICommand DeleteDayBtnCommand { get; set; }
+        public ICommand SelectDayCommand { get; set; }
+
+        public ITripDetailPresenter tripDetailPresenter { get; set; }
+
+        public TripDaysContext CurrentDay { get; set; }
+
+
 
         public TripDetailContext(Guid tripID, PresenterFactory presenterFactory)
         {
             TripID = tripID;
 
-            IMyTripPresenter myTripPresenter = presenterFactory.Create<IMyTripPresenter, IMyTripView>(this);
+            this.tripDetailPresenter = presenterFactory.Create<ITripDetailPresenter, ITripDetailView>(this);
 
-            TripDAO tripDAO = myTripPresenter.GetTrip(tripID);
+            tripDetailPresenter.GetTripRequest(tripID);
 
 
-            tripDaysContexts = new ObservableCollection<TripDaysContext>()
-            {
-                new TripDaysContext(1, new DateTime(2026,6,29), true),
-                new TripDaysContext(2, new DateTime(2026,6,30), false),
-                new TripDaysContext(3, new DateTime(2026,7,1), false),
-                new TripDaysContext(4, new DateTime(2026,7,2), false),
-            };
 
             this.AddDayBtnCommand = new RelayCommand(() =>
             {
                 TripDaysContext LastTripDay = tripDaysContexts.Last();
-                TripDaysContext tripDay = new TripDaysContext(LastTripDay.Day + 1, LastTripDay.Date.AddDays(1), false);
+                TripDaysContext tripDay = new TripDaysContext(LastTripDay.Day + 1, LastTripDay.Date.AddDays(1), LastTripDay.StartTime, false);
                 tripDaysContexts.Add(tripDay);
             });
 
@@ -65,11 +68,28 @@ namespace TravelPlanning.ViewModels
             });
 
 
+            this.SelectDayCommand = new RelayCommand<TripDaysContext>(tripDay =>
+            {
+                CurrentDay = tripDay;
+            });
+
+
+
         }
 
-        public void OnTripsResponse(List<TripDAO> tripDAOs)
+        public void OnTripsResponse(List<TripDaysDAO> tripDays)
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TripDaysDAO, TripDaysContext>();
+                cfg.CreateMap<TripDayPlaceDAO, TripDayPlaceContext>();
+            });
+            var mapper = config.CreateMapper();
+
+            List<TripDaysContext> days = mapper.Map<List<TripDaysContext>>(tripDays);
+
+            tripDaysContexts = new ObservableCollection<TripDaysContext>(days);
+            CurrentDay = tripDaysContexts.FirstOrDefault();
         }
     }
 }

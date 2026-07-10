@@ -50,47 +50,18 @@ namespace TravelPlanning.Database.Repositories
 
         public TripDAO GetTrip(Guid TripID)
         {
-            //TripDAO tripDAO = db.Trip
-            //    .Where(x => x.Id == TripID)
-            //    .Select(x => new TripDAO()
-            //    {
-            //        Id = x.Id,
-            //        Name = x.Name,
-            //        Started_time = x.Started_time,
-            //        End_time = x.Ended_time,
-            //        Days = x.Days,
-            //        Cover = x.Cover,
-            //        TripDays = x.TripDays.Select(y => new TripDaysDAO
-            //        {
-            //            Id = y.Id,
-            //            Trip_id = y.Trip_id,
-            //            Date = y.Date.Value,
-            //            Startime = y.Startime.Value,
-            //            TripDayPlaces = y.TripDayPlace.Select(z => new TripDayPlaceDAO
-            //            {
-            //                Id = z.Id,
-            //                TripDays_id = z.TripDays_id,
-            //                Travel_time = z.Travel_time,
-            //                Transit_time = z.Transit_time,
-            //                Stay_time = z.Stay_time,
-            //                Place_name = z.Place_name,
-            //                Place_id = z.Place_id,
-            //            }).ToList(),
-            //        }).ToList()
-
-            //    }).FirstOrDefault();
-
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Trip, TripDAO>();
                 cfg.CreateMap<TripDays, TripDaysDAO>()
                     .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Value))
-                    .ForMember(dest => dest.Startime, opt => opt.MapFrom(src => src.Startime.Value))
+                    .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.Startime.Value))
                     .ForMember(dest => dest.TripDayPlaces, opt => opt.MapFrom(src => src.TripDayPlace));
                 cfg.CreateMap<TripDayPlace, TripDayPlaceDAO>();
             });
             var mapper = config.CreateMapper();
+
+
 
             TripDAO tripDAO = db.Trip
                 .Where(x => x.Id == TripID)
