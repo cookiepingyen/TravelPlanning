@@ -69,7 +69,7 @@ namespace TravelPlanning
             collection.AddTransient<TripDetailPage, TripDetailPage>();
             collection.AddTransient<ITripDetailPresenter, TripDetailPresenter>();
             collection.AddTransient<ITripDetailView, TripDetailContext>();
-
+            collection.AddTransient<ITripDayPlaceRepository, TripDayPlaceRepository>();
             #endregion
 
 

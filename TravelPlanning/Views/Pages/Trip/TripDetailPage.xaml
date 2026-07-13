@@ -314,6 +314,7 @@
                             VerticalAlignment="Center"
                             BorderThickness="0"
                             Command="{Binding DataContext.AddDayBtnCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                            CommandParameter="{Binding TripID}"
                             Cursor="Hand">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">

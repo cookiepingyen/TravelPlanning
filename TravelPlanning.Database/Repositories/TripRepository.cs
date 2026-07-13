@@ -64,10 +64,10 @@ namespace TravelPlanning.Database.Repositories
 
 
             TripDAO tripDAO = db.Trip
-                .Where(x => x.Id == TripID)
                 .ProjectTo<TripDAO>(config)
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.Id == TripID);
 
+            tripDAO.TripDays = tripDAO.TripDays.OrderBy(x => x.Date).ToList(); ;
 
 
             return tripDAO;

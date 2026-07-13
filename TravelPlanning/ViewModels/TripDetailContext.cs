@@ -53,12 +53,7 @@ namespace TravelPlanning.ViewModels
 
 
 
-            this.AddDayBtnCommand = new RelayCommand(() =>
-            {
-                TripDaysContext LastTripDay = tripDaysContexts.Last();
-                TripDaysContext tripDay = new TripDaysContext(LastTripDay.Day + 1, LastTripDay.Date.AddDays(1), LastTripDay.StartTime, false);
-                tripDaysContexts.Add(tripDay);
-            });
+            this.AddDayBtnCommand = new RelayCommand<Guid>(tripDetailPresenter.CreateTripDay);
 
             this.DeleteDayBtnCommand = new RelayCommand<TripDaysContext>(tripDay =>
             {
@@ -83,6 +78,21 @@ namespace TravelPlanning.ViewModels
 
 
 
+        }
+
+        public async Task<PlaceDetailResModel> GetPlaceDetail(string selectedItem, bool with_all_field)
+        {
+            PlaceDetailRequest placeDetailRequest = new PlaceDetailRequest();
+            placeDetailRequest.placeId = selectedItem;
+
+            if (!with_all_field)
+            {
+                placeDetailRequest.fields = new PlaceDetailInputFields[] { PlaceDetailInputFields.name, PlaceDetailInputFields.formatted_address, PlaceDetailInputFields.type };
+            }
+
+            PlaceDetailResModel placeDetailResModel = await GoogleAPIContext.Place.PlaceDetail(placeDetailRequest);
+
+            return placeDetailResModel;
         }
 
         public async void OnTripsResponse(List<TripDaysDAO> tripDays)
@@ -123,23 +133,13 @@ namespace TravelPlanning.ViewModels
             foreach (var place in places)
             {
                 WeakReferenceMessenger.Default.Send(place);
-
             }
         }
 
-        public async Task<PlaceDetailResModel> GetPlaceDetail(string selectedItem, bool with_all_field)
+        public void OnTripDaysResponse(TripDaysDAO tripDays)
         {
-            PlaceDetailRequest placeDetailRequest = new PlaceDetailRequest();
-            placeDetailRequest.placeId = selectedItem;
-
-            if (!with_all_field)
-            {
-                placeDetailRequest.fields = new PlaceDetailInputFields[] { PlaceDetailInputFields.name, PlaceDetailInputFields.formatted_address, PlaceDetailInputFields.type };
-            }
-
-            PlaceDetailResModel placeDetailResModel = await GoogleAPIContext.Place.PlaceDetail(placeDetailRequest);
-
-            return placeDetailResModel;
+            TripDaysContext tripDay = Utilities.Mapper.Map<TripDaysDAO, TripDaysContext>(tripDays);
+            tripDaysContexts.Add(tripDay);
         }
     }
 }

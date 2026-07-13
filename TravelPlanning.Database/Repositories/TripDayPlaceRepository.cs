@@ -41,15 +41,20 @@ namespace TravelPlanning.Database.Repositories
 
         public async Task<TripDaysDAO> CreateTripDayAsync(Guid TripID)
         {
-            var lastDay = db.TripDays.Where(x => x.Trip_id == TripID)
+
+            List<TripDays> tripDayList = db.TripDays.Where(x => x.Trip_id == TripID)
                 .OrderBy(x => x.Date)
-                .LastOrDefault();
+                .ToList();
+
+            TripDays lastDay = tripDayList.LastOrDefault();
+
 
             DateTime nextDay = lastDay?.Date.Value.AddDays(1) ?? db.Trip.Find(TripID).Started_time;
 
             TripDays tripDays = new TripDays()
             {
                 Id = Guid.NewGuid(),
+                Trip_id = TripID,
                 Date = nextDay,
                 Startime = new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 8, 0, 0),
             };
@@ -58,6 +63,7 @@ namespace TravelPlanning.Database.Repositories
             await db.SaveChangesAsync();
 
             TripDaysDAO tripDaysDAO = Mapper.Map<TripDays, TripDaysDAO>(tripDays);
+            tripDaysDAO.Day = tripDayList.Count + 1;
             return tripDaysDAO;
         }
 
