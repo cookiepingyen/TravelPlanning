@@ -19,6 +19,7 @@ using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Models.DAO;
 using TravelPlanning.Models.DTO;
+using TravelPlanning.Presenters;
 using static TravelPlanning.Contracts.MyTripContract;
 using static TravelPlanning.Contracts.TripDetailContract;
 
@@ -53,21 +54,26 @@ namespace TravelPlanning.ViewModels
 
 
 
-            this.AddDayBtnCommand = new RelayCommand<Guid>(tripDetailPresenter.CreateTripDay);
+            this.AddDayBtnCommand = new RelayCommand<Guid>(guid =>
+            {
+                tripDetailPresenter.CreateTripDay(guid);
+            });
 
             this.DeleteDayBtnCommand = new RelayCommand<TripDaysContext>(tripDay =>
             {
+                tripDetailPresenter.DeleteTripDay(tripDay.Id);
                 tripDaysContexts.Remove(tripDay);
                 var firstDay = tripDaysContexts.OrderBy(x => x.Day).First();
                 firstDay.IsChecked = true;
 
-                for (int i = 1; i < tripDaysContexts.Count; i++)
+                for (int i = 0; i < tripDaysContexts.Count; i++)
                 {
                     TripDaysContext x = tripDaysContexts[i];
                     x.Day = i + 1;
                     x.Date = firstDay.Date.AddDays(i);
                     x.IsChecked = false;
                 }
+
             });
 
 
@@ -136,7 +142,7 @@ namespace TravelPlanning.ViewModels
             }
         }
 
-        public void OnTripDaysResponse(TripDaysDAO tripDays)
+        public void OnCreateTripDaysResponse(TripDaysDAO tripDays)
         {
             TripDaysContext tripDay = Utilities.Mapper.Map<TripDaysDAO, TripDaysContext>(tripDays);
             tripDaysContexts.Add(tripDay);

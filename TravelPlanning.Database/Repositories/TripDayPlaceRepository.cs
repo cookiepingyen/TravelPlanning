@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Interface;
 using TravelPlanning.Database.Models.DAO;
@@ -69,12 +70,30 @@ namespace TravelPlanning.Database.Repositories
 
         public async Task DeleteTripDayAsync(Guid id)
         {
+            // 刪除日期
             TripDays tripDays = await db.TripDays.FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException();
+            Guid trip_id = tripDays.Trip_id;
 
             List<TripDayPlace> TripDayPlaces = db.TripDayPlace.Where(x => x.TripDays_id == tripDays.Id).ToList();
             db.TripDayPlace.RemoveRange(TripDayPlaces);
 
             db.TripDays.Remove(tripDays);
+
+            await db.SaveChangesAsync();
+            // 重新計算所有日期
+            List<TripDays> TripDayList = db.TripDays.Where(x => x.Trip_id == trip_id)
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            DateTime? firstDate = TripDayList.First().Date;
+
+            for (int i = 0; i < TripDayList.Count; i++)
+            {
+                TripDayList[i].Date = firstDate.Value.AddDays(i);
+                var date = TripDayList[i].Date.Value;
+                TripDayList[i].Startime = new DateTime(date.Year, date.Month, date.Day, TripDayList[i].Startime.Value.Hour, TripDayList[i].Startime.Value.Minute, 0);
+            }
+
             await db.SaveChangesAsync();
         }
 
@@ -84,5 +103,6 @@ namespace TravelPlanning.Database.Repositories
             List<TripDaysDAO> tripDaysDAO = Mapper.Map<TripDays, TripDaysDAO>(tripDays).ToList();
             return tripDaysDAO;
         }
+
     }
 }

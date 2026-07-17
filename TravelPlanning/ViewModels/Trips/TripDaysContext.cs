@@ -10,6 +10,7 @@ namespace TravelPlanning.ViewModels
     [AddINotifyPropertyChangedInterface]
     internal class TripDaysContext
     {
+        public Guid Id { get; set; }
         public int Day { get; set; }
         public DateTime Date { get; set; }
         public DateTime StartTime { get; set; }

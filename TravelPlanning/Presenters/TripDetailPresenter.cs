@@ -45,7 +45,13 @@ namespace TravelPlanning.Presenters
         {
             TripDaysDAO tripDaysDAO = await tripDayPlaceRepository.CreateTripDayAsync(tripID);
 
-            this.tripDetailView.OnTripDaysResponse(tripDaysDAO);
+            this.tripDetailView.OnCreateTripDaysResponse(tripDaysDAO);
+        }
+
+
+        public async void DeleteTripDay(Guid tripID)
+        {
+            await tripDayPlaceRepository.DeleteTripDayAsync(tripID);
         }
     }
 }

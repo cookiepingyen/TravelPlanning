@@ -14,14 +14,14 @@ namespace TravelPlanning.Contracts
         {
             void OnTripsResponse(List<TripDaysDAO> tripDays);
 
-            void OnTripDaysResponse(TripDaysDAO tripDays);
+            void OnCreateTripDaysResponse(TripDaysDAO tripDays);
         }
 
         public interface ITripDetailPresenter
         {
             void GetTripRequest(Guid tripID);
-
             void CreateTripDay(Guid tripID);
+            void DeleteTripDay(Guid tripID);
         }
     }
 }
