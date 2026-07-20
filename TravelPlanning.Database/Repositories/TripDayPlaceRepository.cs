@@ -20,6 +20,7 @@ namespace TravelPlanning.Database.Repositories
         {
             TripDayPlace tripDayPlace = Mapper.Map<TripDayPlaceDAO, TripDayPlace>(tripDayPlaceDAO);
             tripDayPlace.Id = Guid.NewGuid();
+            tripDayPlaceDAO.Id = tripDayPlace.Id;
 
             db.TripDayPlace.Add(tripDayPlace);
             await db.SaveChangesAsync();

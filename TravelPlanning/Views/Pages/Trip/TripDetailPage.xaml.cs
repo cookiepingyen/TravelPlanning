@@ -82,7 +82,7 @@ namespace TravelPlanning.Views.Pages.Trip
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(TripDetailContext.CurrentDay))
+            if (e.PropertyName == nameof(TripDetailContext.CurrentDay) || e.PropertyName == nameof(TripDetailContext.MapVersion))
             {
                 ClearMap();
             }

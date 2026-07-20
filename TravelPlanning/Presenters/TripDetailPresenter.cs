@@ -44,7 +44,6 @@ namespace TravelPlanning.Presenters
         public async void CreateTripDay(Guid tripID)
         {
             TripDaysDAO tripDaysDAO = await tripDayPlaceRepository.CreateTripDayAsync(tripID);
-
             this.tripDetailView.OnCreateTripDaysResponse(tripDaysDAO);
         }
 
@@ -56,9 +55,7 @@ namespace TravelPlanning.Presenters
 
         public async void AddTripDayPlace(TripDayPlaceDAO tripDayPlace)
         {
-            tripDayPlace.Id = Guid.NewGuid();
             await tripDayPlaceRepository.CreateTripDayPlaceAsync(tripDayPlace);
-
             this.tripDetailView.OnCreateTripDayPlaceResponse(tripDayPlace);
         }
 

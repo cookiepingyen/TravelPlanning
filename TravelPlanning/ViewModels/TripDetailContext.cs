@@ -62,6 +62,9 @@ namespace TravelPlanning.ViewModels
 
         public IGoogleAPIContext GoogleAPIContext { get; set; }
 
+        public int MapVersion { get; set; }
+
+
         public TripDetailContext(Guid tripID, PresenterFactory presenterFactory, IGoogleAPIContext googleAPIContext)
         {
             TripID = tripID;
@@ -96,10 +99,11 @@ namespace TravelPlanning.ViewModels
 
             });
 
-            this.DeletePlaceCommand = new RelayCommand<TripDayPlaceContext>((tripDayPlace) =>
+            this.DeletePlaceCommand = new RelayCommand<TripDayPlaceContext>(async (tripDayPlace) =>
             {
                 tripDetailPresenter.DeleteTripDayPlace(tripDayPlace.Id);
                 CurrentDay.TripDayPlaces.Remove(tripDayPlace);
+                await RefreshMapAsync();
             });
 
 
@@ -271,13 +275,19 @@ namespace TravelPlanning.ViewModels
             }
         }
 
+        public async Task RefreshMapAsync()
+        {
+            MapVersion++;
+            await LoadCurrentDayMapAsync();
+        }
+
         public void OnCreateTripDaysResponse(TripDaysDAO tripDays)
         {
             TripDaysContext tripDay = Utilities.Mapper.Map<TripDaysDAO, TripDaysContext>(tripDays);
             tripDaysContexts.Add(tripDay);
         }
 
-        public void OnCreateTripDayPlaceResponse(TripDayPlaceDAO tripDayPlace)
+        public async void OnCreateTripDayPlaceResponse(TripDayPlaceDAO tripDayPlace)
         {
             TripDayPlaceContext tripDayPlaceContext = Utilities.Mapper.Map<TripDayPlaceDAO, TripDayPlaceContext>(tripDayPlace);
 
@@ -287,6 +297,10 @@ namespace TravelPlanning.ViewModels
             }
 
             CurrentDay.TripDayPlaces.Add(tripDayPlaceContext);
+            await RefreshMapAsync();
         }
+
+
+
     }
 }
