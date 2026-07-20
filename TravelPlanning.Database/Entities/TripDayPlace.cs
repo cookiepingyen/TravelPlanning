@@ -13,7 +13,7 @@ namespace TravelPlanning.Database.Entities
 
         public Guid TripDays_id { get; set; }
 
-        public DateTime Travel_time { get; set; }
+        public DateTime Start_time { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -26,6 +26,8 @@ namespace TravelPlanning.Database.Entities
         public string Place_name { get; set; }
 
         public int Stay_time { get; set; }
+
+        public bool Is_custom { get; set; }
 
         public virtual TripDays TripDays { get; set; }
     }

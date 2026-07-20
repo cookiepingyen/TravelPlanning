@@ -1,6 +1,7 @@
 ﻿using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace TravelPlanning.ViewModels
         public string StartTimeText => StartTime.ToString("HH:mm");
 
         public bool IsChecked { get; set; }
-        public List<TripDayPlaceContext> TripDayPlaces { get; set; }
+        public ObservableCollection<TripDayPlaceContext> TripDayPlaces { get; set; }
 
         public TripDaysContext() { }
         public TripDaysContext(int day, DateTime date, DateTime startTime, bool ischecked)

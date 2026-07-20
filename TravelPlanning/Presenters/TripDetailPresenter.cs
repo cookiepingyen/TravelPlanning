@@ -53,5 +53,18 @@ namespace TravelPlanning.Presenters
         {
             await tripDayPlaceRepository.DeleteTripDayAsync(tripID);
         }
+
+        public async void AddTripDayPlace(TripDayPlaceDAO tripDayPlace)
+        {
+            tripDayPlace.Id = Guid.NewGuid();
+            await tripDayPlaceRepository.CreateTripDayPlaceAsync(tripDayPlace);
+
+            this.tripDetailView.OnCreateTripDayPlaceResponse(tripDayPlace);
+        }
+
+        public async void DeleteTripDayPlace(Guid tripID)
+        {
+            await tripDayPlaceRepository.DeleteTripDayPlaceAsync(tripID);
+        }
     }
 }

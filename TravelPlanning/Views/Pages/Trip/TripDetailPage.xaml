@@ -2,6 +2,7 @@
     x:Class="TravelPlanning.Views.Pages.Trip.TripDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:autoComplete="clr-namespace:TravelPlanning.Components.AutoCompleteComponent"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TravelPlanning.Views.Pages.Trip"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,6 +12,8 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
         <!--  ===== 色彩系統 =====  -->
         <SolidColorBrush x:Key="DarkBg" Color="#121212" />
         <SolidColorBrush x:Key="SurfaceBg" Color="#1E1E1E" />
@@ -29,6 +32,19 @@
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="Padding" Value="12" />
             <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+
+        <!--  ===== 可點擊卡片按鈕（無外觀，僅提供點擊）=====  -->
+        <Style x:Key="PlaceCardButtonStyle" TargetType="Button">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--  ===== 底部操作按鈕 =====  -->
@@ -91,7 +107,7 @@
         </Style>
     </Page.Resources>
 
-    <Grid Background="{StaticResource DarkBg}">
+    <Grid x:Name="RootGrid" Background="{StaticResource DarkBg}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="340"
@@ -113,6 +129,8 @@
                     <!--  Header  -->
                     <RowDefinition Height="Auto" />
                     <!--  Tabs  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  加入地點按鈕  -->
                     <RowDefinition Height="Auto" />
                     <!--  Day info  -->
                     <RowDefinition Height="*" />
@@ -341,8 +359,233 @@
                     </Grid>
                 </Border>
 
+                <!--  === 加入地點按鈕 ===  -->
+                <Button
+                    x:Name="BtnAddPlace"
+                    Grid.Row="2"
+                    Margin="20,0,20,12"
+                    Padding="0,10"
+                    HorizontalAlignment="Stretch"
+                    Background="{StaticResource CardBg}"
+                    BorderThickness="0"
+                    Command="{Binding OpenAddPlaceCommand}"
+                    Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="#333333" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="16"
+                            Foreground="{StaticResource AccentBlue}"
+                            Text="＋ " />
+                        <TextBlock
+                            FontSize="13"
+                            Foreground="{StaticResource TextPrimary}"
+                            Text="加入地點" />
+                    </StackPanel>
+                </Button>
+
+                <!--  === 加入地點 Popup ===  -->
+                <Popup
+                    x:Name="AddPlacePopup"
+                    AllowsTransparency="True"
+                    IsOpen="{Binding IsAddPlacePopupOpen, Mode=TwoWay}"
+                    Placement="Center"
+                    PlacementTarget="{Binding ElementName=RootGrid}"
+                    PopupAnimation="Fade"
+                    StaysOpen="False">
+                    <Border
+                        Width="300"
+                        Padding="16"
+                        Background="{StaticResource CardBg}"
+                        BorderBrush="{StaticResource DividerColor}"
+                        BorderThickness="1"
+                        CornerRadius="10">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Foreground="{StaticResource TextPrimary}"
+                                Text="加入地點" />
+                            <autoComplete:AutoComplete
+                                Foreground="{StaticResource TextPrimary}"
+                                SelectedCommand="{Binding SelectAddPlaceCommand}"
+                                SelectedItem="{Binding PendingPlace}" />
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="停留時間（分鐘）" />
+                            <Border
+                                Padding="10,8"
+                                Background="#303030"
+                                BorderBrush="{StaticResource DividerColor}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid>
+                                    <TextBox
+                                        x:Name="StayTimeTextBox"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        Text="{Binding PendingTimeText, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock
+                                        Foreground="{StaticResource TextSecondary}"
+                                        IsHitTestVisible="False"
+                                        Text="分鐘，例如 30">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=StayTimeTextBox}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="交通時間（分鐘）" />
+                            <Border
+                                Padding="10,8"
+                                Background="#303030"
+                                BorderBrush="{StaticResource DividerColor}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid>
+                                    <TextBox
+                                        x:Name="TransitTimeTextBox"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        Text="{Binding PendingTransitTimeText, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock
+                                        Foreground="{StaticResource TextSecondary}"
+                                        IsHitTestVisible="False"
+                                        Text="分鐘，例如 15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=TransitTimeTextBox}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <CheckBox
+                                x:Name="IsCustomCheckBox"
+                                Margin="0,12,0,0"
+                                Content="自訂時間"
+                                Foreground="{StaticResource TextPrimary}"
+                                IsChecked="{Binding IsCustom}" />
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="到達時間" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Width="70"
+                                    Padding="10,8"
+                                    Background="#303030"
+                                    BorderBrush="{StaticResource DividerColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    IsEnabled="{Binding IsChecked, ElementName=IsCustomCheckBox}">
+                                    <TextBox
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        MaxLength="2"
+                                        Text="{Binding PendingCustomHourText, UpdateSourceTrigger=PropertyChanged}" />
+                                </Border>
+                                <TextBlock
+                                    Margin="6,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Text="時" />
+                                <Border
+                                    Width="70"
+                                    Padding="10,8"
+                                    Background="#303030"
+                                    BorderBrush="{StaticResource DividerColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    IsEnabled="{Binding IsChecked, ElementName=IsCustomCheckBox}">
+                                    <TextBox
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        MaxLength="2"
+                                        Text="{Binding PendingCustomMinuteText, UpdateSourceTrigger=PropertyChanged}" />
+                                </Border>
+                                <TextBlock
+                                    Margin="6,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Text="分" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Margin="0,14,0,0"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,8,0"
+                                    Padding="14,6"
+                                    Background="#333333"
+                                    BorderThickness="0"
+                                    Command="{Binding CancelAddPlaceCommand}"
+                                    Cursor="Hand"
+                                    Foreground="{StaticResource TextSecondary}">
+                                    取消
+                                </Button>
+                                <Button
+                                    Padding="14,6"
+                                    Background="{StaticResource AccentBlue}"
+                                    BorderThickness="0"
+                                    Command="{Binding ConfirmAddPlaceCommand}"
+                                    Cursor="Hand"
+                                    Foreground="White">
+                                    加入
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+
                 <!--  === 當天資訊列 ===  -->
-                <Grid Grid.Row="2" Margin="20,0,20,12">
+                <Grid Grid.Row="3" Margin="20,0,20,12">
                     <StackPanel>
                         <TextBlock
                             FontSize="15"
@@ -369,7 +612,7 @@
 
                 <!--  === 行程清單（可捲動）===  -->
                 <ScrollViewer
-                    Grid.Row="3"
+                    Grid.Row="4"
                     HorizontalScrollBarVisibility="Disabled"
                     VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="12,0,12,0">
@@ -391,7 +634,13 @@
                                                     HorizontalAlignment="Center"
                                                     FontSize="11"
                                                     Foreground="{StaticResource TextMuted}"
-                                                    Text="{Binding TravelTimeText}" />
+                                                    Text="{Binding StartTimeText}" />
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="10"
+                                                    Foreground="{StaticResource AccentBlue}"
+                                                    Text="(自訂)"
+                                                    Visibility="{Binding Is_custom, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                                 <!--  圓點  -->
                                                 <Ellipse
                                                     Width="16"
@@ -407,39 +656,77 @@
                                             </StackPanel>
 
                                             <!--  卡片內容  -->
-                                            <Border
+                                            <Button
+                                                x:Name="PlaceCardButton"
                                                 Grid.Column="1"
                                                 Margin="8,0,0,0"
-                                                Style="{StaticResource StopCardStyle}">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <StackPanel Grid.Column="0">
-                                                        <TextBlock
-                                                            FontSize="15"
-                                                            FontWeight="SemiBold"
-                                                            Foreground="{StaticResource TextPrimary}"
-                                                            Text="{Binding Place_name}" />
-                                                        <TextBlock
-                                                            FontSize="12"
-                                                            Foreground="{StaticResource AccentBlue}"
-                                                            Text="{Binding Stay_time, StringFormat=停留{0}分鐘}" />
-                                                    </StackPanel>
-                                                    <!--  縮圖  -->
-                                                    <Border
-                                                        Grid.Column="1"
-                                                        Width="60"
-                                                        Height="60"
-                                                        Margin="8,0,0,0"
-                                                        CornerRadius="8">
-                                                        <Border.Background>
-                                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
-                                                        </Border.Background>
-                                                    </Border>
-                                                </Grid>
-                                            </Border>
+                                                Command="{Binding DataContext.TogglePlaceMenuCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource PlaceCardButtonStyle}">
+                                                <Border Style="{StaticResource StopCardStyle}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock
+                                                                FontSize="15"
+                                                                FontWeight="SemiBold"
+                                                                Foreground="{StaticResource TextPrimary}"
+                                                                Text="{Binding Place_name}" />
+                                                            <TextBlock
+                                                                FontSize="12"
+                                                                Foreground="{StaticResource AccentBlue}"
+                                                                Text="{Binding Stay_time, StringFormat=停留{0}分鐘}" />
+                                                        </StackPanel>
+                                                        <!--  縮圖  -->
+                                                        <Border
+                                                            Grid.Column="1"
+                                                            Width="60"
+                                                            Height="60"
+                                                            Margin="8,0,0,0"
+                                                            CornerRadius="8">
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
+                                                            </Border.Background>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </Button>
+
+                                            <Popup
+                                                AllowsTransparency="True"
+                                                IsOpen="{Binding IsMenuOpen}"
+                                                Placement="Right"
+                                                PlacementTarget="{Binding ElementName=PlaceCardButton}"
+                                                PopupAnimation="Fade"
+                                                StaysOpen="False">
+                                                <Border
+                                                    Margin="4,0,0,0"
+                                                    Padding="4"
+                                                    Background="{StaticResource CardBg}"
+                                                    BorderBrush="{StaticResource DividerColor}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8">
+                                                    <Button
+                                                        Padding="10,6"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding DataContext.DeletePlaceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                        CommandParameter="{Binding}"
+                                                        Cursor="Hand">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock
+                                                                Margin="0,0,6,0"
+                                                                FontSize="14"
+                                                                Foreground="#E05555"
+                                                                Text="🗑" />
+                                                            <TextBlock Foreground="#E05555" Text="刪除" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+                                            </Popup>
                                         </Grid>
 
                                         <!--  ── 交通段：約 1 分 ──  -->
@@ -577,7 +864,7 @@
 
                 <!--  === 底部操作按鈕 ===  -->
                 <Border
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Padding="12,12,12,16"
                     BorderBrush="{StaticResource DividerColor}"
                     BorderThickness="0,1,0,0">

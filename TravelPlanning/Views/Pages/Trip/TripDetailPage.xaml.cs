@@ -38,6 +38,8 @@ namespace TravelPlanning.Views.Pages.Trip
         ServiceProvider serviceProvider;
         IGoogleAPIContext googleAPIContext;
 
+        private readonly List<Location> currentMarkerLocations = new List<Location>();
+
         private const double ScrollStep = 80;
         public TripDetailPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
         {
@@ -56,12 +58,46 @@ namespace TravelPlanning.Views.Pages.Trip
 
             WeakReferenceMessenger.Default.Register<List<Location>>(this, CreateRoute);
 
+            DataContextChanged += TripDetailPage_DataContextChanged;
 
             BtnScrollLeft.Click += (sender, e) => DayTabScroller.ScrollToHorizontalOffset(
                 DayTabScroller.HorizontalOffset - ScrollStep);
 
             BtnScrollRight.Click += (sender, e) => DayTabScroller.ScrollToHorizontalOffset(
                 DayTabScroller.HorizontalOffset + ScrollStep);
+        }
+
+        private void TripDetailPage_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is INotifyPropertyChanged oldViewModel)
+            {
+                oldViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            }
+
+            if (e.NewValue is INotifyPropertyChanged newViewModel)
+            {
+                newViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            }
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(TripDetailContext.CurrentDay))
+            {
+                ClearMap();
+            }
+        }
+
+        private void ClearMap()
+        {
+            foreach (Location location in currentMarkerLocations)
+            {
+                mapControl.RemoveMarker("選擇的地點", location);
+            }
+
+            currentMarkerLocations.Clear();
+
+            mapControl.RemoveRoute("Route");
         }
 
 
@@ -115,7 +151,9 @@ namespace TravelPlanning.Views.Pages.Trip
             };
 
             var location = e.result.geometry.location;
-            mapControl.AddMarker("選擇的地點", new Location(location.lat, location.lng), toolTip);
+            Location markerLocation = new Location(location.lat, location.lng);
+            mapControl.AddMarker("選擇的地點", markerLocation, toolTip);
+            currentMarkerLocations.Add(markerLocation);
         }
 
         private BitmapImage CreateImage(byte[] bytes)

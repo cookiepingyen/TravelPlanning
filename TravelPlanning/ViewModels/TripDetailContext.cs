@@ -35,6 +35,26 @@ namespace TravelPlanning.ViewModels
         public ICommand AddDayBtnCommand { get; set; }
         public ICommand DeleteDayBtnCommand { get; set; }
         public ICommand SelectDayCommand { get; set; }
+        public ICommand OpenAddPlaceCommand { get; set; }
+        public ICommand CancelAddPlaceCommand { get; set; }
+        public ICommand ConfirmAddPlaceCommand { get; set; }
+        public ICommand SelectAddPlaceCommand { get; set; }
+        public ICommand TogglePlaceMenuCommand { get; set; }
+        public ICommand DeletePlaceCommand { get; set; }
+
+        public bool IsAddPlacePopupOpen { get; set; }
+
+        public PlaceDetailResModel PendingPlace { get; set; }
+
+        public string PendingTimeText { get; set; }
+
+        public string PendingTransitTimeText { get; set; }
+
+        public bool IsCustom { get; set; }
+
+        public string PendingCustomHourText { get; set; }
+
+        public string PendingCustomMinuteText { get; set; }
 
         public ITripDetailPresenter tripDetailPresenter { get; set; }
 
@@ -76,12 +96,108 @@ namespace TravelPlanning.ViewModels
 
             });
 
-
-            this.SelectDayCommand = new RelayCommand<TripDaysContext>(tripDay =>
+            this.DeletePlaceCommand = new RelayCommand<TripDayPlaceContext>((tripDayPlace) =>
             {
-                CurrentDay = tripDay;
+                tripDetailPresenter.DeleteTripDayPlace(tripDayPlace.Id);
+                CurrentDay.TripDayPlaces.Remove(tripDayPlace);
             });
 
+
+
+            this.SelectDayCommand = new RelayCommand<TripDaysContext>(async tripDay =>
+            {
+                CurrentDay = tripDay;
+                await LoadCurrentDayMapAsync();
+            });
+
+            this.SelectAddPlaceCommand = new RelayCommand<PlaceDetailResModel>(place =>
+            {
+                PendingPlace = place;
+            });
+
+            this.TogglePlaceMenuCommand = new RelayCommand<TripDayPlaceContext>(place =>
+            {
+                if (CurrentDay?.TripDayPlaces == null) return;
+
+                bool isOpening = !place.IsMenuOpen;
+
+                foreach (TripDayPlaceContext item in CurrentDay.TripDayPlaces)
+                {
+                    item.IsMenuOpen = false;
+                }
+
+                place.IsMenuOpen = isOpening;
+            });
+
+            this.OpenAddPlaceCommand = new RelayCommand(() =>
+            {
+                PendingPlace = null;
+                PendingTimeText = string.Empty;
+                PendingTransitTimeText = string.Empty;
+                PendingCustomHourText = string.Empty;
+                PendingCustomMinuteText = string.Empty;
+                IsCustom = false;
+                IsAddPlacePopupOpen = true;
+            });
+
+            this.CancelAddPlaceCommand = new RelayCommand(() =>
+            {
+                PendingPlace = null;
+                PendingTimeText = string.Empty;
+                PendingTransitTimeText = string.Empty;
+                PendingCustomHourText = string.Empty;
+                PendingCustomMinuteText = string.Empty;
+                IsCustom = false;
+                IsAddPlacePopupOpen = false;
+            });
+
+            this.ConfirmAddPlaceCommand = new RelayCommand(() =>
+            {
+                if (PendingPlace == null) return;
+
+                int stayTime = int.TryParse(PendingTimeText, out int parsedStayTime) ? parsedStayTime : 30;
+                int transitTime = int.TryParse(PendingTransitTimeText, out int parsedTransitTime) ? parsedTransitTime : 0;
+
+                bool hasCustomTime = IsCustom
+                    && int.TryParse(PendingCustomHourText, out int customHour) && customHour >= 0 && customHour <= 23
+                    && int.TryParse(PendingCustomMinuteText, out int customMinute) && customMinute >= 0 && customMinute <= 59;
+
+                DateTime startTime;
+                if (hasCustomTime)
+                {
+                    startTime = new DateTime(CurrentDay.Date.Year, CurrentDay.Date.Month, CurrentDay.Date.Day, int.Parse(PendingCustomHourText), int.Parse(PendingCustomMinuteText), 0);
+                }
+                else if (CurrentDay.TripDayPlaces == null || CurrentDay.TripDayPlaces.Count == 0)
+                {
+                    startTime = CurrentDay.StartTime;
+                }
+                else
+                {
+                    TripDayPlaceContext lastPlace = CurrentDay.TripDayPlaces.OrderBy(x => x.Start_time).Last();
+                    startTime = lastPlace.Start_time.AddMinutes(lastPlace.Transit_time + lastPlace.Stay_time);
+                }
+
+                TripDayPlaceDAO tripDayPlace = new TripDayPlaceDAO()
+                {
+                    TripDays_id = CurrentDay.Id,
+                    Place_id = PendingPlace.result.place_id,
+                    Place_name = PendingPlace.result.name,
+                    Start_time = startTime,
+                    Transit_time = transitTime,
+                    Stay_time = stayTime,
+                    Is_custom = IsCustom,
+                };
+
+                tripDetailPresenter.AddTripDayPlace(tripDayPlace);
+
+                PendingPlace = null;
+                PendingTimeText = string.Empty;
+                PendingTransitTimeText = string.Empty;
+                PendingCustomHourText = string.Empty;
+                PendingCustomMinuteText = string.Empty;
+                IsCustom = false;
+                IsAddPlacePopupOpen = false;
+            });
 
 
         }
@@ -112,9 +228,22 @@ namespace TravelPlanning.ViewModels
 
             List<TripDaysContext> days = mapper.Map<List<TripDaysContext>>(tripDays);
 
+            foreach (TripDaysContext day in days)
+            {
+                if (day.TripDayPlaces != null)
+                {
+                    day.TripDayPlaces = new ObservableCollection<TripDayPlaceContext>(day.TripDayPlaces.OrderBy(x => x.Start_time));
+                }
+            }
+
             tripDaysContexts = new ObservableCollection<TripDaysContext>(days);
             CurrentDay = tripDaysContexts[1];
 
+            await LoadCurrentDayMapAsync();
+        }
+
+        public async Task LoadCurrentDayMapAsync()
+        {
             if (CurrentDay.TripDayPlaces.Count >= 2)
             {
                 string StartPlaceId = CurrentDay.TripDayPlaces.First().Place_id;
@@ -146,6 +275,18 @@ namespace TravelPlanning.ViewModels
         {
             TripDaysContext tripDay = Utilities.Mapper.Map<TripDaysDAO, TripDaysContext>(tripDays);
             tripDaysContexts.Add(tripDay);
+        }
+
+        public void OnCreateTripDayPlaceResponse(TripDayPlaceDAO tripDayPlace)
+        {
+            TripDayPlaceContext tripDayPlaceContext = Utilities.Mapper.Map<TripDayPlaceDAO, TripDayPlaceContext>(tripDayPlace);
+
+            if (CurrentDay.TripDayPlaces == null)
+            {
+                CurrentDay.TripDayPlaces = new ObservableCollection<TripDayPlaceContext>();
+            }
+
+            CurrentDay.TripDayPlaces.Add(tripDayPlaceContext);
         }
     }
 }

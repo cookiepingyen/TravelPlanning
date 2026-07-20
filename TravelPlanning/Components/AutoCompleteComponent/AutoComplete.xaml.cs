@@ -48,11 +48,10 @@ namespace TravelPlanning.Components.AutoCompleteComponent
             typeof(AutoComplete),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
             {
-                if (e.NewValue == null) return;
                 AutoComplete autoComplete = (AutoComplete)d;
                 PlaceDetailResModel placeDetailResModel = (PlaceDetailResModel)e.NewValue;
 
-                autoComplete.AutoCompleteView.Text = placeDetailResModel.result.name;
+                autoComplete.AutoCompleteView.Text = placeDetailResModel?.result.name ?? string.Empty;
             }));
 
         public PlaceDetailResModel SelectedItem

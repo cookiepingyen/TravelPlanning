@@ -15,6 +15,8 @@ namespace TravelPlanning.Contracts
             void OnTripsResponse(List<TripDaysDAO> tripDays);
 
             void OnCreateTripDaysResponse(TripDaysDAO tripDays);
+
+            void OnCreateTripDayPlaceResponse(TripDayPlaceDAO tripDayPlace);
         }
 
         public interface ITripDetailPresenter
@@ -22,6 +24,8 @@ namespace TravelPlanning.Contracts
             void GetTripRequest(Guid tripID);
             void CreateTripDay(Guid tripID);
             void DeleteTripDay(Guid tripID);
+            void AddTripDayPlace(TripDayPlaceDAO tripDayPlace);
+            void DeleteTripDayPlace(Guid tripID);
         }
     }
 }
