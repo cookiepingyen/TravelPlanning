@@ -132,6 +132,8 @@
                     <RowDefinition Height="Auto" />
                     <!--  加入地點按鈕  -->
                     <RowDefinition Height="Auto" />
+                    <!--  交通方式選擇  -->
+                    <RowDefinition Height="Auto" />
                     <!--  Day info  -->
                     <RowDefinition Height="*" />
                     <!--  Scroll content  -->
@@ -396,6 +398,45 @@
                             Text="加入地點" />
                     </StackPanel>
                 </Button>
+
+                <!--  === 交通方式選擇 ===  -->
+                <UniformGrid
+                    Grid.Row="3"
+                    Margin="20,0,20,12"
+                    Columns="3"
+                    Rows="1">
+                    <RadioButton
+                        Command="{Binding ChangeTravelModeCommand}"
+                        CommandParameter="DRIVE"
+                        GroupName="TransportMode"
+                        IsChecked="True"
+                        Style="{StaticResource TabButtonStyle}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            Text="🚗" />
+                    </RadioButton>
+                    <RadioButton
+                        Command="{Binding ChangeTravelModeCommand}"
+                        CommandParameter="TWO_WHEELER"
+                        GroupName="TransportMode"
+                        Style="{StaticResource TabButtonStyle}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            Text="🛵" />
+                    </RadioButton>
+                    <RadioButton
+                        Command="{Binding ChangeTravelModeCommand}"
+                        CommandParameter="WALK"
+                        GroupName="TransportMode"
+                        Style="{StaticResource TabButtonStyle}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            Text="🚶" />
+                    </RadioButton>
+                </UniformGrid>
 
                 <!--  === 加入地點 Popup ===  -->
                 <Popup
@@ -780,7 +821,7 @@
                 </Popup>
 
                 <!--  === 當天資訊列 ===  -->
-                <Grid Grid.Row="3" Margin="20,0,20,12">
+                <Grid Grid.Row="4" Margin="20,0,20,12">
                     <StackPanel>
                         <TextBlock
                             FontSize="15"
@@ -807,7 +848,7 @@
 
                 <!--  === 行程清單（可捲動）===  -->
                 <ScrollViewer
-                    Grid.Row="4"
+                    Grid.Row="5"
                     HorizontalScrollBarVisibility="Disabled"
                     VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="12,0,12,0">
@@ -974,10 +1015,6 @@
                                                 Background="Transparent">
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock
-                                                        FontSize="18"
-                                                        Foreground="{StaticResource TextMuted}"
-                                                        Text="🚗 " />
-                                                    <TextBlock
                                                         VerticalAlignment="Center"
                                                         FontSize="12"
                                                         Foreground="{StaticResource TextMuted}"
@@ -1003,7 +1040,7 @@
 
                 <!--  === 底部操作按鈕 ===  -->
                 <Border
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Padding="12,12,12,16"
                     BorderBrush="{StaticResource DividerColor}"
                     BorderThickness="0,1,0,0">

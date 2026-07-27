@@ -44,6 +44,7 @@ namespace TravelPlanning.ViewModels
         public ICommand EditPlaceCommand { get; set; }
         public ICommand CancelEditPlaceCommand { get; set; }
         public ICommand ConfirmEditPlaceCommand { get; set; }
+        public ICommand ChangeTravelModeCommand { get; set; }
 
         public bool IsAddPlacePopupOpen { get; set; }
 
@@ -80,6 +81,8 @@ namespace TravelPlanning.ViewModels
         public IGoogleAPIContext GoogleAPIContext { get; set; }
 
         public int MapVersion { get; set; }
+
+        public TravelMode TravelMode { get; set; } = TravelMode.DRIVE;
 
 
         public TripDetailContext(Guid tripID, PresenterFactory presenterFactory, IGoogleAPIContext googleAPIContext)
@@ -176,7 +179,6 @@ namespace TravelPlanning.ViewModels
 
             this.ConfirmEditPlaceCommand = new RelayCommand<TripDayPlaceContext>(place =>
             {
-
                 place.Is_custom = EditIsCustom;
                 place.Stay_time = int.Parse(EditPendingStayTimeText);
                 place.Transit_time = int.Parse(EditPendingTransitTimeText);
@@ -190,9 +192,13 @@ namespace TravelPlanning.ViewModels
                 tripDetailPresenter.UpdateTripDayPlace(tripDayPlaceDAO);
 
                 IsEditPlacePopupOpen = false;
+            });
 
+            this.ChangeTravelModeCommand = new RelayCommand<string>(async mode =>
+            {
+                TravelMode = (TravelMode)Enum.Parse(typeof(TravelMode), mode);
 
-
+                await LoadCurrentDayMapAsync();
             });
 
             this.OpenAddPlaceCommand = new RelayCommand(() =>
@@ -315,7 +321,7 @@ namespace TravelPlanning.ViewModels
                 string StartPlaceId = CurrentDay.TripDayPlaces.First().Place_id;
                 string EndPlaceId = CurrentDay.TripDayPlaces.Last().Place_id;
 
-                RoutesRequest routesRequest = new RoutesRequest(StartPlaceId, EndPlaceId, addressType: AddressType.PlaceId);
+                RoutesRequest routesRequest = new RoutesRequest(StartPlaceId, EndPlaceId, mode: TravelMode, addressType: AddressType.PlaceId);
                 if (CurrentDay.TripDayPlaces.Count > 2)
                 {
                     List<string> intermediates = new List<string>();
