@@ -59,9 +59,46 @@ namespace TravelPlanning.Presenters
             this.tripDetailView.OnCreateTripDayPlaceResponse(tripDayPlace);
         }
 
+        public async void UpdateTripDayPlace(TripDayPlaceDAO tripDayPlace)
+        {
+            await tripDayPlaceRepository.UpdateTripDayPlaceAsync(tripDayPlace);
+
+            List<TripDayPlaceDAO> tripDayPlaceDAOs = await CalTripDayPlaceTimes(tripDayPlace.TripDays_id);
+
+            await tripDayPlaceRepository.UpdateTripDayPlacesAsync(tripDayPlaceDAOs);
+
+            this.tripDetailView.OnUpdateTripDayPlaceResponse(tripDayPlaceDAOs);
+        }
+
         public async void DeleteTripDayPlace(Guid tripID)
         {
             await tripDayPlaceRepository.DeleteTripDayPlaceAsync(tripID);
+        }
+
+
+        private async Task<List<TripDayPlaceDAO>> CalTripDayPlaceTimes(Guid TripDays_id)
+        {
+            List<TripDayPlaceDAO> tripDayPlaceDAOs = await tripDayPlaceRepository.GetTripDayPlacesAsync(TripDays_id);
+            tripDayPlaceDAOs = tripDayPlaceDAOs.OrderBy(x => x.Start_time).ToList();
+
+            List<TripDayPlaceDAO> newTripDayPlaceDAOS = tripDayPlaceDAOs.Aggregate(new List<TripDayPlaceDAO>(), (datas, trip) =>
+            {
+
+                if (datas.Count == 0 || trip.Is_custom)
+                {
+                    datas.Add(trip);
+                    return datas;
+                }
+
+                TripDayPlaceDAO last_place = datas.Last();
+                trip.Start_time = last_place.Start_time.AddMinutes(last_place.Stay_time + last_place.Transit_time);
+                datas.Add(trip);
+
+                return datas;
+            });
+
+            return newTripDayPlaceDAOS;
+
         }
     }
 }

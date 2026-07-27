@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using GoogleMap.SDK.Contract.GoogleMapAPI;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Enums;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
@@ -20,6 +19,7 @@ using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Models.DAO;
 using TravelPlanning.Models.DTO;
 using TravelPlanning.Presenters;
+using TravelPlanning.Utilities;
 using static TravelPlanning.Contracts.MyTripContract;
 using static TravelPlanning.Contracts.TripDetailContract;
 
@@ -41,6 +41,9 @@ namespace TravelPlanning.ViewModels
         public ICommand SelectAddPlaceCommand { get; set; }
         public ICommand TogglePlaceMenuCommand { get; set; }
         public ICommand DeletePlaceCommand { get; set; }
+        public ICommand EditPlaceCommand { get; set; }
+        public ICommand CancelEditPlaceCommand { get; set; }
+        public ICommand ConfirmEditPlaceCommand { get; set; }
 
         public bool IsAddPlacePopupOpen { get; set; }
 
@@ -55,6 +58,20 @@ namespace TravelPlanning.ViewModels
         public string PendingCustomHourText { get; set; }
 
         public string PendingCustomMinuteText { get; set; }
+
+        public bool IsEditPlacePopupOpen { get; set; }
+
+        public TripDayPlaceContext EditingPlace { get; set; }
+
+        public string EditPendingStayTimeText { get; set; }
+
+        public string EditPendingTransitTimeText { get; set; }
+
+        public bool EditIsCustom { get; set; }
+
+        public string EditPendingCustomHourText { get; set; }
+
+        public string EditPendingCustomMinuteText { get; set; }
 
         public ITripDetailPresenter tripDetailPresenter { get; set; }
 
@@ -131,6 +148,51 @@ namespace TravelPlanning.ViewModels
                 }
 
                 place.IsMenuOpen = isOpening;
+            });
+
+            this.EditPlaceCommand = new RelayCommand<TripDayPlaceContext>(place =>
+            {
+                place.IsMenuOpen = false;
+
+                EditingPlace = place;
+                EditPendingStayTimeText = place.Stay_time.ToString();
+                EditPendingTransitTimeText = place.Transit_time.ToString();
+                EditIsCustom = place.Is_custom;
+                EditPendingCustomHourText = place.Is_custom ? place.Start_time.Hour.ToString("00") : string.Empty;
+                EditPendingCustomMinuteText = place.Is_custom ? place.Start_time.Minute.ToString("00") : string.Empty;
+                IsEditPlacePopupOpen = true;
+            });
+
+            this.CancelEditPlaceCommand = new RelayCommand(() =>
+            {
+                EditingPlace = null;
+                EditPendingStayTimeText = string.Empty;
+                EditPendingTransitTimeText = string.Empty;
+                EditIsCustom = false;
+                EditPendingCustomHourText = string.Empty;
+                EditPendingCustomMinuteText = string.Empty;
+                IsEditPlacePopupOpen = false;
+            });
+
+            this.ConfirmEditPlaceCommand = new RelayCommand<TripDayPlaceContext>(place =>
+            {
+
+                place.Is_custom = EditIsCustom;
+                place.Stay_time = int.Parse(EditPendingStayTimeText);
+                place.Transit_time = int.Parse(EditPendingTransitTimeText);
+                if (EditIsCustom)
+                {
+                    DateTime customTime = new DateTime(place.Start_time.Year, place.Start_time.Month, place.Start_time.Day, int.Parse(EditPendingCustomHourText), int.Parse(EditPendingCustomMinuteText), 0);
+                    place.Start_time = customTime;
+                }
+
+                TripDayPlaceDAO tripDayPlaceDAO = Mapper.Map<TripDayPlaceContext, TripDayPlaceDAO>(place);
+                tripDetailPresenter.UpdateTripDayPlace(tripDayPlaceDAO);
+
+                IsEditPlacePopupOpen = false;
+
+
+
             });
 
             this.OpenAddPlaceCommand = new RelayCommand(() =>
@@ -223,7 +285,7 @@ namespace TravelPlanning.ViewModels
 
         public async void OnTripsResponse(List<TripDaysDAO> tripDays)
         {
-            var config = new MapperConfiguration(cfg =>
+            var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<TripDaysDAO, TripDaysContext>();
                 cfg.CreateMap<TripDayPlaceDAO, TripDayPlaceContext>();
@@ -301,6 +363,13 @@ namespace TravelPlanning.ViewModels
         }
 
 
+        public void OnUpdateTripDayPlaceResponse(List<TripDayPlaceDAO> tripDayPlaceDAOs)
+        {
 
+            List<TripDayPlaceContext> tripDayPlaceContexts = Utilities.Mapper.Map<TripDayPlaceDAO, TripDayPlaceContext>(tripDayPlaceDAOs).ToList();
+
+            CurrentDay.TripDayPlaces = new ObservableCollection<TripDayPlaceContext>(tripDayPlaceContexts);
+
+        }
     }
 }

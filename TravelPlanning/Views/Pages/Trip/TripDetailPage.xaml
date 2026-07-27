@@ -29,8 +29,8 @@
         <!--  ===== 行程卡片樣式 =====  -->
         <Style x:Key="StopCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource CardBg}" />
-            <Setter Property="CornerRadius" Value="12" />
-            <Setter Property="Padding" Value="12" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="8" />
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
 
@@ -584,6 +584,201 @@
                     </Border>
                 </Popup>
 
+                <!--  === 修改地點 Popup ===  -->
+                <Popup
+                    x:Name="EditPlacePopup"
+                    AllowsTransparency="True"
+                    IsOpen="{Binding IsEditPlacePopupOpen, Mode=TwoWay}"
+                    Placement="Center"
+                    PlacementTarget="{Binding ElementName=RootGrid}"
+                    PopupAnimation="Fade"
+                    StaysOpen="False">
+                    <Border
+                        Width="300"
+                        Padding="16"
+                        Background="{StaticResource CardBg}"
+                        BorderBrush="{StaticResource DividerColor}"
+                        BorderThickness="1"
+                        CornerRadius="10">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,10"
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Foreground="{StaticResource TextPrimary}"
+                                Text="修改地點" />
+
+                            <TextBlock
+                                Margin="0,0,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="地點" />
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource TextPrimary}"
+                                Text="{Binding EditingPlace.Place_name}" />
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="停留時間（分鐘）" />
+                            <Border
+                                Padding="10,8"
+                                Background="#303030"
+                                BorderBrush="{StaticResource DividerColor}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid>
+                                    <TextBox
+                                        x:Name="EditStayTimeTextBox"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        Text="{Binding EditPendingStayTimeText, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock
+                                        Foreground="{StaticResource TextSecondary}"
+                                        IsHitTestVisible="False"
+                                        Text="分鐘，例如 30">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=EditStayTimeTextBox}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="交通時間（分鐘）" />
+                            <Border
+                                Padding="10,8"
+                                Background="#303030"
+                                BorderBrush="{StaticResource DividerColor}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid>
+                                    <TextBox
+                                        x:Name="EditTransitTimeTextBox"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        Text="{Binding EditPendingTransitTimeText, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock
+                                        Foreground="{StaticResource TextSecondary}"
+                                        IsHitTestVisible="False"
+                                        Text="分鐘，例如 15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=EditTransitTimeTextBox}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <CheckBox
+                                x:Name="EditIsCustomCheckBox"
+                                Margin="0,12,0,0"
+                                Content="自訂時間"
+                                Foreground="{StaticResource TextPrimary}"
+                                IsChecked="{Binding EditIsCustom}" />
+
+                            <TextBlock
+                                Margin="0,10,0,4"
+                                FontSize="12"
+                                Foreground="{StaticResource TextSecondary}"
+                                Text="到達時間" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Width="70"
+                                    Padding="10,8"
+                                    Background="#303030"
+                                    BorderBrush="{StaticResource DividerColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    IsEnabled="{Binding IsChecked, ElementName=EditIsCustomCheckBox}">
+                                    <TextBox
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        MaxLength="2"
+                                        Text="{Binding EditPendingCustomHourText, UpdateSourceTrigger=PropertyChanged}" />
+                                </Border>
+                                <TextBlock
+                                    Margin="6,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Text="時" />
+                                <Border
+                                    Width="70"
+                                    Padding="10,8"
+                                    Background="#303030"
+                                    BorderBrush="{StaticResource DividerColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    IsEnabled="{Binding IsChecked, ElementName=EditIsCustomCheckBox}">
+                                    <TextBox
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        CaretBrush="{StaticResource TextPrimary}"
+                                        Foreground="{StaticResource TextPrimary}"
+                                        MaxLength="2"
+                                        Text="{Binding EditPendingCustomMinuteText, UpdateSourceTrigger=PropertyChanged}" />
+                                </Border>
+                                <TextBlock
+                                    Margin="6,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextSecondary}"
+                                    Text="分" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Margin="0,14,0,0"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,8,0"
+                                    Padding="14,6"
+                                    Background="#333333"
+                                    BorderThickness="0"
+                                    Command="{Binding CancelEditPlaceCommand}"
+                                    Cursor="Hand"
+                                    Foreground="{StaticResource TextSecondary}">
+                                    取消
+                                </Button>
+                                <Button
+                                    Padding="14,6"
+                                    Background="{StaticResource AccentBlue}"
+                                    BorderThickness="0"
+                                    Command="{Binding ConfirmEditPlaceCommand}"
+                                    CommandParameter="{Binding EditingPlace}"
+                                    Cursor="Hand"
+                                    Foreground="White">
+                                    儲存
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+
                 <!--  === 當天資訊列 ===  -->
                 <Grid Grid.Row="3" Margin="20,0,20,12">
                     <StackPanel>
@@ -650,7 +845,7 @@
                                                 <!--  豎線  -->
                                                 <Rectangle
                                                     Width="2"
-                                                    Height="80"
+                                                    Height="56"
                                                     HorizontalAlignment="Center"
                                                     Fill="{StaticResource DividerColor}" />
                                             </StackPanel>
@@ -669,24 +864,24 @@
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <StackPanel Grid.Column="0">
+                                                        <StackPanel Grid.Column="0" VerticalAlignment="Top">
                                                             <TextBlock
-                                                                FontSize="15"
+                                                                FontSize="13"
                                                                 FontWeight="SemiBold"
                                                                 Foreground="{StaticResource TextPrimary}"
                                                                 Text="{Binding Place_name}" />
                                                             <TextBlock
-                                                                FontSize="12"
+                                                                FontSize="11"
                                                                 Foreground="{StaticResource AccentBlue}"
                                                                 Text="{Binding Stay_time, StringFormat=停留{0}分鐘}" />
                                                         </StackPanel>
                                                         <!--  縮圖  -->
                                                         <Border
                                                             Grid.Column="1"
-                                                            Width="60"
-                                                            Height="60"
+                                                            Width="40"
+                                                            Height="40"
                                                             Margin="8,0,0,0"
-                                                            CornerRadius="8">
+                                                            CornerRadius="6">
                                                             <Border.Background>
                                                                 <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ximending_20060111.jpg/320px-Ximending_20060111.jpg" Stretch="UniformToFill" />
                                                             </Border.Background>
@@ -709,22 +904,40 @@
                                                     BorderBrush="{StaticResource DividerColor}"
                                                     BorderThickness="1"
                                                     CornerRadius="8">
-                                                    <Button
-                                                        Padding="10,6"
-                                                        Background="Transparent"
-                                                        BorderThickness="0"
-                                                        Command="{Binding DataContext.DeletePlaceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                        CommandParameter="{Binding}"
-                                                        Cursor="Hand">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock
-                                                                Margin="0,0,6,0"
-                                                                FontSize="14"
-                                                                Foreground="#E05555"
-                                                                Text="🗑" />
-                                                            <TextBlock Foreground="#E05555" Text="刪除" />
-                                                        </StackPanel>
-                                                    </Button>
+                                                    <StackPanel>
+                                                        <Button
+                                                            Padding="10,6"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Command="{Binding DataContext.EditPlaceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                            CommandParameter="{Binding}"
+                                                            Cursor="Hand">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock
+                                                                    Margin="0,0,6,0"
+                                                                    FontSize="14"
+                                                                    Foreground="{StaticResource TextSecondary}"
+                                                                    Text="✎" />
+                                                                <TextBlock Foreground="{StaticResource TextSecondary}" Text="修改" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                        <Button
+                                                            Padding="10,6"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Command="{Binding DataContext.DeletePlaceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                            CommandParameter="{Binding}"
+                                                            Cursor="Hand">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock
+                                                                    Margin="0,0,6,0"
+                                                                    FontSize="14"
+                                                                    Foreground="#E05555"
+                                                                    Text="🗑" />
+                                                                <TextBlock Foreground="#E05555" Text="刪除" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </StackPanel>
                                                 </Border>
                                             </Popup>
                                         </Grid>
@@ -754,13 +967,6 @@
                                                     HorizontalAlignment="Center"
                                                     Fill="{StaticResource DividerColor}" />
                                             </StackPanel>
-                                            <!--<StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                                <Rectangle
-                                                    Width="2"
-                                                    Height="6"
-                                                    HorizontalAlignment="Center"
-                                                    Fill="{StaticResource DividerColor}" />
-                                            </StackPanel>-->
                                             <Border
                                                 Grid.Column="1"
                                                 Margin="8,4,0,4"
@@ -792,73 +998,6 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-
-                        <!--  ── 景點 2：臺北車站 ──  -->
-                        <!--<Grid Margin="0,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontSize="11"
-                                    Foreground="{StaticResource TextMuted}"
-                                    Text="10:01" />
-                                <Ellipse
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource AccentBlue}" />
-                                <Rectangle
-                                    Width="2"
-                                    Height="100"
-                                    HorizontalAlignment="Center"
-                                    Fill="{StaticResource DividerColor}" />
-                            </StackPanel>
-
-                            <Border
-                                Grid.Column="1"
-                                Margin="8,0,0,0"
-                                Style="{StaticResource StopCardStyle}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock
-                                            FontSize="15"
-                                            FontWeight="SemiBold"
-                                            Foreground="{StaticResource TextPrimary}"
-                                            Text="臺北車站" />
-                                        <TextBlock
-                                            FontSize="12"
-                                            Foreground="{StaticResource AccentBlue}"
-                                            Text="停留 20 分" />
-                                        <TextBlock
-                                            Margin="0,4,0,0"
-                                            FontSize="11"
-                                            Foreground="{StaticResource TextMuted}"
-                                            Text="台北車站位於台灣台北市中正區，為臺鐵、臺灣高鐵、臺北捷運..."
-                                            TextTrimming="CharacterEllipsis"
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                    <Border
-                                        Grid.Column="1"
-                                        Width="60"
-                                        Height="60"
-                                        Margin="8,0,0,0"
-                                        CornerRadius="8">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Taipei_Main_Station.JPG/320px-Taipei_Main_Station.JPG" Stretch="UniformToFill" />
-                                        </Border.Background>
-                                    </Border>
-                                </Grid>
-                            </Border>
-                        </Grid>-->
-
                     </StackPanel>
                 </ScrollViewer>
 

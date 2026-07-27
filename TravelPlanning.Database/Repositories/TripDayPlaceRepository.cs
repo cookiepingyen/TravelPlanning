@@ -26,6 +26,32 @@ namespace TravelPlanning.Database.Repositories
             await db.SaveChangesAsync();
         }
 
+        public async Task UpdateTripDayPlaceAsync(TripDayPlaceDAO tripDayPlaceDAO)
+        {
+            TripDayPlace tripDayPlace = await db.TripDayPlace.FirstOrDefaultAsync(x => x.Id == tripDayPlaceDAO.Id) ?? throw new KeyNotFoundException();
+
+            tripDayPlace.Start_time = tripDayPlaceDAO.Start_time;
+            tripDayPlace.Transit_time = tripDayPlaceDAO.Transit_time;
+            tripDayPlace.Stay_time = tripDayPlaceDAO.Stay_time;
+            tripDayPlace.Is_custom = tripDayPlaceDAO.Is_custom;
+
+            await db.SaveChangesAsync();
+        }
+
+        public async Task UpdateTripDayPlacesAsync(List<TripDayPlaceDAO> tripDayPlaceDAOs)
+        {
+            List<Guid> idList = tripDayPlaceDAOs.Select(x => x.Id).ToList();
+
+            List<TripDayPlace> oldTripDayPlaces = db.TripDayPlace.Where(x => idList.Contains(x.Id)).ToList();
+
+            db.TripDayPlace.RemoveRange(oldTripDayPlaces);
+            await db.SaveChangesAsync();
+
+            List<TripDayPlace> newTripDayPlace = Mapper.Map<List<TripDayPlaceDAO>, List<TripDayPlace>>(tripDayPlaceDAOs);
+            db.TripDayPlace.AddRange(oldTripDayPlaces);
+            await db.SaveChangesAsync();
+        }
+
         public async Task DeleteTripDayPlaceAsync(Guid id)
         {
             TripDayPlace tripDayPlace = await db.TripDayPlace.FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException();
@@ -35,12 +61,13 @@ namespace TravelPlanning.Database.Repositories
 
         public async Task<List<TripDayPlaceDAO>> GetTripDayPlacesAsync(Guid tripDayId)
         {
-
             List<TripDayPlace> tripDayPlaces = await db.TripDayPlace.Where(x => x.TripDays_id == tripDayId).ToListAsync();
             List<TripDayPlaceDAO> tripDayPlaceDAOs = Mapper.Map<TripDayPlace, TripDayPlaceDAO>(tripDayPlaces).ToList();
             return tripDayPlaceDAOs;
         }
 
+
+        #region TripDay
         public async Task<TripDaysDAO> CreateTripDayAsync(Guid TripID)
         {
 
@@ -105,5 +132,6 @@ namespace TravelPlanning.Database.Repositories
             return tripDaysDAO;
         }
 
+        #endregion
     }
 }
