@@ -51,9 +51,9 @@ namespace TravelPlanning.ViewModels
                 this.navigationService.Navigate(typeof(CreateTripPage));
             });
 
-            this.TripDetailPageCommand = new RelayCommand<Guid>(ID =>
+            this.TripDetailPageCommand = new RelayCommand<TripDTO>(trip =>
             {
-                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(ID, presenterFactory, googleAPIContext));
+                this.navigationService.Navigate(typeof(TripDetailPage), new TripDetailContext(trip, presenterFactory, googleAPIContext));
             });
 
             this.DeleteTripCommand = new RelayCommand<TripDTO>(x =>

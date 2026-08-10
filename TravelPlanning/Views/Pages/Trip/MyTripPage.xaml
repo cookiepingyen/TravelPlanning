@@ -202,7 +202,7 @@
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonUp">
-                                    <i:InvokeCommandAction Command="{Binding DataContext.TripDetailPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding Id}" />
+                                    <i:InvokeCommandAction Command="{Binding DataContext.TripDetailPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
 

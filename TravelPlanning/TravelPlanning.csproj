@@ -59,6 +59,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words, Version=26.7.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Words.26.7.0\lib\net462\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
@@ -78,22 +81,22 @@
       <HintPath>..\packages\GMap.NET.WinPresentation.2.1.7\lib\net472\GMap.NET.WindowsPresentation.dll</HintPath>
     </Reference>
     <Reference Include="GoogleMap.SDK.API, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.Core.1.0.7\lib\net472\GoogleMap.SDK.API.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\GoogleMap.SDK.API.dll</HintPath>
     </Reference>
     <Reference Include="GoogleMap.SDK.Contract, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.Core.1.0.7\lib\net472\GoogleMap.SDK.Contract.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\GoogleMap.SDK.Contract.dll</HintPath>
     </Reference>
     <Reference Include="GoogleMap.SDK.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.Core.1.0.7\lib\net472\GoogleMap.SDK.Core.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\GoogleMap.SDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="GoogleMap.SDK.UI.WPF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.2\lib\net472\GoogleMap.SDK.UI.WPF.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\GoogleMap.SDK.UI.WPF.dll</HintPath>
     </Reference>
     <Reference Include="HttpUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.Core.1.0.7\lib\net472\HttpUtility.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\HttpUtility.dll</HintPath>
     </Reference>
     <Reference Include="IOCServiceCollection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GoogleMap.SDK.Core.1.0.7\lib\net472\IOCServiceCollection.dll</HintPath>
+      <HintPath>..\packages\GoogleMap.SDK.UI.WPF.1.0.3\lib\net472\IOCServiceCollection.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -164,6 +167,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.115.5\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Pipelines, Version=9.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Pipelines.9.0.9\lib\net462\System.IO.Pipelines.dll</HintPath>
     </Reference>
@@ -232,6 +236,9 @@
     <Compile Include="Contracts\MyTripContract.cs" />
     <Compile Include="Contracts\TripDetailContract.cs" />
     <Compile Include="Converters\RatingToStarsConverter.cs" />
+    <Compile Include="Extension\CollectionExtensions.cs" />
+    <Compile Include="Extension\DayDataSource.cs" />
+    <Compile Include="Extension\StopDataSource.cs" />
     <Compile Include="MapToolTip.xaml.cs">
       <DependentUpon>MapToolTip.xaml</DependentUpon>
     </Compile>
@@ -389,6 +396,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Templates\旅遊行程套版.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

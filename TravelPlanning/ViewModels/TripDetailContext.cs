@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using Aspose.Words;
+using CommunityToolkit.Mvvm.Messaging;
 using GoogleMap.SDK.Contract.GoogleMapAPI;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Enums;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
@@ -9,17 +10,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using TravelPlanning.Database.DAO;
 using TravelPlanning.Database.Entities;
 using TravelPlanning.Database.Models.DAO;
+using TravelPlanning.Extension;
 using TravelPlanning.Models.DTO;
 using TravelPlanning.Presenters;
 using TravelPlanning.Utilities;
+using TravelPlanning.Views.Pages;
 using static TravelPlanning.Contracts.MyTripContract;
 using static TravelPlanning.Contracts.TripDetailContract;
 
@@ -28,10 +35,13 @@ namespace TravelPlanning.ViewModels
     [AddINotifyPropertyChangedInterface]
     internal class TripDetailContext : ITripDetailView
     {
+        public TripDTO CurrentTrip { get; set; }
         public Guid TripID { get; set; }
+        public TripDaysContext CurrentDay { get; set; }
 
         public ObservableCollection<TripDaysContext> tripDaysContexts { get; set; }
 
+        #region commands
         public ICommand AddDayBtnCommand { get; set; }
         public ICommand DeleteDayBtnCommand { get; set; }
         public ICommand SelectDayCommand { get; set; }
@@ -45,8 +55,9 @@ namespace TravelPlanning.ViewModels
         public ICommand CancelEditPlaceCommand { get; set; }
         public ICommand ConfirmEditPlaceCommand { get; set; }
         public ICommand ChangeTravelModeCommand { get; set; }
-
+        public ICommand ExportCommand { get; set; }
         public bool IsAddPlacePopupOpen { get; set; }
+        #endregion
 
         public PlaceDetailResModel PendingPlace { get; set; }
 
@@ -76,7 +87,6 @@ namespace TravelPlanning.ViewModels
 
         public ITripDetailPresenter tripDetailPresenter { get; set; }
 
-        public TripDaysContext CurrentDay { get; set; }
 
         public IGoogleAPIContext GoogleAPIContext { get; set; }
 
@@ -85,15 +95,16 @@ namespace TravelPlanning.ViewModels
         public TravelMode TravelMode { get; set; } = TravelMode.DRIVE;
 
 
-        public TripDetailContext(Guid tripID, PresenterFactory presenterFactory, IGoogleAPIContext googleAPIContext)
+        public TripDetailContext(TripDTO tripDTO, PresenterFactory presenterFactory, IGoogleAPIContext googleAPIContext)
         {
-            TripID = tripID;
+            CurrentTrip = tripDTO;
+            TripID = tripDTO.Id;
 
             GoogleAPIContext = googleAPIContext;
 
             this.tripDetailPresenter = presenterFactory.Create<ITripDetailPresenter, ITripDetailView>(this);
 
-            tripDetailPresenter.GetTripRequest(tripID);
+            tripDetailPresenter.GetTripRequest(TripID);
 
 
 
@@ -271,7 +282,10 @@ namespace TravelPlanning.ViewModels
                 IsAddPlacePopupOpen = false;
             });
 
-
+            this.ExportCommand = new RelayCommand(() =>
+            {
+                ExportDataToWord();
+            });
         }
 
         public async Task<PlaceDetailResModel> GetPlaceDetail(string selectedItem, bool with_all_field)
@@ -376,6 +390,86 @@ namespace TravelPlanning.ViewModels
 
             CurrentDay.TripDayPlaces = new ObservableCollection<TripDayPlaceContext>(tripDayPlaceContexts);
 
+        }
+
+
+
+        public void ExportDataToWord()
+        {
+            Document doc = new Document("C:\\Users\\user\\source\\repos\\C#基礎專案\\TravelPlanning\\TravelPlanning\\Templates\\旅遊行程套版_v2.docx");
+
+            // Trip 資料
+            string TripName = CurrentTrip.Name;
+            string TotalDays = tripDaysContexts.Count().ToString();
+            string StartDate = tripDaysContexts.First().DateText;
+            string EndDate = tripDaysContexts.Last().DateText;
+            byte[] imgData = ConvertBitmapImageToByteArray(CurrentTrip.Cover);
+            //byte[] mapImage = MapPanelPage.ToImage();
+
+
+            doc.MailMerge.Execute(
+                new[] { "TripName", "TotalDays", "StartDate", "EndDate" },
+                new object[] { $"{TripName}", $"{TotalDays}", $"{StartDate}", $"{EndDate}" }
+            );
+
+
+
+
+            // TripDay 資料
+
+            doc.MailMerge.ExecuteWithRegions(new DayDataSource(tripDaysContexts));
+
+
+
+            //DataTable productsTable = products.ToDataTable();
+            //TripDaysContext Day = CurrentDay;
+
+            //doc.MailMerge.Execute(
+            //    new[] { "DayIndex", "DayDate", "DayWeekday", "DepartureTime" },
+
+            //    new object[] { $"{1}", $"{Day.DateText}", $"{Day.Date.DayOfWeek}", $"{Day.StartTimeText}" }
+            //);
+
+
+            // 封面圖
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            bool moved = builder.MoveToBookmark("TripCover");
+            builder.InsertImage(imgData);
+            builder.InsertImage(mapImage);
+
+
+
+
+
+
+
+
+            doc.Save("output1.docx");
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+        private byte[] ConvertBitmapImageToByteArray(BitmapImage bitmapImage)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // 依你的圖片格式選擇對應的 Encoder，PNG 可保留透明度
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                encoder.Save(ms);
+                return ms.ToArray();
+            }
         }
     }
 }
