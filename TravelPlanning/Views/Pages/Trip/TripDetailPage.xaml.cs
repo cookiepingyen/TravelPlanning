@@ -74,10 +74,23 @@ namespace TravelPlanning.Views.Pages.Trip
                 oldViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             }
 
+            if (e.OldValue is TripDetailContext oldContext)
+            {
+                oldContext.CaptureMapImage = null;
+            }
+
+
             if (e.NewValue is INotifyPropertyChanged newViewModel)
             {
                 newViewModel.PropertyChanged += ViewModel_PropertyChanged;
             }
+
+
+            if (e.NewValue is TripDetailContext newContext)
+            {
+                newContext.CaptureMapImage = () => mapControl.ToImage();
+            }
+
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

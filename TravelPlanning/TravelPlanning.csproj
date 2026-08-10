@@ -396,12 +396,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Templates\旅遊行程套版.docx" />
+    <None Include="Templates\旅遊行程套版_v2.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Claude\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TravelPlanning.Database\TravelPlanning.Database.csproj">
       <Project>{5351f73b-cc02-498d-bec1-5bafa8342e28}</Project>

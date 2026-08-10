@@ -35,6 +35,9 @@ namespace TravelPlanning.ViewModels
     [AddINotifyPropertyChangedInterface]
     internal class TripDetailContext : ITripDetailView
     {
+        [DoNotNotify]
+        public Func<byte[]> CaptureMapImage { get; set; }
+
         public TripDTO CurrentTrip { get; set; }
         public Guid TripID { get; set; }
         public TripDaysContext CurrentDay { get; set; }
@@ -404,7 +407,7 @@ namespace TravelPlanning.ViewModels
             string StartDate = tripDaysContexts.First().DateText;
             string EndDate = tripDaysContexts.Last().DateText;
             byte[] imgData = ConvertBitmapImageToByteArray(CurrentTrip.Cover);
-            //byte[] mapImage = MapPanelPage.ToImage();
+            byte[] mapImage = CaptureMapImage?.Invoke();
 
 
             doc.MailMerge.Execute(
