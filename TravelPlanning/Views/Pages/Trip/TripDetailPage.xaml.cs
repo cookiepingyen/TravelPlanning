@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TravelPlanning.Utilities;
 using TravelPlanning.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,12 @@ namespace TravelPlanning.Views.Pages.Trip
         IGoogleAPIContext googleAPIContext;
 
         private readonly List<Location> currentMarkerLocations = new List<Location>();
+
+        /// <summary>正在進行中的 marker 建立流程(含 PlacePhoto 的網路請求)</summary>
+        private readonly List<Task> pendingMarkerTasks = new List<Task>();
+
+        /// <summary>截圖前等圖磚下載 / 地圖重新定位的緩衝時間</summary>
+        private const int MapSettleDelayMs = 1500;
 
         private const double ScrollStep = 80;
         public TripDetailPage(ServiceProvider provider, IGoogleAPIContext googleAPIContext)
@@ -88,7 +95,7 @@ namespace TravelPlanning.Views.Pages.Trip
 
             if (e.NewValue is TripDetailContext newContext)
             {
-                newContext.CaptureMapImage = (pixel) => mapControl.ToImage(pixel);
+                newContext.CaptureMapImage = CaptureMapImageAsync;
             }
 
         }
@@ -109,8 +116,35 @@ namespace TravelPlanning.Views.Pages.Trip
             }
 
             currentMarkerLocations.Clear();
+            pendingMarkerTasks.Clear();
 
             mapControl.RemoveRoute("Route");
+        }
+
+        /// <summary>
+        /// 截圖前先確定「當日的 marker 都已經加到地圖上、而且畫面真的畫完了」,
+        /// 否則 ToImage 抓到的會是上一幀(沒有 marker、中心點停在前一天)。
+        /// </summary>
+        private async Task<byte[]> CaptureMapImageAsync(int pixelWidth)
+        {
+            // 1. 等所有 marker 的非同步流程跑完(AddMarkerandToolTip 會先 await PlacePhoto)
+            while (pendingMarkerTasks.Count > 0)
+            {
+                Task[] tasks = pendingMarkerTasks.ToArray();
+                pendingMarkerTasks.Clear();
+                await Task.WhenAll(tasks);
+            }
+
+            Control mapVisual = (Control)mapControl;
+            mapVisual.UpdateLayout();
+
+            // 2. 等圖磚下載完、地圖 zoom-to-fit 到當日路線
+            await Task.Delay(MapSettleDelayMs);
+
+            // 3. 讓 WPF 完成一次 render pass,RenderTargetBitmap 才抓得到最新畫面
+            await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
+
+            return mapControl.ToImage(pixelWidth);
         }
 
 
@@ -125,11 +159,14 @@ namespace TravelPlanning.Views.Pages.Trip
             this.mapControl.AddRoute("Route", locations);
         }
 
-        public async void AddMarkerandToolTip(object sender, PlaceDetailResModel e)
+        public void AddMarkerandToolTip(object sender, PlaceDetailResModel e)
         {
+            // 記下這個 task,匯出截圖時才知道 marker 有沒有真的加完
+            pendingMarkerTasks.Add(AddMarkerandToolTipAsync(e));
+        }
 
-            Action<object, PlaceDetailResModel> func = AddMarkerandToolTip;
-
+        private async Task AddMarkerandToolTipAsync(PlaceDetailResModel e)
+        {
             MapToolTip toolTip = new MapToolTip();
 
             string BusinessStatusText = "未提供";
@@ -138,15 +175,19 @@ namespace TravelPlanning.Views.Pages.Trip
                 BusinessStatusText = e.result.current_opening_hours.open_now ? "營業中" : "已打烊";
             }
 
-            byte[] photobytes = await googleAPIContext.Place.PlacePhoto(new PlacePhotoRequest()
+            byte[] photobytes = null;
+            if (e.result.photos != null && e.result.photos.Count() > 0)
             {
-                photo_reference = e.result.photos[0].photo_reference,
-                photoSpec = new PhotoSpec()
+                photobytes = await googleAPIContext.Place.PlacePhoto(new PlacePhotoRequest()
                 {
-                    maxwidth = 600,
-                    maxheight = 300
-                }
-            });
+                    photo_reference = e.result.photos[0].photo_reference,
+                    photoSpec = new PhotoSpec()
+                    {
+                        maxwidth = 600,
+                        maxheight = 300
+                    }
+                });
+            }
 
 
             toolTip.DataContext = new PlaceModel()
@@ -158,7 +199,7 @@ namespace TravelPlanning.Views.Pages.Trip
                 Rating = e.result.rating,
                 UserRatingsTotal = $"({e.result.user_ratings_total})",
                 BusinessStatus = BusinessStatusText,
-                Photo = CreateImage(photobytes),
+                Photo = photobytes == null ? null : CreateImage(photobytes),
                 Reviews = e.result.reviews,
                 IsOpening = e.result.current_opening_hours?.open_now
             };

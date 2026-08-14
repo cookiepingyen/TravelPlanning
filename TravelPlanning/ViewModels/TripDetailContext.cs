@@ -37,7 +37,7 @@ namespace TravelPlanning.ViewModels
     internal class TripDetailContext : ITripDetailView
     {
         [DoNotNotify]
-        public Func<int, byte[]> CaptureMapImage { get; set; }
+        public Func<int, Task<byte[]>> CaptureMapImage { get; set; }
 
         public TripDTO CurrentTrip { get; set; }
         public Guid TripID { get; set; }
@@ -427,7 +427,11 @@ namespace TravelPlanning.ViewModels
             {
                 CurrentDay = tripDaysContexts[i];
                 await LoadCurrentDayMapAsync();
-                CurrentDay.GmapImage = CaptureMapImage?.Invoke(390);
+
+                if (CaptureMapImage != null)
+                {
+                    CurrentDay.GmapImage = await CaptureMapImage.Invoke(390);
+                }
             }
 
             // TripDay 資料
@@ -451,7 +455,7 @@ namespace TravelPlanning.ViewModels
             bool moved = builder.MoveToBookmark("TripCover");
             builder.InsertImage(imgData);
 
-            doc.Save("output1.docx");
+            doc.Save("output1.pdf");
 
 
 
