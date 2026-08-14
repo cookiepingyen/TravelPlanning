@@ -29,7 +29,7 @@ namespace TravelPlanning.Extension
                 case "DayDate": fieldValue = day.DateText; return true;
                 case "DayWeekday": fieldValue = day.Date.DayOfWeek; return true;
                 case "DepartureTime": fieldValue = day.StartTimeText; return true;
-                //case "DayRouteMap": fieldValue = day.DayRouteMap; return true;
+                case "DayRouteMap": fieldValue = day.GmapImage; return true;
                 default: fieldValue = null; return false;
             }
         }

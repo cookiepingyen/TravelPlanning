@@ -18,6 +18,8 @@ namespace TravelPlanning.ViewModels
         public string DateText => Date.ToString("M月dd日");
         public string StartTimeText => StartTime.ToString("HH:mm");
 
+        public byte[] GmapImage { get; set; }
+
         public bool IsChecked { get; set; }
         public ObservableCollection<TripDayPlaceContext> TripDayPlaces { get; set; }
 
