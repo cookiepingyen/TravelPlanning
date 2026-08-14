@@ -37,7 +37,7 @@ namespace TravelPlanning.ViewModels
     internal class TripDetailContext : ITripDetailView
     {
         [DoNotNotify]
-        public Func<byte[]> CaptureMapImage { get; set; }
+        public Func<int, byte[]> CaptureMapImage { get; set; }
 
         public TripDTO CurrentTrip { get; set; }
         public Guid TripID { get; set; }
@@ -427,7 +427,7 @@ namespace TravelPlanning.ViewModels
             {
                 CurrentDay = tripDaysContexts[i];
                 await LoadCurrentDayMapAsync();
-                CurrentDay.GmapImage = ResizeImageByteArray(CaptureMapImage?.Invoke(), 390);
+                CurrentDay.GmapImage = CaptureMapImage?.Invoke(390);
             }
 
             // TripDay 資料
@@ -470,29 +470,29 @@ namespace TravelPlanning.ViewModels
         /// <summary>
         /// 將圖片 byte[] 等比例縮放到指定寬度(px)後再轉回 byte[]
         /// </summary>
-        private byte[] ResizeImageByteArray(byte[] imageData, int pixelWidth)
-        {
-            if (imageData == null || imageData.Length == 0) return imageData;
+        //private byte[] ResizeImageByteArray(byte[] imageData, int pixelWidth)
+        //{
+        //    if (imageData == null || imageData.Length == 0) return imageData;
 
-            BitmapImage bitmapImage = new BitmapImage();
-            using (MemoryStream input = new MemoryStream(imageData))
-            {
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;   // 讀完就關掉 stream
-                bitmapImage.StreamSource = input;
-                bitmapImage.DecodePixelWidth = pixelWidth;            // 只設寬度，高度會自動等比例
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-            }
+        //    BitmapImage bitmapImage = new BitmapImage();
+        //    using (MemoryStream input = new MemoryStream(imageData))
+        //    {
+        //        bitmapImage.BeginInit();
+        //        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;   // 讀完就關掉 stream
+        //        bitmapImage.StreamSource = input;
+        //        bitmapImage.DecodePixelWidth = pixelWidth;            // 只設寬度，高度會自動等比例
+        //        bitmapImage.EndInit();
+        //        bitmapImage.Freeze();
+        //    }
 
-            using (MemoryStream output = new MemoryStream())
-            {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-                encoder.Save(output);
-                return output.ToArray();
-            }
-        }
+        //    using (MemoryStream output = new MemoryStream())
+        //    {
+        //        BitmapEncoder encoder = new PngBitmapEncoder();
+        //        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+        //        encoder.Save(output);
+        //        return output.ToArray();
+        //    }
+        //}
 
         private byte[] ConvertBitmapImageToByteArray(BitmapImage bitmapImage)
         {

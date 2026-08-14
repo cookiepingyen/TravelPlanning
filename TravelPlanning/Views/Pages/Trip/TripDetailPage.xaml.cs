@@ -88,7 +88,7 @@ namespace TravelPlanning.Views.Pages.Trip
 
             if (e.NewValue is TripDetailContext newContext)
             {
-                newContext.CaptureMapImage = () => mapControl.ToImage();
+                newContext.CaptureMapImage = (pixel) => mapControl.ToImage(pixel);
             }
 
         }
