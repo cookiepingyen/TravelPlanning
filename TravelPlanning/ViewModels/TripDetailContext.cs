@@ -7,6 +7,7 @@ using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Enums;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Routes;
 using IOCServiceCollection;
+using Microsoft.Office.Interop.Word;
 using PropertyChanged;
 using System;
 using System.Collections;
@@ -16,6 +17,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,7 +34,9 @@ using TravelPlanning.Utilities;
 using TravelPlanning.Views.Pages;
 using static TravelPlanning.Contracts.MyTripContract;
 using static TravelPlanning.Contracts.TripDetailContract;
+using Application = Microsoft.Office.Interop.Word.Application;
 using Document = Aspose.Words.Document;
+using Task = System.Threading.Tasks.Task;
 
 
 namespace TravelPlanning.ViewModels
@@ -459,10 +463,15 @@ namespace TravelPlanning.ViewModels
             bool moved = builder.MoveToBookmark("TripCover");
             builder.InsertImage(imgData);
 
-            doc.Save("output1.docx");
-            doc.Save("output1.pdf");
+            // COM 轉檔一定要絕對路徑：相對路徑會被 Word 解讀成它自己的工作目錄
+            string docxPath = Path.GetFullPath("output1.docx");
+            string pdfPath = Path.GetFullPath("output1.pdf");
 
-            RemoveAllHeaders("output1.docx");
+            doc.Save(docxPath);
+
+            // 先清掉頁首/浮水印，PDF 才能從乾淨的 docx 產生
+            RemoveAllHeaders(docxPath);
+            ConvertDocxToPdf(docxPath, pdfPath);
 
 
 
@@ -477,34 +486,6 @@ namespace TravelPlanning.ViewModels
 
 
         }
-
-
-        /// <summary>
-        /// 將圖片 byte[] 等比例縮放到指定寬度(px)後再轉回 byte[]
-        /// </summary>
-        //private byte[] ResizeImageByteArray(byte[] imageData, int pixelWidth)
-        //{
-        //    if (imageData == null || imageData.Length == 0) return imageData;
-
-        //    BitmapImage bitmapImage = new BitmapImage();
-        //    using (MemoryStream input = new MemoryStream(imageData))
-        //    {
-        //        bitmapImage.BeginInit();
-        //        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;   // 讀完就關掉 stream
-        //        bitmapImage.StreamSource = input;
-        //        bitmapImage.DecodePixelWidth = pixelWidth;            // 只設寬度，高度會自動等比例
-        //        bitmapImage.EndInit();
-        //        bitmapImage.Freeze();
-        //    }
-
-        //    using (MemoryStream output = new MemoryStream())
-        //    {
-        //        BitmapEncoder encoder = new PngBitmapEncoder();
-        //        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-        //        encoder.Save(output);
-        //        return output.ToArray();
-        //    }
-        //}
 
         private byte[] ConvertBitmapImageToByteArray(BitmapImage bitmapImage)
         {
@@ -549,6 +530,46 @@ namespace TravelPlanning.ViewModels
                 }
 
                 main.Document.Save();
+            }
+        }
+
+
+        // Word COM 的 enum 值，用晚期繫結所以自己列出來，不必參考 PIA
+        private const int WdExportFormatPdf = 17;   // WdExportFormat.wdExportFormatPDF
+
+        /// <summary>
+        /// 用本機安裝的 Word 把 docx 轉成 PDF。
+        /// 不走 Aspose，因為未授權的 Aspose 每次 Save 都會重新加上評估標記。
+        /// </summary>
+        private void ConvertDocxToPdf(string docxPath, string pdfPath)
+        {
+
+            // 概念性程式碼
+            Application appWord = new Application();
+
+            try
+            {
+                // 背景執行，不顯示 UI
+                appWord.Visible = false;
+
+                var wordDocument = appWord.Documents.Open(Path.GetFullPath(docxPath));
+
+                // 匯出為 PDF
+                wordDocument.ExportAsFixedFormat(
+                    Path.GetFullPath(pdfPath),
+                    WdExportFormat.wdExportFormatPDF
+                );
+
+                wordDocument.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                appWord.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(appWord);
             }
         }
     }
