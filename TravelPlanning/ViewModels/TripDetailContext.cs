@@ -19,6 +19,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
+// Aspose.Words、Word Interop、OpenXml 三邊的 Paragraph / Run / Text / Document 等型別同名，用別名區分
+using O = DocumentFormat.OpenXml;
+using W = DocumentFormat.OpenXml.Wordprocessing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -469,8 +473,9 @@ namespace TravelPlanning.ViewModels
 
             doc.Save(docxPath);
 
-            // 先清掉頁首/浮水印，PDF 才能從乾淨的 docx 產生
+            // 先清掉頁首/浮水印與頁尾的評估訊息，PDF 才能從乾淨的 docx 產生
             RemoveAllHeaders(docxPath);
+            RemoveTextEverywhere(docxPath, AsposeEvaluationNotices);
             ConvertDocxToPdf(docxPath, pdfPath);
 
 
@@ -531,6 +536,120 @@ namespace TravelPlanning.ViewModels
 
                 main.Document.Save();
             }
+        }
+
+
+        /// <summary>
+        /// Aspose.Words 未授權時塞進文件的評估訊息。
+        /// 用 Regex 而非固定字串，因為 Copyright 年份每年都會變。
+        /// </summary>
+        private static readonly Regex[] AsposeEvaluationNotices =
+        {
+            // 每一頁的頁尾（同一段裡還有頁碼欄位，所以只能刪這句、不能刪整個頁尾）
+            new Regex(@"Evaluation Only\.\s*Created with Aspose\.Words\.\s*Copyright\s*\d{4}-\d{4}\s*Aspose Pty Ltd\.\s*"),
+            // 本文第一段
+            new Regex(@"Created with an evaluation copy of Aspose\.Words\..*?Free Temporary License\s*", RegexOptions.Singleline),
+            new Regex(@"https://products\.aspose\.com/words/temporary-license/?"),
+        };
+
+        /// <summary>
+        /// 從整份 docx（本文 / 頁首 / 頁尾 / 註腳）刪除符合 pattern 的文字。
+        /// docx 沒有「頁」的結構，真正每頁都出現的文字必然在頁首或頁尾，所以這裡一併掃。
+        /// </summary>
+        private static void RemoveTextEverywhere(string docxPath, params Regex[] patterns)
+        {
+            if (patterns == null || patterns.Length == 0) return;
+
+            using (var wordDoc = WordprocessingDocument.Open(docxPath, true))
+            {
+                var main = wordDoc.MainDocumentPart;
+
+                var roots = new List<O.OpenXmlPartRootElement> { main.Document };
+                foreach (var hp in main.HeaderParts) roots.Add(hp.Header);
+                foreach (var fp in main.FooterParts) roots.Add(fp.Footer);
+                if (main.FootnotesPart != null) roots.Add(main.FootnotesPart.Footnotes);
+                if (main.EndnotesPart != null) roots.Add(main.EndnotesPart.Endnotes);
+
+                foreach (var root in roots)
+                {
+                    // ToList()：迴圈裡會刪節點，不能邊列舉邊改
+                    foreach (var para in root.Descendants<W.Paragraph>().ToList())
+                        foreach (var pattern in patterns)
+                            StripTextFromParagraph(para, pattern);
+
+                    root.Save();
+                }
+            }
+        }
+
+        /// <summary>刪除單一段落內符合 pattern 的文字，必要時連空掉的段落一起收掉。</summary>
+        private static void StripTextFromParagraph(W.Paragraph para, Regex pattern)
+        {
+            var texts = para.Descendants<W.Text>().ToList();
+            if (texts.Count == 0) return;
+
+            // 同一句話常被 Word 切散在多個 <w:r><w:t> 裡（rsid、拼字檢查、格式變化都會切），
+            // 所以先把整段拼成一個字串並記住每個 w:t 的起始位移，比對命中後再換算回去刪。
+            var sb = new StringBuilder();
+            var offsets = new int[texts.Count];
+            for (int i = 0; i < texts.Count; i++)
+            {
+                offsets[i] = sb.Length;
+                sb.Append(texts[i].Text);
+            }
+
+            var matches = pattern.Matches(sb.ToString());
+            if (matches.Count == 0) return;
+
+            // 由後往前刪：先刪前面的會讓後面所有位移失效
+            for (int m = matches.Count - 1; m >= 0; m--)
+            {
+                int hitStart = matches[m].Index;
+                int hitEnd = hitStart + matches[m].Length;
+
+                for (int i = 0; i < texts.Count; i++)
+                {
+                    int tStart = offsets[i];
+                    int tEnd = tStart + texts[i].Text.Length;
+                    if (tEnd <= hitStart || tStart >= hitEnd) continue;   // 與命中範圍無交集
+
+                    int from = Math.Max(hitStart, tStart) - tStart;
+                    int to = Math.Min(hitEnd, tEnd) - tStart;
+                    texts[i].Text = texts[i].Text.Remove(from, to - from);
+                }
+            }
+
+            // 清掉空殼，並保住剩餘文字的首尾空白
+            foreach (var t in texts)
+            {
+                if (t.Text.Length == 0)
+                {
+                    var run = t.Parent as W.Run;
+                    t.Remove();
+                    // run 裡只剩格式設定 (w:rPr) 就整個移除
+                    if (run != null && !run.Elements().Any(e => !(e is W.RunProperties)))
+                        run.Remove();
+                }
+                else if (t.Text != t.Text.Trim())
+                {
+                    t.Space = O.SpaceProcessingModeValues.Preserve;
+                }
+            }
+
+            foreach (var link in para.Descendants<W.Hyperlink>().ToList())
+                if (!link.Descendants<W.Text>().Any())
+                    link.Remove();
+
+            // 整段空了才刪，但要避開兩個地雷：
+            //   1) 段落裡還有圖片 / 圖形 → 不能刪
+            //   2) 表格儲存格必須至少保留一個段落，否則 Word 會判定檔案損毀
+            if (para.Descendants<W.Text>().Any(t => t.Text.Length > 0)) return;
+            if (para.Descendants<W.Drawing>().Any() || para.Descendants<W.Picture>().Any()) return;
+
+            var cell = para.Parent as W.TableCell;
+            if (cell != null && cell.Elements<W.Paragraph>().Count() <= 1) return;
+
+            para.Remove();
         }
 
 
