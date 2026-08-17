@@ -1,5 +1,7 @@
 ﻿using Aspose.Words;
 using CommunityToolkit.Mvvm.Messaging;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using GoogleMap.SDK.Contract.GoogleMapAPI;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Enums;
 using GoogleMap.SDK.Contract.GoogleMapAPI.Models.Place.PlaceDetail;
@@ -30,6 +32,8 @@ using TravelPlanning.Utilities;
 using TravelPlanning.Views.Pages;
 using static TravelPlanning.Contracts.MyTripContract;
 using static TravelPlanning.Contracts.TripDetailContract;
+using Document = Aspose.Words.Document;
+
 
 namespace TravelPlanning.ViewModels
 {
@@ -455,7 +459,11 @@ namespace TravelPlanning.ViewModels
             bool moved = builder.MoveToBookmark("TripCover");
             builder.InsertImage(imgData);
 
+            doc.Save("output1.docx");
             doc.Save("output1.pdf");
+
+            RemoveAllHeaders("output1.docx");
+
 
 
 
@@ -507,6 +515,40 @@ namespace TravelPlanning.ViewModels
                 encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                 encoder.Save(ms);
                 return ms.ToArray();
+            }
+        }
+
+
+        void RemoveAllHeaders(string path)
+        {
+            using (var doc = WordprocessingDocument.Open(path, true))
+            {
+                var main = doc.MainDocumentPart;
+
+                // 1) 移除每個節的頁首參照（default / first / even 三種都會被掃到）
+                foreach (var sectPr in main.Document.Descendants<SectionProperties>())
+                {
+                    foreach (var href in sectPr.Elements<HeaderReference>().ToList())
+                        href.Remove();
+
+                    // 「第一頁不同」旗標
+                    foreach (var tp in sectPr.Elements<TitlePage>().ToList())
+                        tp.Remove();
+                }
+
+                // 2) 刪掉 header part 本體（一定要 ToList，邊列舉邊刪會炸）
+                main.DeleteParts(main.HeaderParts.ToList());
+
+                // 3) 關掉「奇偶頁不同」
+                var settingsPart = main.DocumentSettingsPart;
+                if (settingsPart != null)
+                {
+                    foreach (var e in settingsPart.Settings.Elements<EvenAndOddHeaders>().ToList())
+                        e.Remove();
+                    settingsPart.Settings.Save();
+                }
+
+                main.Document.Save();
             }
         }
     }
